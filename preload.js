@@ -1,9 +1,13 @@
 const axios = require("axios").default;
 const { getCurrentWindow } = require("@electron/remote");
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 const { URL } = require("url");
 const Titlebar = require("@6c65726f79/custom-titlebar");
 const Utils = require("./utils");
+const isDev = ipcRenderer.sendSync("isDev");
+const Store = require('electron-store');
+
+const store = new Store();
 
 window.addEventListener("DOMContentLoaded", () => {
     const currentWindow = getCurrentWindow();
@@ -23,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 const versionsApiSettings = {
-    root: "https://nadwey.pl/",
+    root: isDev ? "http://localhost/" : "https://nadwey.pl/",
     SE3Dir: "./kamiloso/SE3/",
     ImagesDir: "./Images",
     LauncherDir: "./Launcher",
@@ -66,15 +70,28 @@ const versionsApiSettings = {
         ).toString();
     },
 };
-
 contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
 
-contextBridge.exposeInMainWorld("versionsApi", {
-    GetVersions: async () => {
+const GetVersions = async() => {
+    try {
         let res = await axios.get(versionsApiSettings.GetVersionsInfo());
+        store.set("versions", res.data);
         return res.data;
-    },
+    } catch (ex) {
+        if (store.has("versions")) {
+            return store.get("versions");
+        }
+        throw new Error("Can't load versions");
+    }
+}
+
+const GetInstalledVersions = async() => {
+
+}
+
+contextBridge.exposeInMainWorld("versionsApi", {
+    GetVersions,
+    GetInstalledVersions    
 });
 
 console.log(Utils.GetGameDirectory());
-console.log(Utils.GetLauncherDirectory());

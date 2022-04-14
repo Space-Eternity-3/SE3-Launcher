@@ -1,7 +1,8 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 require("@electron/remote/main").initialize();
+require("electron-store").initRenderer();
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -15,7 +16,7 @@ async function createWindow() {
             webSecurity: false,
         },
         frame: false,
-        title: "SE3 Launcher"
+        title: "SE3 Launcher",
     });
 
     require("@electron/remote/main").enable(mainWindow.webContents);
@@ -29,6 +30,10 @@ async function createWindow() {
         mainWindow.loadURL(path.join(__dirname, "./build/index.html"));
     }
 }
+
+ipcMain.on("isDev", (e) => {
+    e.returnValue = isDev;
+});
 
 app.whenReady().then(() => {
     createWindow();
