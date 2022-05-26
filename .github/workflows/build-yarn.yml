@@ -22,5 +22,5 @@ jobs:
             - name: Install and build
               run: |
                   npm install -g yarn
-                  yarn install --frozen-lockfile
+                  yarn install
                   yarn run build
