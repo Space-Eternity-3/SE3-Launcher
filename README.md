@@ -1,5 +1,8 @@
 # SE3 Launcher
 
+![image](https://user-images.githubusercontent.com/81181783/170561949-3ff63da7-a5da-44b0-b0ec-111983316914.png)
+![build](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build?style=for-the-badge)
+
 Launcher for Space Eternity 3
 
 **NOTE**: Launcher is only built for Windows, because there is no game builds for other operating system. (You can still use Wine I think)
