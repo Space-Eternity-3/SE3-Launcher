@@ -12,9 +12,8 @@
     "devDependencies": {
         "concurrently": "^7.2.1",
         "cross-env": "^7.0.3",
-        "dot-env": "^0.0.1",
         "electron": "^19.0.1",
-        "electron-packager": "^15.5.1",
+        "electron-builder": "^23.0.3",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-scripts": "^5.0.1",
@@ -24,7 +23,7 @@
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-scripts start\" \"electron .\"",
         "react-build": "react-scripts build",
-        "electron-build": "electron-packager . \"SE3 Launcher\" --prune=true --platform=win32 --asar --overwrite --out=dist",
+        "electron-build": "electron-builder --dir",
         "build": "yon run react-build && yon run electron-build"
     },
     "eslintConfig": {
@@ -65,11 +64,15 @@
     "build": {
         "extends": null,
         "files": [
-            "!**/src/*",
-            "!**/resources/*",
-            "!**/public/*",
+            "**/*",
+            "!.github/",
+            "!src/",
+            "!resources/",
+            "!public/",
             "!debugConfig.json",
-            "!.prettierrc"
+            "!.prettierrc",
+            "node_modules/",
+            "build/"
         ]
     }
 }

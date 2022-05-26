@@ -1,7 +1,7 @@
 # SE3 Launcher
 
 ![image](https://user-images.githubusercontent.com/81181783/170561949-3ff63da7-a5da-44b0-b0ec-111983316914.png)
-![build](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build?style=for-the-badge)
+[![build](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build?style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/actions/workflows/build.yml)
 [![discord badge](https://img.shields.io/discord/909014300088213547?label=Discord&logo=Discord&style=for-the-badge)](https://discord.gg/e4ppBTRKhg)
 
 Launcher for Space Eternity 3
