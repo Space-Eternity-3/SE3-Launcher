@@ -6,14 +6,17 @@ require("electron-store").initRenderer();
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
-        width: 800,
+        width: 850,
         height: 600,
+        minWidth: 750,
+        minHeight: 500,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             backgroundThrottling: false,
             nodeIntegration: false,
             contextIsolation: true,
             webSecurity: false,
+            webviewTag: true,
         },
         frame: false,
         title: "SE3 Launcher",
@@ -21,7 +24,7 @@ async function createWindow() {
 
     require("@electron/remote/main").enable(mainWindow.webContents);
     if (isDev) {
-        mainWindow.setMenuBarVisibility(false);
+        mainWindow.setMenuBarVisibility(false); // dev tools
         const waitOn = require("wait-on");
         await waitOn({ resources: ["http://localhost:3000"] });
         await mainWindow.loadURL("http://localhost:3000");

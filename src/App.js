@@ -1,42 +1,27 @@
 import "./App.css";
-import "mdb-ui-kit/css/mdb.dark.min.css";
-import { MDBTabs, MDBTabsItem, MDBTabsLink, MDBTabsContent, MDBTabsPane } from "mdb-react-ui-kit";
-import { useState, useEffect } from "react";
+import "github-markdown-css/github-markdown-dark.css";
+import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
-import { GetVersions } from "./versionsApi/versionsApi";
+import { GetVersions } from "./se3Api/versionsApi";
+import { GetLauncherInfo } from "./se3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification } from "@mantine/notifications";
-
-function humanFileSize(bytes, si = false, dp = 1) {
-    const thresh = si ? 1000 : 1024;
-
-    if (Math.abs(bytes) < thresh) {
-        return bytes + " B";
-    }
-
-    const units = si
-        ? ["kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-        : ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-    let u = -1;
-    const r = 10 ** dp;
-
-    do {
-        bytes /= thresh;
-        ++u;
-    } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
-
-    return bytes.toFixed(dp) + " " + units[u];
-}
+import { Container, Tabs } from "@mantine/core";
+import remarkGfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
+import { humanFileSize } from "./utils";
 
 export default function App() {
-    const [basicActive, setBasicActive] = useState("homeTab");
+    const [activeTab, setActiveTab] = useState(0);
     const [versionsSelectorVersions, setVersionsSelectorVersions] = useState([]);
     const [versionSelectorShown, setVersionSelectorShown] = useState(false);
+    const [launcherText, setLauncherText] = useState("Failed to load launcher info");
 
-    const handleBasicClick = (value) => {
-        if (value === basicActive) return;
-        setBasicActive(value);
-    };
+    useEffect(() => {
+        (async () => {
+            setLauncherText(await GetLauncherInfo());
+        })();
+    }, []);
 
     const VersionSelectorVersions = async () => {
         const versions = await GetVersions();
@@ -59,42 +44,24 @@ export default function App() {
         });
     };
 
-    useEffect(() => {
-        (async () => {
-            setVersionsSelectorVersions(await VersionSelectorVersions());
-        })();
-    }, []);
+    const showVersionSelector = async () => {
+        setVersionSelectorShown(true);
+        setVersionsSelectorVersions(await VersionSelectorVersions());
+    };
 
     return (
-        <div className="h-100">
-            <MDBTabs
+        <Container>
+            <Tabs
+                active={activeTab}
+                onTabChange={setActiveTab}
                 style={{
-                    backgroundColor: "#363636",
-                    height: "47px",
+                    height: "100%",
                 }}
             >
-                <MDBTabsItem>
-                    <MDBTabsLink onClick={() => handleBasicClick("homeTab")} active={basicActive === "homeTab"}>
-                        Home
-                    </MDBTabsLink>
-                </MDBTabsItem>
-                <MDBTabsItem>
-                    <MDBTabsLink onClick={() => handleBasicClick("versionsTab")} active={basicActive === "versionsTab"}>
-                        Versions
-                    </MDBTabsLink>
-                </MDBTabsItem>
-            </MDBTabs>
-
-            <MDBTabsContent
-                style={{
-                    height: "calc(100% - 47px)",
-                    position: "relative",
-                }}
-            >
-                <MDBTabsPane className="h-100" show={basicActive === "homeTab"}>
+                <Tabs.Tab label="Home">
                     <HomePage />
-                </MDBTabsPane>
-                <MDBTabsPane show={basicActive === "versionsTab"}>
+                </Tabs.Tab>
+                <Tabs.Tab label="Versions">
                     <VersionSelector
                         onCancel={() => {
                             setVersionSelectorShown(false);
@@ -103,14 +70,23 @@ export default function App() {
                         shown={versionSelectorShown}
                         versions={versionsSelectorVersions}
                     />
-                    <button
-                        onClick={() => {
-                            setVersionSelectorShown(true);
+                    <button onClick={showVersionSelector} id="add-button" />
+                </Tabs.Tab>
+                <Tabs.Tab label="Launcher">
+                    <div
+                        style={{
+                            paddingTop: "40px",
+                            margin: "0 10px 10px",
+                            overflowY: "auto",
+                            overflowX: "hidden",
+                            width: "calc(100% - 20px)",
+                            height: "calc(100% - 50px)",
                         }}
-                        id="add-button"
-                    />
-                </MDBTabsPane>
-            </MDBTabsContent>
-        </div>
+                    >
+                        <ReactMarkdown className="markdown-body" children={launcherText} remarkPlugins={[remarkGfm]} />
+                    </div>
+                </Tabs.Tab>
+            </Tabs>
+        </Container>
     );
 }

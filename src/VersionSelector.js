@@ -1,11 +1,11 @@
-import { RadioGroup, Radio, Switch, Tooltip } from "@mantine/core";
-import { MDBBtn, MDBFooter, MDBNavbar, MDBNavbarBrand } from "mdb-react-ui-kit";
-import Notiflix from "notiflix";
+import { RadioGroup, Radio, Switch, Tooltip, Text, Button, Header, Footer } from "@mantine/core";
 import { useState } from "react";
+import { useModals } from "@mantine/modals";
 
 export default function VersionSelector({ versions, shown, onCancel, onInstall }) {
     const [showHidden, setShowHidden] = useState(false);
     const [versionSelectValue, setVersionSelectValue] = useState();
+    const modals = useModals();
 
     // TODO: do something with this
     const Version = (e) => {
@@ -43,17 +43,20 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
             return e.value === versionSelectValue;
         });
         if (version.hidden) {
-            Notiflix.Confirm.show(
-                "Hidden Version",
-                "This version is hidden, it may cause issues, like corrupting worlds.<br />Do you want to continue?",
-                "Yes",
-                "No",
-                () => {
-                    onInstall(versionSelectValue);
-                },
-                () => {},
-                { plainText: false, width: "400px" }
-            );
+            modals.openConfirmModal({
+                title: "Hidden Version",
+                centered: true,
+                children: (
+                    <Text size="sm">
+                        This version is hidden, it may cause issues, like corrupting worlds.
+                        <br />
+                        Do you want to continue?
+                    </Text>
+                ),
+                labels: { confirm: "Continue", cancel: "Cancel" },
+                confirmProps: { color: "red" },
+                onConfirm: () => onInstall(versionSelectValue),
+            });
         } else onInstall(versionSelectValue);
     };
 
@@ -75,20 +78,21 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
             className="VersionSelectorContainer"
         >
             <div className="VersionSelector">
-                <MDBNavbar
-                    className="vs-nav px-3"
-                    style={{
-                        flex: "0 1 auto",
-                    }}
-                >
-                    <MDBNavbarBrand>Select version to install</MDBNavbarBrand>
+                <Header style={{
+                    padding: "10px 13px"
+                }}>
+                    <span style={{
+                        color: "white",
+                        fontFamily: "Quicksand",
+                        fontSize: "26px"
+                    }}>Select version to install</span>
                     <button
                         onClick={() => {
                             onCancel?.();
                         }}
                         className="CloseButton"
                     ></button>
-                </MDBNavbar>
+                </Header>
 
                 <div
                     style={{
@@ -105,7 +109,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         })}
                     </RadioGroup>
                 </div>
-                <MDBFooter className="VersionAcceptContainer">
+                <Footer className="VersionAcceptContainer">
                     <Switch
                         style={{ float: "left", marginTop: "5px" }}
                         checked={showHidden}
@@ -114,16 +118,17 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         color="orange"
                         size="md"
                     />
-                    <MDBBtn
+                    <Button 
                         onClick={() => {
                             onInstall && onInstallPre();
                         }}
-                        color="success"
+                        color="green"
                         disabled={installButtonDisabled()}
+                        uppercase
                     >
                         install
-                    </MDBBtn>
-                </MDBFooter>
+                    </Button>
+                </Footer>
             </div>
         </div>
     );

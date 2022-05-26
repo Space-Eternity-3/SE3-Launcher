@@ -4,6 +4,18 @@ Launcher for Space Eternity 3
 
 **NOTE**: Launcher is only built for Windows, because there is no game builds for other operating system. (You can still use Wine I think)
 
+**Another note**: Both yarn and npm should be supported
+
+## debugConfig.json
+
+If you ~~somehow~~ have local copy of Version Api you can create file named debugConfig.json and set localServer to true
+
+```json
+{
+    "localServer": true
+}
+```
+
 ## Version api
 
 Root: `https://nadwey.pl/` (this may change)
@@ -20,6 +32,7 @@ Root/kamiloso (https://nadwey.pl/kamiloso)
     │       ...
     │
     ├───Launcher
+    |       Launcher.md
     └───Versions
         │   Versions.json
         │   Versions.php

@@ -1,18 +1,20 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom";
 import App from "./App";
 import "./index.css";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
-const container = document.getElementById("root");
-const root = createRoot(container);
-root.render(
+ReactDOM.render(
     <React.StrictMode>
         <MantineProvider theme={{ colorScheme: "dark" }}>
-            <NotificationsProvider position="bottom-left">
-                <App />
-            </NotificationsProvider>
+            <ModalsProvider>
+                <NotificationsProvider zIndex={999} position="bottom-left">
+                    <App />
+                </NotificationsProvider>
+            </ModalsProvider>
         </MantineProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
+    document.getElementById("root")
 );

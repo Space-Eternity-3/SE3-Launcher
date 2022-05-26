@@ -29,6 +29,7 @@
     font-family: "Quicksand";
     font-weight: bold;
     user-select: none;
+    color: white;
 }
 
 #play-container {
@@ -64,6 +65,7 @@
     background-size: 50%;
     background-repeat: no-repeat;
     background-position: center;
+    cursor: pointer;
     border-radius: 50%;
     width: 80px;
     height: 80px;
@@ -138,6 +140,9 @@
     background-image: url(/public/close-line.svg);
     background-size: cover;
     background-color: transparent;
+    cursor: pointer;
     height: 23px;
     width: 23px;
+    float: right;
+    margin: 5px;
 }

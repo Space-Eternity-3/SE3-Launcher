@@ -1,0 +1,25 @@
+name: "Build"
+
+on: [push]
+jobs:
+    analyze:
+        name: Build (Windows)
+
+        permissions:
+            actions: read
+            contents: read
+            security-events: write
+
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows-latest]
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
+            - name: Install and build
+              run: |
+                  npm ci
+                  npm run build

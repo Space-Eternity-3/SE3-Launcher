@@ -6,6 +6,52 @@
     bottom: 0;   
 }
 
+.custom-titlebar {
+    z-index: 10000;
+}
+
+::-webkit-scrollbar-track
+{
+	background-color: #555;
+}
+
+::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #555;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
 body {
     background-color: #222222;
+}
+
+.mantine-Tabs-tabsListWrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 0;
+    right: 0;
+    
+}
+
+.mantine-Tabs-tabsList {
+    background-color: #00000050;
+    backdrop-filter: blur(2px);
+}
+
+.mantine-Tabs-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; 
+}
+
+.markdown-body {
+    background-color: transparent !important;
 }

@@ -22,5 +22,5 @@
  * @returns {FetchedVersions}
  */
 export async function GetVersions() {
-    return window.versionsApi.GetVersions();
+    return window.se3Api.GetVersions();
 }
