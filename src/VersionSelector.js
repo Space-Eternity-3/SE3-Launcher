@@ -48,13 +48,15 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 centered: true,
                 children: (
                     <Text size="sm">
-                        This version is hidden, it may cause issues, like corrupting worlds.
-                        <br />
+                        This version is hidden.<br />
+                        Hidden versions may cause issues like corrupting worlds.
+                        <br /><br />
                         Do you want to continue?
                     </Text>
                 ),
                 labels: { confirm: "Continue", cancel: "Cancel" },
                 confirmProps: { color: "red" },
+                zIndex: 998,
                 onConfirm: () => onInstall(versionSelectValue),
             });
         } else onInstall(versionSelectValue);

@@ -24,7 +24,7 @@
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-scripts start\" \"electron .\"",
         "react-build": "react-scripts build",
-        "electron-build": "electron-packager . \"SE3 Launcher\" --platform=win32 --arch=ia32 --asar --overwrite --out=dist",
+        "electron-build": "electron-packager . \"SE3 Launcher\" --prune=true --platform=win32 --asar --overwrite --out=dist",
         "build": "yon run react-build && yon run electron-build"
     },
     "eslintConfig": {
