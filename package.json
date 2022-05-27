@@ -1,5 +1,6 @@
 {
     "name": "se3-launcher",
+    "description": "Launcher for Space Eternity 3",
     "version": "3.0.0",
     "private": true,
     "homepage": "./",
@@ -23,7 +24,7 @@
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-scripts start\" \"electron .\"",
         "react-build": "react-scripts build",
-        "electron-build": "electron-builder --dir",
+        "electron-build": "electron-builder --ia32 --win",
         "build": "yon run react-build && yon run electron-build"
     },
     "eslintConfig": {
@@ -62,7 +63,9 @@
         "remark-gfm": "^3.0.1"
     },
     "build": {
+        "productName": "SE3 Launcher",
         "extends": null,
+        "icon": "../resources/ikona.ico",
         "files": [
             "**/*",
             "!.github/",
@@ -73,6 +76,17 @@
             "!.prettierrc",
             "node_modules/",
             "build/"
-        ]
+        ],
+        "win": {
+            "target": "nsis"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": true,
+            "installerIcon": "resources/ikona.ico",
+            "artifactName": "SE3 Launcher ${version} Setup.${ext}",
+            "deleteAppDataOnUninstall": true
+        }
     }
 }
