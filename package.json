@@ -86,7 +86,8 @@
             "allowToChangeInstallationDirectory": true,
             "installerIcon": "resources/ikona.ico",
             "artifactName": "SE3 Launcher ${version} Setup.${ext}",
-            "deleteAppDataOnUninstall": true
+            "deleteAppDataOnUninstall": true,
+            "installerSidebar": "../resources/Sidebar.bmp"
         }
     }
 }
