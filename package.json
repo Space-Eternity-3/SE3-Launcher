@@ -24,7 +24,7 @@
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-scripts start\" \"electron .\"",
         "react-build": "react-scripts build",
-        "electron-build": "electron-builder --ia32 --win --publish=never",
+        "electron-build": "electron-builder --win --ia32 --publish=never && electron-builder --win --x64 --publish=never && electron-builder --win --arm64 --publish=never",
         "build": "yon run react-build && yon run electron-build"
     },
     "eslintConfig": {
@@ -79,16 +79,17 @@
             "build/"
         ],
         "win": {
-            "target": "nsis"
+            "target": ["nsis", "zip"],
+            "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}"
         },
         "nsis": {
             "oneClick": false,
             "perMachine": false,
             "allowToChangeInstallationDirectory": true,
             "installerIcon": "resources/ikona.ico",
-            "artifactName": "SE3 Launcher ${version} Setup.${ext}",
             "deleteAppDataOnUninstall": true,
-            "installerSidebar": "../resources/Sidebar.bmp"
+            "installerSidebar": "../resources/Sidebar.bmp",
+            "differentialPackage": false
         }
     }
 }
