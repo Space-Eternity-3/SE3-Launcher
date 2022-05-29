@@ -1,7 +1,7 @@
 {
     "name": "se3-launcher",
     "description": "Launcher for Space Eternity 3",
-    "version": "3.0.0",
+    "version": "3.0.0-alpha.1",
     "private": true,
     "homepage": "./",
     "main": "index.js",
@@ -55,10 +55,11 @@
         "@mantine/notifications": "^4.2.6",
         "appdata-path": "^1.0.0",
         "axios": "^0.27.2",
-        "download": "^8.0.0",
-        "electron-is-dev": "^2.0.0",
+        "decompress": "^4.2.1",
+        "electron-is": "^3.0.0",
         "electron-store": "^8.0.1",
         "github-markdown-css": "^5.1.0",
+        "lodash": "^4.17.21",
         "react-markdown": "^8.0.3",
         "remark-gfm": "^3.0.1"
     },
@@ -72,7 +73,7 @@
             "!src/",
             "!resources/",
             "!public/",
-            "!debugConfig.json",
+            "!debugConfig.js",
             "!.prettierrc",
             "node_modules/",
             "build/"

@@ -1,3 +1,4 @@
+import styles from "./styles/VersionSelector.module.css";
 import { RadioGroup, Radio, Switch, Tooltip, Text, Button, Header, Footer } from "@mantine/core";
 import { useState } from "react";
 import { useModals } from "@mantine/modals";
@@ -57,9 +58,9 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 labels: { confirm: "Continue", cancel: "Cancel" },
                 confirmProps: { color: "red" },
                 zIndex: 998,
-                onConfirm: () => onInstall(versionSelectValue),
+                onConfirm: () => onInstall(version),
             });
-        } else onInstall(versionSelectValue);
+        } else onInstall(version);
     };
 
     const installButtonDisabled = () => {
@@ -77,9 +78,9 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 visibility: shown ? "visible" : "hidden",
                 opacity: shown ? "1" : "0",
             }}
-            className="VersionSelectorContainer"
+            className={styles.VersionSelectorContainer}
         >
-            <div className="VersionSelector">
+            <div className={styles.VersionSelector}>
                 <Header style={{
                     padding: "10px 13px"
                 }}>
@@ -92,7 +93,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         onClick={() => {
                             onCancel?.();
                         }}
-                        className="CloseButton"
+                        className={styles.CloseButton}
                     ></button>
                 </Header>
 
@@ -102,7 +103,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         flex: "1 1 auto",
                         overflowY: "scroll",
                     }}
-                    className="versions"
+                    className={styles.versions}
                 >
                     <RadioGroup value={versionSelectValue} onChange={setVersionSelectValue} orientation="vertical">
                         {versions.map((e) => {
@@ -111,7 +112,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         })}
                     </RadioGroup>
                 </div>
-                <Footer className="VersionAcceptContainer">
+                <Footer className={styles.VersionAcceptContainer}>
                     <Switch
                         style={{ float: "left", marginTop: "5px" }}
                         checked={showHidden}

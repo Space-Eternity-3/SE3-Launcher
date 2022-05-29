@@ -1,21 +1,24 @@
-import "./App.css";
+import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
 import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
-import { GetVersions } from "./se3Api/versionsApi";
-import { GetLauncherInfo } from "./se3Api/launcherApi";
+import { GetVersions, InstallVersion } from "./SE3Api/versionsApi";
+import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
-import { showNotification } from "@mantine/notifications";
-import { Container, Tabs } from "@mantine/core";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import { Button, Container, Tabs, Text } from "@mantine/core";
+import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { humanFileSize } from "./utils";
+import { throttle } from "lodash";
 
 export default function App() {
     const [activeTab, setActiveTab] = useState(0);
     const [versionsSelectorVersions, setVersionsSelectorVersions] = useState([]);
     const [versionSelectorShown, setVersionSelectorShown] = useState(false);
     const [launcherText, setLauncherText] = useState("Failed to load launcher info");
+    const modals = useModals();
 
     useEffect(() => {
         (async () => {
@@ -31,16 +34,108 @@ export default function App() {
                 label: `${e.name} - ${humanFileSize(e.size, true, 2)}`,
                 value: e.tag,
                 hidden: e.hidden,
+                name: e.name,
             });
         });
         return outVersions;
     };
 
-    const onInstall = (tag) => {
+    const onInstall = async (version) => {
         setVersionSelectorShown(false);
+        const notificationID = `installing-${version.value}`;
+
+        /**
+         * @type {import("../preload").Installer}
+         */
+        let installer;
+
         showNotification({
-            title: "TODO",
-            message: "installing",
+            id: notificationID,
+            loading: true,
+            title: `Installing ${version.name}`,
+            message: "Starting...",
+            autoClose: false,
+            disallowClose: true,
+        });
+
+        const cancelInstallation = (e) => {
+            modals.openConfirmModal({
+                title: "Are you sure you want to cancel the installation?",
+                labels: { confirm: "Cancel", cancel: "No, go back" },
+                onConfirm: () => installer.Cancel(),
+                confirmProps: {
+                    color: "orange",
+                },
+            });
+        };
+
+        const updateProgress = (downloadedBytes, totalBytes) => {
+            updateNotification({
+                id: notificationID,
+                title: `Installing ${version.name}`,
+                message: (
+                    <>
+                        Downloaded {humanFileSize(downloadedBytes, true, 2)} / {humanFileSize(totalBytes, true, 2)}
+                        <br />
+                        <button className={styles.installingCancelButton} onClick={cancelInstallation}>
+                            Cancel
+                        </button>
+                    </>
+                ),
+                autoClose: false,
+                disallowClose: true,
+                loading: true,
+            });
+        };
+
+        const throttled = throttle(updateProgress, 150);
+
+        installer = InstallVersion({
+            tag: version.value,
+            onProgress: (downloadedBytes, totalBytes) => {
+                throttled(downloadedBytes, totalBytes);
+            },
+            onUnpacking: () => {
+                throttled.flush();
+                updateNotification({
+                    id: notificationID,
+                    title: `Installing ${version.name}`,
+                    message: `Unpacking...`,
+                    autoClose: false,
+                    disallowClose: true,
+                    loading: true,
+                });
+            },
+            onFinish: () => {
+                updateNotification({
+                    id: notificationID,
+                    title: `Finished installing ${version.name}`,
+                    autoClose: true,
+                    disallowClose: false,
+                    loading: false,
+                });
+            },
+            onCancel: () => {
+                throttled.flush();
+                updateNotification({
+                    id: notificationID,
+                    title: `Canceled ${version.name}`,
+                    autoClose: true,
+                    disallowClose: false,
+                    loading: false,
+                });
+            },
+            onError: (err) => {
+                throttled.flush();
+                updateNotification({
+                    id: notificationID,
+                    title: `Error installing ${version.name}`,
+                    message: err,
+                    autoClose: true,
+                    disallowClose: false,
+                    loading: false,
+                });
+            }
         });
     };
 
@@ -70,7 +165,7 @@ export default function App() {
                         shown={versionSelectorShown}
                         versions={versionsSelectorVersions}
                     />
-                    <button onClick={showVersionSelector} id="add-button" />
+                    <button onClick={showVersionSelector} className={styles.addButton} />
                 </Tabs.Tab>
                 <Tabs.Tab label="Launcher">
                     <div

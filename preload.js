@@ -1,27 +1,21 @@
-const axios = require("axios").default;
 const { getCurrentWindow } = require("@electron/remote");
 const { contextBridge, ipcRenderer } = require("electron");
-const { URL } = require("url");
 const Titlebar = require("@6c65726f79/custom-titlebar");
-const isDev = ipcRenderer.sendSync("isDev");
-const Store = require("electron-store");
 const electron = require("electron");
-const fs = require("fs");
-const debugConfig = fs.existsSync("./debugConfig.json") ? require("./debugConfig.json") : {};
-
-const store = new Store();
+const versionsApiSettings = require("./SE3ApiSettings");
+const EventEmitter = require("events");
 
 window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
-    document.querySelector('body').addEventListener('click', event => {
-        if (event.target.tagName.toLowerCase() === 'a') {
-            const absoluteUrl = new RegExp('^(?:[a-z]+:)?//', 'i');
+    document.querySelector("body").addEventListener("click", (event) => {
+        if (event.target.tagName.toLowerCase() === "a") {
+            const absoluteUrl = new RegExp("^(?:[a-z]+:)?//", "i");
             if (!absoluteUrl.test(event.target.href)) return;
             event.preventDefault();
             electron.shell.openExternal(event.target.href);
         }
     });
-    
+
     const currentWindow = getCurrentWindow();
     new Titlebar({
         backgroundColor: "#363636",
@@ -35,62 +29,93 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-const versionsApiSettings = {
-    root: (isDev && debugConfig.localServer) ? "http://localhost/" : "https://nadwey.pl/",
-    SE3Dir: "./kamiloso/SE3/",
-    ImagesDir: "./Images",
-    LauncherDir: "./Launcher",
-    VersionsDir: "./Versions",
-    VersionsFilesDir: "./Versions/Releases",
-    VersionsInfo: "./Versions/Versions.php",
-    LauncherInfo: "./kamiloso/SE3/Launcher/Launcher.md",
-
-    GetSE3Dir: () => {
-        return new URL(versionsApiSettings.SE3Dir, versionsApiSettings.root).toString();
-    },
-
-    GetImagesDir: () => {
-        return new URL(versionsApiSettings.ImagesDir, versionsApiSettings.GetSE3Dir()).toString();
-    },
-
-    GetVersionsDir: () => {
-        return new URL(versionsApiSettings.VersionsDir, versionsApiSettings.GetSE3Dir()).toString();
-    },
-
-    GetVersionsFilesDir: () => {
-        return new URL(versionsApiSettings.VersionsFilesDir, versionsApiSettings.GetSE3Dir()).toString();
-    },
-
-    GetVersionsInfo: () => {
-        return new URL(versionsApiSettings.VersionsInfo, versionsApiSettings.GetSE3Dir()).toString();
-    },
-};
 contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
 
 const GetVersions = async () => {
-    try {
-        let res = await axios.get(versionsApiSettings.GetVersionsInfo());
-        store.set("versions", res.data);
-        return res.data;
-    } catch (ex) {
-        if (store.has("versions")) {
-            return store.get("versions");
+    return await ipcRenderer.invoke("get_versions");
+};
+
+const GetLauncherInfo = async () => {
+    return await ipcRenderer.invoke("get_launcher_info");
+};
+
+/**
+ * @typedef {Object} InstallVersionSettings
+ * @property {String} tag
+ * @property {function(Number, Number)} onProgress
+ * @property {function()} onUnpacking
+ * @property {function()} onFinish
+ * @property {function(err)} onError
+ * @property {function()} onCancel
+ */
+
+/**
+ * @typedef {Object} Installer
+ * @property {function()} Cancel
+ */
+
+/**
+ * @type {Object.<string, InstallVersionSettings>}
+ */
+let workers = {};
+
+/**
+ * Installs version
+ *
+ * @param {InstallVersionSettings} settings
+ * @returns {Installer}
+ */
+const InstallVersion = (settings) => {
+    const id = crypto.randomUUID();
+    workers[id] = settings;
+
+    ipcRenderer.invoke("install_version", id, settings.tag);
+
+    return {
+        Cancel: () => {
+            ipcRenderer.invoke("installer_cancel", id);
         }
-        throw new Error("Can't load versions");
     }
 };
 
-const GetLauncherInfo = async() => {
-    const url = new URL(versionsApiSettings.LauncherInfo, versionsApiSettings.root).toString();
-    return (await axios.get(url, {
-        transformResponse: []
-    })).data;
-}
+const deleteWorker = (id) => {
+    workers[id] = null;
+    delete workers[id];
+};
+
+ipcRenderer.on("installer_progress", (event, id, downloadedBytes, totalBytes) => {
+    workers[id].onProgress(downloadedBytes, totalBytes);
+});
+
+ipcRenderer.on("installer_unpacking", (event, id) => {
+    workers[id].onUnpacking();
+});
+
+ipcRenderer.on("installer_finish", (event, id) => {
+    workers[id].onFinish();
+    deleteWorker(id);
+});
+
+ipcRenderer.on("installer_canceled", (event, id) => {
+    workers[id].onCancel();
+    deleteWorker(id);
+});
+
+ipcRenderer.on("installer_error", (event, id, err) => {
+    workers[id].onError(err);
+    deleteWorker(id);
+});
+
+const IsVersionInstalled = (versionTag) => {
+    ipcRenderer.invoke("is_version_installed", versionTag);
+};
 
 const GetInstalledVersions = async () => {};
 
 contextBridge.exposeInMainWorld("se3Api", {
     GetVersions,
-    GetInstalledVersions,
     GetLauncherInfo,
+    InstallVersion,
+    IsVersionInstalled,
+    GetInstalledVersions,
 });

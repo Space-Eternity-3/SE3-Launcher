@@ -1,3 +1,5 @@
+import styles from "./styles/HomePage.module.css";
+
 export default function HomePage() {
     return (
         <div style={{
@@ -7,12 +9,12 @@ export default function HomePage() {
             bottom: "0",
             right: "0"
         }}>
-            <div id="background"></div>
-            <div id="content-container">
-                <div className="content">Space Eternity 3</div>
+            <div className={styles.background}></div>
+            <div className={styles.contentContainer}>
+                <div className={styles.content}>Space Eternity 3</div>
             </div>
-            <div id="play-container">
-                <button id="play-button">Play</button>
+            <div className={styles.playContainer}>
+                <button className={styles.playButton}>Play</button>
             </div>
         </div>
     );

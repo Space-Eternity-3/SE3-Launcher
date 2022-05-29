@@ -3,6 +3,7 @@ const path = require("path");
 const isDev = require("electron-is-dev");
 require("@electron/remote/main").initialize();
 require("electron-store").initRenderer();
+require("./main/RendererBridge")();
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -10,6 +11,7 @@ async function createWindow() {
         height: 600,
         minWidth: 750,
         minHeight: 500,
+        icon: path.join(__dirname, "resources", "ikona.ico"),
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             backgroundThrottling: false,
