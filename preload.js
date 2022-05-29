@@ -3,7 +3,6 @@ const { contextBridge, ipcRenderer } = require("electron");
 const Titlebar = require("@6c65726f79/custom-titlebar");
 const electron = require("electron");
 const versionsApiSettings = require("./SE3ApiSettings");
-const EventEmitter = require("events");
 
 window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
