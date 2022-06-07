@@ -8,9 +8,10 @@ window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
     document.querySelector("body").addEventListener("click", (event) => {
         if (event.target.tagName.toLowerCase() === "a") {
+            if (!['https:', 'http:'].includes(new URL(event.target.href).protocol)) return;
             const absoluteUrl = new RegExp("^(?:[a-z]+:)?//", "i");
-            if (!absoluteUrl.test(event.target.href)) return;
             event.preventDefault();
+            if (!absoluteUrl.test(event.target.href)) return;
             electron.shell.openExternal(event.target.href);
         }
     });
@@ -109,7 +110,9 @@ const IsVersionInstalled = (versionTag) => {
     ipcRenderer.invoke("is_version_installed", versionTag);
 };
 
-const GetInstalledVersions = async () => {};
+const GetInstalledVersions = async() => {
+    return await ipcRenderer.invoke("get_installed_versions");
+};
 
 contextBridge.exposeInMainWorld("se3Api", {
     GetVersions,

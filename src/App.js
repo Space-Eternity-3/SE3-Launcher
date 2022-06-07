@@ -2,7 +2,7 @@ import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
 import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
-import { GetVersions, InstallVersion } from "./SE3Api/versionsApi";
+import { GetInstalledVersions, GetVersions, InstallVersion } from "./SE3Api/versionsApi";
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -12,20 +12,27 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { humanFileSize } from "./utils";
 import { throttle } from "lodash";
+import InstalledVersion from "./InstalledVersion";
 
 export default function App() {
     const [activeTab, setActiveTab] = useState(0);
     const [versionsSelectorVersions, setVersionsSelectorVersions] = useState([]);
     const [versionSelectorShown, setVersionSelectorShown] = useState(false);
     const [launcherText, setLauncherText] = useState("Failed to load launcher info");
+    const [installedVersions, setInstalledVersions] = useState([]);
     const modals = useModals();
 
     useEffect(() => {
         (async () => {
             setLauncherText(await GetLauncherInfo());
+            setInstalledVersions(await GetInstalledVersions());
         })();
     }, []);
 
+    const updateInstalledVersions = async() => {
+        setInstalledVersions(await GetInstalledVersions());
+    }
+    
     const VersionSelectorVersions = async () => {
         const versions = await GetVersions();
         let outVersions = [];
@@ -114,6 +121,7 @@ export default function App() {
                     disallowClose: false,
                     loading: false,
                 });
+                updateInstalledVersions();
             },
             onCancel: () => {
                 throttled.flush();
@@ -124,17 +132,19 @@ export default function App() {
                     disallowClose: false,
                     loading: false,
                 });
+                updateInstalledVersions();
             },
             onError: (err) => {
                 throttled.flush();
                 updateNotification({
                     id: notificationID,
                     title: `Error installing ${version.name}`,
-                    message: err,
+                    message: `${err}\nTODO: RETRY`,
                     autoClose: true,
                     disallowClose: false,
                     loading: false,
                 });
+                updateInstalledVersions();
             }
         });
     };
@@ -157,6 +167,11 @@ export default function App() {
                     <HomePage />
                 </Tabs.Tab>
                 <Tabs.Tab label="Versions">
+                    <div className={styles.versionsContainer}>
+                    {
+                        installedVersions.map(version => <InstalledVersion key={version.tag} version={version} />).reverse()
+                    }
+                    </div>
                     <VersionSelector
                         onCancel={() => {
                             setVersionSelectorShown(false);

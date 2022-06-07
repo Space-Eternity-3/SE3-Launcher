@@ -1,0 +1,51 @@
+.installedVersionContainer {
+    position: relative;
+    padding: 10px;
+    margin: 25px;
+    background-size: cover;
+    background-position: center;
+    width: 350px;
+    height: 210px;
+    display: inline-block;
+}
+
+.installedVersion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00000020;
+    user-select: none;
+}
+
+.title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: inline-block;
+    background-color: #00000090;
+    color: white;
+    font-size: 25px;
+    padding: 5px 0;
+    font-family: "Quicksand";
+}
+
+.buttons {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: inline-block;
+    background-color: #00000090;
+    color: white;
+    font-size: 25px;
+    padding: 5px 0;
+    font-family: "Quicksand";
+}
+
+.buttons > button {
+    margin: 0 5px;
+    width: 100px;
+}

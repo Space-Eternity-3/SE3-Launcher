@@ -47,7 +47,6 @@ const GetVersions = async () => {
  * @returns {String} markdown launcher info
  */
 const GetLauncherInfo = async () => {
-    console.log(se3ApiSettings.GetLauncherInfo());
     return (
         await axios.get(se3ApiSettings.GetLauncherInfo(), {
             transformResponse: [],

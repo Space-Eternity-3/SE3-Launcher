@@ -1,5 +1,5 @@
 const axios = require("axios").default;
-const { GetVersionZipFile } = require("./SE3Api");
+const { GetVersionZipFile, GetVersions } = require("./SE3Api");
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
@@ -28,6 +28,7 @@ class VersionInstaller extends EventEmitter {
             }
             const savePath = path.join(GetLauncherDirectory(), file.version.file);
 
+            if (fs.existsSync(savePath)) fs.rmSync(savePath);
             const res = await axios.get(file.url, {
                 responseType: "stream",
             });
@@ -41,9 +42,12 @@ class VersionInstaller extends EventEmitter {
             this.writer.on("close", async () => {
                 this.emit("unpacking");
                 const dir = path.join(GetVersionsDirectory(), file.version.tag);
+                if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
 
                 try {
-                    await decompress(savePath, dir);
+                    await decompress(savePath, dir, {
+                        filter: file => !file.path.endsWith("/")
+                    });
                 } catch (ex) {
                     this.emit("error", ex);
                     return;
@@ -91,11 +95,23 @@ class VersionInstaller extends EventEmitter {
  * 
  * @param {String} versionTag 
  */
-const IsVersionInstalled = (versionTag) => {
+ const IsVersionInstalled = (versionTag) => {
     return fs.existsSync(path.join(GetVersionsDirectory(), versionTag));
+}
+
+/**
+ * Returns installed versions 
+ * 
+ * @returns {import("./SE3Api").FetchedVersion[]}
+ */
+const GetInstalledVersions = async() => {
+    let versions = (await GetVersions()).Versions;
+
+    return versions.filter(version => IsVersionInstalled(version.tag));
 }
 
 module.exports = {
     VersionInstaller,
-    IsVersionInstalled
+    IsVersionInstalled,
+    GetInstalledVersions
 };

@@ -44,3 +44,7 @@ export function InstallVersion(settings) {
 export function IsVersionInstalled(versionTag) {
     return window.se3Api.IsVersionInstalled(versionTag);
 }
+
+export async function GetInstalledVersions() {
+    return await window.se3Api.GetInstalledVersions();
+}

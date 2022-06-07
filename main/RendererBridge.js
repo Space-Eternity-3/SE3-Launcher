@@ -1,6 +1,6 @@
 const { ipcMain } = require("electron");
 const SE3Api = require("./SE3Api");
-const { VersionInstaller, IsVersionInstalled } = require("./VersionInstaller");
+const { VersionInstaller, IsVersionInstalled, GetInstalledVersions } = require("./VersionInstaller");
 
 /**
  * @type {Object.<string, VersionInstaller>}
@@ -20,9 +20,7 @@ const ExportAsync = (name, fun) => {
 };
 
 const RendererBridge = () => {
-    ExportAsync("get_versions", SE3Api.GetVersions);
-    ExportAsync("get_launcher_info", SE3Api.GetLauncherInfo);
-
+    // Installer
     ipcMain.handle("install_version", (e, id, tag) => {
         const deleteInstaller = (id) => {
             installers[id] = null;
@@ -57,11 +55,15 @@ const RendererBridge = () => {
             deleteInstaller(id);
         }
     });
-
-    Export("is_version_installed", IsVersionInstalled);
     Export("installer_cancel", (id) => {
         installers[id].Stop();
     });
+
+    Export("is_version_installed", IsVersionInstalled);
+    ExportAsync("get_versions", SE3Api.GetVersions);
+    ExportAsync("get_installed_versions", GetInstalledVersions);
+
+    ExportAsync("get_launcher_info", SE3Api.GetLauncherInfo);
 };
 
 module.exports = RendererBridge;
