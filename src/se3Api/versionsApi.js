@@ -41,10 +41,18 @@ export function InstallVersion(settings) {
  * @param {String} versionTag tag of the version to check
  * @returns {Boolean}
  */
-export function IsVersionInstalled(versionTag) {
-    return window.se3Api.IsVersionInstalled(versionTag);
+export async function IsVersionInstalled(versionTag) {
+    return await window.se3Api.IsVersionInstalled(versionTag);
 }
 
 export async function GetInstalledVersions() {
     return await window.se3Api.GetInstalledVersions();
+}
+
+export async function UninstallVersion(versionTag) {
+    return await window.se3Api.UninstallVersion(versionTag);
+}
+
+export async function RunVersion(versionTag) {
+    return await window.se3Api.RunVersion(versionTag);
 }

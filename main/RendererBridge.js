@@ -1,6 +1,6 @@
 const { ipcMain } = require("electron");
 const SE3Api = require("./SE3Api");
-const { VersionInstaller, IsVersionInstalled, GetInstalledVersions } = require("./VersionInstaller");
+const { VersionInstaller, IsVersionInstalled, GetInstalledVersions, UninstallVersion, RunVersion } = require("./VersionInstaller");
 
 /**
  * @type {Object.<string, VersionInstaller>}
@@ -62,7 +62,8 @@ const RendererBridge = () => {
     Export("is_version_installed", IsVersionInstalled);
     ExportAsync("get_versions", SE3Api.GetVersions);
     ExportAsync("get_installed_versions", GetInstalledVersions);
-
+    ExportAsync("uninstall_version", UninstallVersion);
+    Export("run_version", RunVersion);
     ExportAsync("get_launcher_info", SE3Api.GetLauncherInfo);
 };
 

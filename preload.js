@@ -106,13 +106,21 @@ ipcRenderer.on("installer_error", (event, id, err) => {
     deleteWorker(id);
 });
 
-const IsVersionInstalled = (versionTag) => {
-    ipcRenderer.invoke("is_version_installed", versionTag);
+const IsVersionInstalled = async(versionTag) => {
+    return await ipcRenderer.invoke("is_version_installed", versionTag);
 };
 
 const GetInstalledVersions = async() => {
     return await ipcRenderer.invoke("get_installed_versions");
 };
+
+const UninstallVersion = async(versionTag) => {
+    return await ipcRenderer.invoke("uninstall_version", versionTag);
+}
+
+const RunVersion = async(versionTag) => {
+    return await ipcRenderer.invoke("run_version", versionTag);
+}
 
 contextBridge.exposeInMainWorld("se3Api", {
     GetVersions,
@@ -120,4 +128,6 @@ contextBridge.exposeInMainWorld("se3Api", {
     InstallVersion,
     IsVersionInstalled,
     GetInstalledVersions,
+    UninstallVersion,
+    RunVersion
 });

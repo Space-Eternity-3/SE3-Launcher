@@ -2,7 +2,7 @@ import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
 import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
-import { GetInstalledVersions, GetVersions, InstallVersion } from "./SE3Api/versionsApi";
+import { GetInstalledVersions, GetVersions, InstallVersion, UninstallVersion } from "./SE3Api/versionsApi";
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
@@ -29,10 +29,10 @@ export default function App() {
         })();
     }, []);
 
-    const updateInstalledVersions = async() => {
+    const updateInstalledVersions = async () => {
         setInstalledVersions(await GetInstalledVersions());
-    }
-    
+    };
+
     const VersionSelectorVersions = async () => {
         const versions = await GetVersions();
         let outVersions = [];
@@ -73,6 +73,7 @@ export default function App() {
                 confirmProps: {
                     color: "orange",
                 },
+                centered: true,
             });
         };
 
@@ -139,19 +140,58 @@ export default function App() {
                 updateNotification({
                     id: notificationID,
                     title: `Error installing ${version.name}`,
-                    message: `${err}\nTODO: RETRY`,
+                    message: `${err}`,
                     autoClose: true,
                     disallowClose: false,
                     loading: false,
                 });
                 updateInstalledVersions();
-            }
+            },
         });
     };
 
     const showVersionSelector = async () => {
         setVersionSelectorShown(true);
         setVersionsSelectorVersions(await VersionSelectorVersions());
+    };
+
+    const uninstallVersion = (ver) => {
+        modals.openConfirmModal({
+            title: "Are you sure you want to uninstall this version?",
+            labels: { confirm: "Uninstall", cancel: "No, go back" },
+            onConfirm: async () => {
+                try {
+                    showNotification({
+                        id: `uninstalling-${ver.tag}`,
+                        title: `Uninstalled ${ver.name}`,
+                        autoClose: false,
+                        disallowClose: true,
+                        loading: true,
+                    });
+                    await UninstallVersion(ver.tag);
+                    updateInstalledVersions();
+                    updateNotification({
+                        id: `uninstalling-${ver.tag}`,
+                        title: `Uninstalled ${ver.name}`,
+                        autoClose: true,
+                        disallowClose: false,
+                        loading: false,
+                    });
+                } catch (ex) {
+                    updateNotification({
+                        id: `uninstalling-${ver.tag}`,
+                        title: `Failed to uninstall ${ver.name}\n${ex}`,
+                        autoClose: true,
+                        disallowClose: false,
+                        loading: false,
+                    });
+                }
+            },
+            confirmProps: {
+                color: "red",
+            },
+            centered: true,
+        });
     };
 
     return (
@@ -168,9 +208,7 @@ export default function App() {
                 </Tabs.Tab>
                 <Tabs.Tab label="Versions">
                     <div className={styles.versionsContainer}>
-                    {
-                        installedVersions.map(version => <InstalledVersion key={version.tag} version={version} />).reverse()
-                    }
+                        {installedVersions.map((version) => <InstalledVersion key={version.tag} version={version} uninstallVersion={uninstallVersion} />).reverse()}
                     </div>
                     <VersionSelector
                         onCancel={() => {

@@ -1,7 +1,8 @@
 import { Button } from "@mantine/core";
+import { RunVersion } from "./SE3Api/versionsApi";
 import styles from "./styles/InstalledVersion.module.css";
 
-export default function InstalledVersion({ version }) {
+export default function InstalledVersion({ version, uninstallVersion }) {
     return (
         <div
             style={{
@@ -19,8 +20,17 @@ export default function InstalledVersion({ version }) {
                     {version.name}
                 </span>
                 <div className={styles.buttons}>
-                    <Button color="red">Uninstall</Button>
-                    <Button>Play</Button>
+                    <Button
+                        onClick={() => {
+                            uninstallVersion(version);
+                        }}
+                        color="red"
+                    >
+                        Uninstall
+                    </Button>
+                    <Button onClick={() => {
+                        RunVersion(version.tag);
+                    }}>Play</Button>
                 </div>
             </div>
         </div>
