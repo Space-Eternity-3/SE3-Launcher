@@ -24,6 +24,10 @@ async function createWindow() {
         title: "SE3 Launcher",
     });
 
+    process.on("uncaughtException", (ex) => {
+        mainWindow.webContents.send("uncaught_exception", ex);
+    });
+
     require("@electron/remote/main").enable(mainWindow.webContents);
     if (isDev) {
         mainWindow.setMenuBarVisibility(false); // dev tools

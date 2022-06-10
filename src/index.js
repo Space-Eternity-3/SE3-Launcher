@@ -10,7 +10,7 @@ ReactDOM.render(
     <React.StrictMode>
         <MantineProvider theme={{ colorScheme: "dark" }}>
             <ModalsProvider>
-                <NotificationsProvider zIndex={999} position="bottom-left">
+                <NotificationsProvider zIndex={998} position="bottom-left">
                     <App />
                 </NotificationsProvider>
             </ModalsProvider>

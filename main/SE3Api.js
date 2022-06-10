@@ -42,19 +42,6 @@ const GetVersions = async () => {
 };
 
 /**
- * Gets launcher info (markdown)
- * 
- * @returns {String} markdown launcher info
- */
-const GetLauncherInfo = async () => {
-    return (
-        await axios.get(se3ApiSettings.GetLauncherInfo(), {
-            transformResponse: [],
-        })
-    ).data;
-};
-
-/**
  * Gets link to version's zip file
  * 
  * @param {String} versionTag version tag
@@ -71,6 +58,5 @@ const GetVersionZipFile = async(versionTag) => {
 
 module.exports = {
     GetVersions,
-    GetLauncherInfo,
     GetVersionZipFile
 };

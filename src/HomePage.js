@@ -1,6 +1,7 @@
+import { IsVersionInstalled, RunVersion } from "./SE3Api/versionsApi";
 import styles from "./styles/HomePage.module.css";
 
-export default function HomePage() {
+export default function HomePage({ playButtonText, versions, openVersionSelector }) {
     return (
         <div style={{
             position: "absolute",
@@ -14,7 +15,10 @@ export default function HomePage() {
                 <div className={styles.content}>Space Eternity 3</div>
             </div>
             <div className={styles.playContainer}>
-                <button className={styles.playButton}>Play</button>
+                <button onClick={async() => {
+                    if (await IsVersionInstalled(versions.latest)) RunVersion(versions.latest);
+                    else openVersionSelector();
+                }} className={styles.playButton}>{`${playButtonText}`}</button>
             </div>
         </div>
     );

@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
     document.querySelector("body").addEventListener("click", (event) => {
         if (event.target.tagName.toLowerCase() === "a") {
-            if (!['https:', 'http:'].includes(new URL(event.target.href).protocol)) return;
+            if (!["https:", "http:"].includes(new URL(event.target.href).protocol)) return;
             const absoluteUrl = new RegExp("^(?:[a-z]+:)?//", "i");
             event.preventDefault();
             if (!absoluteUrl.test(event.target.href)) return;
@@ -74,8 +74,8 @@ const InstallVersion = (settings) => {
     return {
         Cancel: () => {
             ipcRenderer.invoke("installer_cancel", id);
-        }
-    }
+        },
+    };
 };
 
 const deleteWorker = (id) => {
@@ -106,21 +106,21 @@ ipcRenderer.on("installer_error", (event, id, err) => {
     deleteWorker(id);
 });
 
-const IsVersionInstalled = async(versionTag) => {
+const IsVersionInstalled = async (versionTag) => {
     return await ipcRenderer.invoke("is_version_installed", versionTag);
 };
 
-const GetInstalledVersions = async() => {
+const GetInstalledVersions = async () => {
     return await ipcRenderer.invoke("get_installed_versions");
 };
 
-const UninstallVersion = async(versionTag) => {
+const UninstallVersion = async (versionTag) => {
     return await ipcRenderer.invoke("uninstall_version", versionTag);
-}
+};
 
-const RunVersion = async(versionTag) => {
+const RunVersion = async (versionTag) => {
     return await ipcRenderer.invoke("run_version", versionTag);
-}
+};
 
 contextBridge.exposeInMainWorld("se3Api", {
     GetVersions,
@@ -129,5 +129,35 @@ contextBridge.exposeInMainWorld("se3Api", {
     IsVersionInstalled,
     GetInstalledVersions,
     UninstallVersion,
-    RunVersion
+    RunVersion,
 });
+
+// I was thinking about making a less spaghetti code library for this shit (Main < --- > Preload < --- > Renderer)
+(() => {
+    let listeners = {};
+
+    const callListener = (name, ...args) => {
+        if (!(name in listeners) || !Array.isArray(listeners[name])) return;
+        for (const callback of listeners[name]) {
+            callback(...args);
+        }
+    }
+
+    contextBridge.exposeInMainWorld("listeners", {
+        add: (name, callback) => {
+            if (!(name in listeners) || !Array.isArray(listeners[name])) listeners[name] = [];
+            listeners[name].push(callback);
+        },
+        remove: (name) => {
+            if (!(name in listeners) || !Array.isArray(listeners[name])) return;
+            listeners[name] = [];
+        },
+        test: (ex) => {
+            callListener("uncaught_exception", ex);
+        }
+    });
+
+    ipcRenderer.on("uncaught_exception", (event, err) => {
+        callListener("uncaught_exception", err);
+    });
+})();

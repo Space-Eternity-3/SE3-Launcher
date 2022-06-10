@@ -64,7 +64,6 @@ const RendererBridge = () => {
     ExportAsync("get_installed_versions", GetInstalledVersions);
     ExportAsync("uninstall_version", UninstallVersion);
     Export("run_version", RunVersion);
-    ExportAsync("get_launcher_info", SE3Api.GetLauncherInfo);
 };
 
 module.exports = RendererBridge;

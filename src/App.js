@@ -2,11 +2,11 @@ import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
 import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
-import { GetInstalledVersions, GetVersions, InstallVersion, UninstallVersion } from "./SE3Api/versionsApi";
+import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, UninstallVersion } from "./SE3Api/versionsApi";
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Container, Tabs } from "@mantine/core";
+import { Container, Tabs, Text } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
@@ -14,24 +14,78 @@ import { humanFileSize } from "./utils";
 import { throttle } from "lodash";
 import InstalledVersion from "./InstalledVersion";
 
+let versions = {};
+
 export default function App() {
     const [activeTab, setActiveTab] = useState(0);
     const [versionsSelectorVersions, setVersionsSelectorVersions] = useState([]);
     const [versionSelectorShown, setVersionSelectorShown] = useState(false);
     const [launcherText, setLauncherText] = useState("Failed to load launcher info");
     const [installedVersions, setInstalledVersions] = useState([]);
+    const [playButtonText, setPlayButtonText] = useState("Play");
     const modals = useModals();
+
+    const updateInstalledVersions = async () => {
+        const installedVersions = await GetInstalledVersions();
+        setInstalledVersions(installedVersions);
+
+        if (await IsVersionInstalled(versions.latest)) setPlayButtonText("Play");
+        else if (installedVersions.length > 0) setPlayButtonText("Update");
+        else setPlayButtonText("Install");
+    };
 
     useEffect(() => {
         (async () => {
-            setLauncherText(await GetLauncherInfo());
-            setInstalledVersions(await GetInstalledVersions());
+            try {
+                setLauncherText(await GetLauncherInfo());
+            }
+            catch (ex) {
+
+            }
+
+            versions = await GetVersions();
+            if (!versions) {
+                showNotification({
+                    title: "Failed to get versions. Check your internet connection.",
+                    color: "red",
+                    autoClose: true,
+                    disallowClose: false
+                })
+            }
+            updateInstalledVersions();
         })();
     }, []);
 
-    const updateInstalledVersions = async () => {
-        setInstalledVersions(await GetInstalledVersions());
-    };
+    useEffect(() => {
+        window.listeners.add("uncaught_exception", (err) => {
+            showNotification({
+                color: "red",
+                title: "Error ocurred in main process.",
+                message: (
+                    <div>
+                        <code>{`${err}`}</code>
+                        <br />
+                        <br />
+                        If the error keeps appearing, please report it on{" "}
+                        <Text variant="link" component="a" href="https://github.com/Space-Eternity-3/SE3-Launcher/issues">
+                            Github
+                        </Text>{" "}
+                        or{" "}
+                        <Text variant="link" component="a" href="https://discord.gg/e4ppBTRKhg">
+                            our discord server
+                        </Text>
+                        .
+                    </div>
+                ),
+                disallowClose: false,
+                autoClose: true,
+            });
+        });
+
+        return () => {
+            window.listeners.remove("uncaught_exception");
+        };
+    }, []);
 
     const VersionSelectorVersions = async () => {
         const versions = await GetVersions();
@@ -74,6 +128,7 @@ export default function App() {
                     color: "orange",
                 },
                 centered: true,
+                zIndex: 999,
             });
         };
 
@@ -144,6 +199,7 @@ export default function App() {
                     autoClose: true,
                     disallowClose: false,
                     loading: false,
+                    color: "red"
                 });
                 updateInstalledVersions();
             },
@@ -191,8 +247,14 @@ export default function App() {
                 color: "red",
             },
             centered: true,
+            zIndex: 999,
         });
     };
+
+    const openVersionSelector = () => {
+        setActiveTab(1);
+        showVersionSelector();
+    }
 
     return (
         <Container>
@@ -204,7 +266,7 @@ export default function App() {
                 }}
             >
                 <Tabs.Tab label="Home">
-                    <HomePage />
+                    <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
                 </Tabs.Tab>
                 <Tabs.Tab label="Versions">
                     <div className={styles.versionsContainer}>
