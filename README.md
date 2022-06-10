@@ -4,6 +4,7 @@
 [![build](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build?style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/actions/workflows/build.yml)
 [![version](https://img.shields.io/github/v/tag/Space-Eternity-3/SE3-Launcher?label=version&style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/releases/)
 [![discord badge](https://img.shields.io/discord/909014300088213547?label=Discord&logo=Discord&style=for-the-badge)](https://discord.gg/e4ppBTRKhg)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSpace-Eternity-3%2FSE3-Launcher.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSpace-Eternity-3%2FSE3-Launcher?ref=badge_shield)
 
 Launcher for Space Eternity 3
 
@@ -108,3 +109,6 @@ Example (may be out of date):
 ### Launcher.md
 
 [Launcher.md](https://nadwey.pl/kamiloso/SE3/Launcher/Launcher.md) is a markdown file displayed in Launcher tab.
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FSpace-Eternity-3%2FSE3-Launcher.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FSpace-Eternity-3%2FSE3-Launcher?ref=badge_large)
