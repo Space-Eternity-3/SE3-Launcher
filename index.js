@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
-const isDev = require("electron-is-dev");
+const isDev = require("electron-is").dev();
 require("@electron/remote/main").initialize();
 require("electron-store").initRenderer();
 require("./main/RendererBridge")();
@@ -26,6 +26,7 @@ async function createWindow() {
 
     process.on("uncaughtException", (ex) => {
         mainWindow.webContents.send("uncaught_exception", ex);
+        console.error(ex);
     });
 
     require("@electron/remote/main").enable(mainWindow.webContents);
@@ -40,7 +41,7 @@ async function createWindow() {
     }
 }
 
-ipcMain.on("isDev", (e) => {
+ipcMain.handle("isDev", (e) => {
     e.returnValue = isDev;
 });
 

@@ -9,8 +9,6 @@ Launcher for Space Eternity 3
 
 **NOTE**: Launcher is only built for Windows, because there are no game builds for other operating system. (You can still use Wine I think)
 
-**Another note**: Both yarn and npm should be supported
-
 ## Table of Contents
 
 - [SE3 Launcher](#se3-launcher)

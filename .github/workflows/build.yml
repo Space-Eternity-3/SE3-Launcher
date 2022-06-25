@@ -1,8 +1,10 @@
 name: "Build"
 
-on: [push]
+on:
+    push:
+    pull_request:
 jobs:
-    analyze:
+    build:
         name: Build (Windows)
 
         permissions:
