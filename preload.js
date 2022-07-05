@@ -2,7 +2,7 @@ const { getCurrentWindow } = require("@electron/remote");
 const { contextBridge, ipcRenderer } = require("electron");
 const Titlebar = require("@6c65726f79/custom-titlebar");
 const electron = require("electron");
-const versionsApiSettings = require("./SE3ApiSettings")(ipcRenderer.invoke("isDev"));
+const versionsApiSettings = require("./SE3ApiSettings")(ipcRenderer.sendSync("isDev"));
 const { RendererBridge } = require("electronbb");
 let rendererBridge = new RendererBridge();
 

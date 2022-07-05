@@ -41,7 +41,7 @@ async function createWindow() {
     }
 }
 
-ipcMain.handle("isDev", (e) => {
+ipcMain.on("isDev", (e) => {
     e.returnValue = isDev;
 });
 

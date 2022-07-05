@@ -54,5 +54,5 @@ export function UninstallVersion(versionTag) {
 }
 
 export function RunVersion(versionTag) {
-    return window.se3Api.RunVersion.callIgnore(versionTag);
+    return window.se3Api.RunVersion(versionTag);
 }
