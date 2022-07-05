@@ -16,8 +16,8 @@
 
 /**
  * Gets versions list
- * Throws an error if can't get
- * Works with internet off (If version list exists arleady), but it will not fetch the latest version list
+ * Throws an error if can't
+ * Works with internet off (loads from storage)
  *
  * @returns {FetchedVersions}
  */
@@ -41,18 +41,18 @@ export function InstallVersion(settings) {
  * @param {String} versionTag tag of the version to check
  * @returns {Boolean}
  */
-export async function IsVersionInstalled(versionTag) {
-    return await window.se3Api.IsVersionInstalled(versionTag);
+export function IsVersionInstalled(versionTag) {
+    return window.se3Api.IsVersionInstalled(versionTag);
 }
 
 export async function GetInstalledVersions() {
     return await window.se3Api.GetInstalledVersions();
 }
 
-export async function UninstallVersion(versionTag) {
-    return await window.se3Api.UninstallVersion(versionTag);
+export function UninstallVersion(versionTag) {
+    return window.se3Api.UninstallVersion(versionTag);
 }
 
-export async function RunVersion(versionTag) {
-    return await window.se3Api.RunVersion(versionTag);
+export function RunVersion(versionTag) {
+    return window.se3Api.RunVersion.callIgnore(versionTag);
 }

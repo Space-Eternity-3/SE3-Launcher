@@ -2,11 +2,11 @@ import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
 import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
-import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, UninstallVersion } from "./SE3Api/versionsApi";
-import { GetLauncherInfo } from "./SE3Api/launcherApi";
+import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, UninstallVersion } from "./se3Api/versionsApi";
+import { GetLauncherInfo } from "./se3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Container, Tabs, Text } from "@mantine/core";
+import { Container, Tabs, Text, Autocomplete } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
@@ -23,13 +23,14 @@ export default function App() {
     const [launcherText, setLauncherText] = useState("Failed to load launcher info");
     const [installedVersions, setInstalledVersions] = useState([]);
     const [playButtonText, setPlayButtonText] = useState("Play");
+    const [versionFilter, setVersionFilter] = useState("");
     const modals = useModals();
 
     const updateInstalledVersions = async () => {
         const installedVersions = await GetInstalledVersions();
         setInstalledVersions(installedVersions);
 
-        if (await IsVersionInstalled(versions.latest)) setPlayButtonText("Play");
+        if (IsVersionInstalled(versions.latest)) setPlayButtonText("Play");
         else if (installedVersions.length > 0) setPlayButtonText("Update");
         else setPlayButtonText("Install");
     };
@@ -38,10 +39,7 @@ export default function App() {
         (async () => {
             try {
                 setLauncherText(await GetLauncherInfo());
-            }
-            catch (ex) {
-
-            }
+            } catch (ex) {}
 
             versions = await GetVersions();
             if (!versions) {
@@ -49,8 +47,8 @@ export default function App() {
                     title: "Failed to get versions. Check your internet connection.",
                     color: "red",
                     autoClose: true,
-                    disallowClose: false
-                })
+                    disallowClose: false,
+                });
             }
             updateInstalledVersions();
         })();
@@ -199,7 +197,7 @@ export default function App() {
                     autoClose: true,
                     disallowClose: false,
                     loading: false,
-                    color: "red"
+                    color: "red",
                 });
                 updateInstalledVersions();
             },
@@ -254,7 +252,7 @@ export default function App() {
     const openVersionSelector = () => {
         setActiveTab(1);
         showVersionSelector();
-    }
+    };
 
     return (
         <Container>
@@ -269,8 +267,22 @@ export default function App() {
                     <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
                 </Tabs.Tab>
                 <Tabs.Tab label="Versions">
+                    <div style={{
+                        marginTop: "40px",
+                        height: "calc(100% - 40px)",
+                    }}>
+                    <Autocomplete
+                        style={{
+                            width: "calc(100% - 20px)",
+                            margin: "5px 10px 10px",
+                        }}
+                        value={versionFilter}
+                        onChange={setVersionFilter}
+                        placeholder="Version filter"
+                        data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
+                    />
                     <div className={styles.versionsContainer}>
-                        {installedVersions.map((version) => <InstalledVersion key={version.tag} version={version} uninstallVersion={uninstallVersion} />).reverse()}
+                        {installedVersions.filter(version => version.name.includes(versionFilter)).map((version) => <InstalledVersion key={version.tag} version={version} uninstallVersion={uninstallVersion} />).reverse()}
                     </div>
                     <VersionSelector
                         onCancel={() => {
@@ -281,6 +293,7 @@ export default function App() {
                         versions={versionsSelectorVersions}
                     />
                     <button onClick={showVersionSelector} className={styles.addButton} />
+                    </div>
                 </Tabs.Tab>
                 <Tabs.Tab label="Launcher">
                     <div

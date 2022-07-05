@@ -3,6 +3,8 @@ const { contextBridge, ipcRenderer } = require("electron");
 const Titlebar = require("@6c65726f79/custom-titlebar");
 const electron = require("electron");
 const versionsApiSettings = require("./SE3ApiSettings")(ipcRenderer.invoke("isDev"));
+const { RendererBridge } = require("electronbb");
+let rendererBridge = new RendererBridge();
 
 window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
@@ -30,10 +32,6 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
-
-const GetVersions = async () => {
-    return await ipcRenderer.invoke("get_versions");
-};
 
 const GetLauncherInfo = async () => {
     return await ipcRenderer.invoke("get_launcher_info");
@@ -106,33 +104,13 @@ ipcRenderer.on("installer_error", (event, id, err) => {
     deleteWorker(id);
 });
 
-const IsVersionInstalled = async (versionTag) => {
-    return await ipcRenderer.invoke("is_version_installed", versionTag);
-};
-
-const GetInstalledVersions = async () => {
-    return await ipcRenderer.invoke("get_installed_versions");
-};
-
-const UninstallVersion = async (versionTag) => {
-    return await ipcRenderer.invoke("uninstall_version", versionTag);
-};
-
-const RunVersion = async (versionTag) => {
-    return await ipcRenderer.invoke("run_version", versionTag);
-};
-
 contextBridge.exposeInMainWorld("se3Api", {
-    GetVersions,
     GetLauncherInfo,
     InstallVersion,
-    IsVersionInstalled,
-    GetInstalledVersions,
-    UninstallVersion,
-    RunVersion,
+    ...rendererBridge.GetSync("versionsApi")
 });
 
-// I was thinking about making a less spaghetti code library for this shit (Main < --- > Preload < --- > Renderer)
+// :)
 (() => {
     let listeners = {};
 

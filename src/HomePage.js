@@ -1,4 +1,4 @@
-import { IsVersionInstalled, RunVersion } from "./SE3Api/versionsApi";
+import { IsVersionInstalled, RunVersion } from "./se3Api/versionsApi";
 import styles from "./styles/HomePage.module.css";
 
 export default function HomePage({ playButtonText, versions, openVersionSelector }) {
@@ -16,7 +16,7 @@ export default function HomePage({ playButtonText, versions, openVersionSelector
             </div>
             <div className={styles.playContainer}>
                 <button onClick={async() => {
-                    if (await IsVersionInstalled(versions.latest)) RunVersion(versions.latest);
+                    if (IsVersionInstalled(versions.latest)) RunVersion(versions.latest);
                     else openVersionSelector();
                 }} className={styles.playButton}>{`${playButtonText}`}</button>
             </div>
