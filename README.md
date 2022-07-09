@@ -7,7 +7,7 @@
 
 Launcher for Space Eternity 3
 
-**NOTE**: Launcher is only built for Windows, because there are no game builds for other operating system. (You can still use Wine I think)
+**NOTE**: Launcher is built only for Windows, because there are no game builds for other operating systems. (You can still use Wine I think)
 
 ## Table of Contents
 
