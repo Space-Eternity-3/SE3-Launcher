@@ -26,9 +26,12 @@ jobs:
                   npm ci
                   npm run build
 
-            - uses: ncipollo/release-action@v1
+            - name: Release
+              uses: softprops/action-gh-release@v1
               with:
-                  artifacts: "dist/*.zip"
-                  tag: nightly-build
+                  files: dist/*.zip
+                  tag_name: nightly
+                  fail_on_unmatched_files: true
+                  name: Nightly build
                   prerelease: true
-                  allowUpdates: true
+                  body: "Latest commit build."
