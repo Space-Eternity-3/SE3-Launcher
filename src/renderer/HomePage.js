@@ -1,4 +1,4 @@
-import { IsVersionInstalled, RunVersion } from "./se3Api/versionsApi";
+import { IsVersionInstalled, RunVersion } from "./SE3Api/versionsApi";
 import styles from "./styles/HomePage.module.css";
 
 export default function HomePage({ playButtonText, versions, openVersionSelector }) {

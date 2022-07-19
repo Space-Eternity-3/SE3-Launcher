@@ -1,9 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const { setupTitlebar, attachTitlebarToWindow } = require("custom-electron-titlebar/main");
 const isDev = require("electron-is").dev();
-require("@electron/remote/main").initialize();
 require("electron-store").initRenderer();
-require("./main/RendererBridge")();
+require("./RendererBridge")();
+
+setupTitlebar();
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -13,7 +15,7 @@ async function createWindow() {
         minHeight: 500,
         icon: path.join(__dirname, "resources", "ikona.ico"),
         webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
+            preload: require.resolve("../preload/preload.js"),
             backgroundThrottling: false,
             nodeIntegration: false,
             contextIsolation: true,
@@ -29,7 +31,8 @@ async function createWindow() {
         console.error(ex);
     });
 
-    require("@electron/remote/main").enable(mainWindow.webContents);
+    attachTitlebarToWindow(mainWindow);
+
     if (isDev) {
         mainWindow.setMenuBarVisibility(false); // dev tools
         const waitOn = require("wait-on");
@@ -37,7 +40,7 @@ async function createWindow() {
         await mainWindow.loadURL("http://localhost:3000");
     } else {
         mainWindow.setMenu(null);
-        mainWindow.loadURL(path.join(__dirname, "./build/index.html"));
+        mainWindow.loadFile("build/index.html");
     }
 }
 

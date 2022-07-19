@@ -1,10 +1,10 @@
-const { getCurrentWindow } = require("@electron/remote");
 const { contextBridge, ipcRenderer } = require("electron");
-const Titlebar = require("@6c65726f79/custom-titlebar");
+const { Titlebar, Color } = require("custom-electron-titlebar");
 const electron = require("electron");
-const versionsApiSettings = require("./SE3ApiSettings")(ipcRenderer.sendSync("isDev"));
+const versionsApiSettings = require("../SE3ApiSettings");
 const { RendererBridge } = require("electronbb");
 let rendererBridge = new RendererBridge();
+const versionsApi = rendererBridge.GetSync("versionsApi");
 
 window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
@@ -18,16 +18,10 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const currentWindow = getCurrentWindow();
     new Titlebar({
-        backgroundColor: "#363636",
-        titleHorizontalAlignment: "left",
+        icon: "ikona.png",
+        backgroundColor: Color.fromHex("#363636"),
         menu: null,
-        backgroundUnfocusEffect: false,
-        onMinimize: () => currentWindow.minimize(),
-        onMaximize: () => (currentWindow.isMaximized() ? currentWindow.unmaximize() : currentWindow.maximize()),
-        onClose: () => currentWindow.close(),
-        isMaximized: () => currentWindow.isMaximized(),
     });
 });
 
@@ -71,7 +65,7 @@ const InstallVersion = (settings) => {
 
     return {
         Cancel: () => {
-            ipcRenderer.invoke("installer_cancel", id);
+            versionsApi.installerCancel(id);
         },
     };
 };
@@ -107,7 +101,7 @@ ipcRenderer.on("installer_error", (event, id, err) => {
 contextBridge.exposeInMainWorld("se3Api", {
     GetLauncherInfo,
     InstallVersion,
-    ...rendererBridge.GetSync("versionsApi")
+    ...versionsApi,
 });
 
 // :)
@@ -119,7 +113,7 @@ contextBridge.exposeInMainWorld("se3Api", {
         for (const callback of listeners[name]) {
             callback(...args);
         }
-    }
+    };
 
     contextBridge.exposeInMainWorld("listeners", {
         add: (name, callback) => {
@@ -132,7 +126,7 @@ contextBridge.exposeInMainWorld("se3Api", {
         },
         test: (ex) => {
             callListener("uncaught_exception", ex);
-        }
+        },
     });
 
     ipcRenderer.on("uncaught_exception", (event, err) => {

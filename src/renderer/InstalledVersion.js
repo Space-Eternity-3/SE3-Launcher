@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core";
-import { RunVersion } from "./se3Api/versionsApi";
+import { RunVersion } from "./SE3Api/versionsApi";
 import styles from "./styles/InstalledVersion.module.css";
 
 export default function InstalledVersion({ version, uninstallVersion }) {

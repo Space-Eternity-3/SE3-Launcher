@@ -25,3 +25,10 @@ jobs:
               run: |
                   npm ci
                   npm run build
+
+            - uses: ncipollo/release-action@v1
+              with:
+                  artifacts: "dist/*.zip"
+                  tag: nightly-build
+                  prerelease: true
+                  allowUpdates: true

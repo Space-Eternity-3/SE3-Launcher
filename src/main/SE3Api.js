@@ -1,6 +1,5 @@
 const axios = require("axios").default;
-const isDev = require("electron-is").dev();
-const se3ApiSettings = require("../SE3ApiSettings")(isDev);
+const se3ApiSettings = require("../SE3ApiSettings");
 const Store = require("electron-store");
 const { URL } = require("url");
 

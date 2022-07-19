@@ -1,6 +1,5 @@
 const getAppDataPath = require("appdata-path");
 const path = require("path");
-const { version } = require("./package.json");
 const fs = require("fs");
 
 const GetGameDirectory = () => {

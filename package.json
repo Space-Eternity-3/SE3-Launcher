@@ -4,26 +4,27 @@
     "version": "3.0.0-alpha.3",
     "private": true,
     "homepage": "./",
-    "main": "index.js",
+    "main": "src/main/index.js",
     "author": {
         "name": "Nadwey",
         "url": "https://github.com/Nadwey/"
     },
     "license": "MIT",
     "devDependencies": {
-        "concurrently": "^7.2.2",
+        "concurrently": "^7.3.0",
         "cross-env": "^7.0.3",
-        "electron": "^19.0.7",
-        "electron-builder": "^23.1.0",
+        "electron": "^19.0.8",
+        "electron-builder": "^23.3.2",
         "react": "^17.0.2",
+        "react-app-rewired": "^2.2.1",
         "react-dom": "^17.0.2",
-        "react-scripts": "^5.0.1",
         "wait-on": "^6.0.1"
     },
     "scripts": {
-        "start": "concurrently --kill-others \"cross-env BROWSER=none react-scripts start\" \"electron .\"",
-        "react-build": "react-scripts build",
+        "start": "concurrently --kill-others \"cross-env BROWSER=none react-app-rewired start\" \"electron .\"",
+        "react-build": "react-app-rewired build",
         "electron-build": "electron-builder --win --ia32 --publish=never && electron-builder --win --x64 --publish=never",
+        "debug-electron-build": "electron-builder --win --dir --x64 --publish=never",
         "build": "npm run react-build && npm run electron-build"
     },
     "eslintConfig": {
@@ -45,15 +46,12 @@
         ]
     },
     "dependencies": {
-        "@6c65726f79/custom-titlebar": "^0.9.1",
-        "@electron/remote": "^2.0.8",
         "@mantine/core": "^4.2.12",
-        "@mantine/hooks": "^4.2.12",
         "@mantine/modals": "^4.2.12",
-        "@mantine/next": "^4.2.12",
         "@mantine/notifications": "^4.2.12",
         "appdata-path": "^1.0.0",
         "axios": "^0.27.2",
+        "custom-electron-titlebar": "^4.1.0",
         "decompress": "^4.2.1",
         "electron-is": "github:Nadwey/electron-is",
         "electron-store": "^8.0.2",
@@ -70,11 +68,14 @@
         "files": [
             "**/*",
             "!.github/",
-            "!src/",
+            "!src/renderer/",
             "!resources/",
             "!public/",
-            "!debugConfig.js",
             "!.prettierrc",
+            "!.vscode/",
+            "!.github/",
+            "!README.md",
+            "!config-overrides.js",
             "node_modules/",
             "build/"
         ],

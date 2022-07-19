@@ -3,7 +3,7 @@ const { GetVersionZipFile, GetVersions } = require("./SE3Api");
 const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
-const { GetLauncherDirectory, GetVersionsDirectory } = require("../utils");
+const { GetLauncherDirectory, GetVersionsDirectory } = require("./utils");
 const decompress = require("decompress");
 const child_process = require("child_process");
 
