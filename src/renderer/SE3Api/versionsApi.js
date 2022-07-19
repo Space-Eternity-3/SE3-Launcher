@@ -27,13 +27,13 @@ export async function GetVersions() {
 
 /**
  * Installs version
- * 
- * @param {import("../../preload").InstallVersionSettings} settings 
+ *
+ * @param {import("../../preload").InstallVersionSettings} settings
  * @returns {import("../../preload").Installer}
  */
 export function InstallVersion(settings) {
     return window.se3Api.InstallVersion(settings);
-};
+}
 
 /**
  * Checks if version directory exists

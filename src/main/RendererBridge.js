@@ -15,7 +15,7 @@ const RendererBridge = () => {
         const deleteInstaller = (id) => {
             installers[id] = null;
             delete installers[id];
-        }
+        };
 
         try {
             let versionInstaller = new VersionInstaller(tag);
@@ -39,13 +39,13 @@ const RendererBridge = () => {
             versionInstaller.on("cancelled", () => {
                 e.sender.send("installer_canceled", id);
                 deleteInstaller(id);
-            })
+            });
         } catch (err) {
             e.sender.send("installer_error", id, err);
             deleteInstaller(id);
         }
     });
-    
+
     mainBridge.Export("versionsApi", {
         installerCancel: (id) => {
             installers[id].Stop();
@@ -54,7 +54,7 @@ const RendererBridge = () => {
         GetVersions: SE3Api.GetVersions,
         GetInstalledVersions: GetInstalledVersions,
         UninstallVersion: UninstallVersion,
-        RunVersion: RunVersion
+        RunVersion: RunVersion,
     });
 };
 

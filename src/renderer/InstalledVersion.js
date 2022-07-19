@@ -28,9 +28,13 @@ export default function InstalledVersion({ version, uninstallVersion }) {
                     >
                         Uninstall
                     </Button>
-                    <Button onClick={() => {
-                        RunVersion(version.tag);
-                    }}>Play</Button>
+                    <Button
+                        onClick={() => {
+                            RunVersion(version.tag);
+                        }}
+                    >
+                        Play
+                    </Button>
                 </div>
             </div>
         </div>

@@ -267,32 +267,37 @@ export default function App() {
                     <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
                 </Tabs.Tab>
                 <Tabs.Tab label="Versions">
-                    <div style={{
-                        marginTop: "40px",
-                        height: "calc(100% - 40px)",
-                    }}>
-                    <Autocomplete
+                    <div
                         style={{
-                            width: "calc(100% - 20px)",
-                            margin: "5px 10px 10px",
+                            marginTop: "40px",
+                            height: "calc(100% - 40px)",
                         }}
-                        value={versionFilter}
-                        onChange={setVersionFilter}
-                        placeholder="Version filter"
-                        data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
-                    />
-                    <div className={styles.versionsContainer}>
-                        {installedVersions.filter(version => version.name.includes(versionFilter)).map((version) => <InstalledVersion key={version.tag} version={version} uninstallVersion={uninstallVersion} />).reverse()}
-                    </div>
-                    <VersionSelector
-                        onCancel={() => {
-                            setVersionSelectorShown(false);
-                        }}
-                        onInstall={onInstall}
-                        shown={versionSelectorShown}
-                        versions={versionsSelectorVersions}
-                    />
-                    <button onClick={showVersionSelector} className={styles.addButton} />
+                    >
+                        <Autocomplete
+                            style={{
+                                width: "calc(100% - 20px)",
+                                margin: "5px 10px 10px",
+                            }}
+                            value={versionFilter}
+                            onChange={setVersionFilter}
+                            placeholder="Version filter"
+                            data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
+                        />
+                        <div className={styles.versionsContainer}>
+                            {installedVersions
+                                .filter((version) => version.name.includes(versionFilter))
+                                .map((version) => <InstalledVersion key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
+                                .reverse()}
+                        </div>
+                        <VersionSelector
+                            onCancel={() => {
+                                setVersionSelectorShown(false);
+                            }}
+                            onInstall={onInstall}
+                            shown={versionSelectorShown}
+                            versions={versionsSelectorVersions}
+                        />
+                        <button onClick={showVersionSelector} className={styles.addButton} />
                     </div>
                 </Tabs.Tab>
                 <Tabs.Tab label="Launcher">

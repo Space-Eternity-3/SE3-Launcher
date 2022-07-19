@@ -25,7 +25,7 @@ const store = new Store();
  * Gets versions list
  * Throws an error if can't get
  * Works with internet off (If version list exists arleady), but it will not fetch the latest version list
- * 
+ *
  * @returns {FetchedVersions}
  */
 const GetVersions = async () => {
@@ -43,20 +43,20 @@ const GetVersions = async () => {
 
 /**
  * Gets link to version's zip file
- * 
+ *
  * @param {String} versionTag version tag
  * @returns link
  */
-const GetVersionZipFile = async(versionTag) => {
-    const version = (await GetVersions()).Versions.find(version => version.tag === versionTag);
+const GetVersionZipFile = async (versionTag) => {
+    const version = (await GetVersions()).Versions.find((version) => version.tag === versionTag);
 
     return {
         url: new URL(version.file, se3ApiSettings.GetVersionsFilesDir()).toString(),
-        version
+        version,
     };
 };
 
 module.exports = {
     GetVersions,
-    GetVersionZipFile
+    GetVersionZipFile,
 };

@@ -130,7 +130,7 @@ const RunVersion = (versionTag) => {
         if (fs.existsSync(execPath)) {
             const game = child_process.spawn(execPath, {
                 detached: true,
-                cwd: versionPath
+                cwd: versionPath,
             });
             game.unref();
             return;
@@ -145,5 +145,5 @@ module.exports = {
     IsVersionInstalled,
     GetInstalledVersions,
     UninstallVersion,
-    RunVersion
+    RunVersion,
 };

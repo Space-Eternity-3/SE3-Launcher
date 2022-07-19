@@ -85,9 +85,11 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                     return Version(e);
                 })}
             </RadioGroup>
-            <div style={{
-                marginTop: "20px"
-            }}>
+            <div
+                style={{
+                    marginTop: "20px",
+                }}
+            >
                 <Switch
                     style={{ float: "left", marginTop: "5px" }}
                     checked={showHidden}
@@ -104,7 +106,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                     disabled={installButtonDisabled()}
                     uppercase
                     style={{
-                        float: "right"
+                        float: "right",
                     }}
                 >
                     install
