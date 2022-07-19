@@ -1,6 +1,6 @@
 # SE3 Launcher
 
-![image](https://user-images.githubusercontent.com/81181783/170561949-3ff63da7-a5da-44b0-b0ec-111983316914.png)
+![SE3 Launcher - home page](https://user-images.githubusercontent.com/81181783/179812363-a959f891-50a8-4e2f-b269-5f03a7d8933f.png)
 [![build](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build?style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/actions/workflows/build.yml)
 [![version](https://img.shields.io/github/v/tag/Space-Eternity-3/SE3-Launcher?label=version&style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/releases/)
 [![discord badge](https://img.shields.io/discord/909014300088213547?label=Discord&logo=Discord&style=for-the-badge)](https://discord.gg/e4ppBTRKhg)
