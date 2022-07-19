@@ -25,13 +25,3 @@ jobs:
               run: |
                   npm ci
                   npm run build
-
-            - name: Release
-              uses: softprops/action-gh-release@v1
-              with:
-                  files: dist/*.zip
-                  tag_name: nightly
-                  fail_on_unmatched_files: true
-                  name: Nightly build
-                  prerelease: true
-                  body: "Latest commit build."
