@@ -1,4 +1,4 @@
-import { RadioGroup, Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
+import { Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
 import { useState } from "react";
 import { useModals } from "@mantine/modals";
 
@@ -69,7 +69,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
 
     return (
         <Modal onClose={onCancel} size="60%" centered opened={shown} title="Select version to install">
-            <RadioGroup
+            <Radio.Group
                 style={{
                     maxHeight: "230px",
                     overflowY: "scroll",
@@ -79,12 +79,13 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 value={versionSelectValue}
                 onChange={setVersionSelectValue}
                 orientation="vertical"
+                spacing="sm"
             >
                 {versions.map((e) => {
                     if (e.hidden && !showHidden) return null;
                     return Version(e);
                 })}
-            </RadioGroup>
+            </Radio.Group>
             <div
                 style={{
                     marginTop: "20px",

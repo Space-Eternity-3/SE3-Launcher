@@ -1,7 +1,7 @@
 {
     "name": "se3-launcher",
     "description": "Launcher for Space Eternity 3",
-    "version": "3.0.0-alpha.4",
+    "version": "3.0.0-alpha.5",
     "private": true,
     "homepage": "./",
     "main": "src/main/index.js",
@@ -13,12 +13,12 @@
     "devDependencies": {
         "concurrently": "^7.3.0",
         "cross-env": "^7.0.3",
-        "electron": "^19.0.8",
-        "electron-builder": "^23.3.2",
+        "electron": "^19.0.10",
+        "electron-builder": "^23.3.3",
         "prettier": "2.7.1",
-        "react": "^17.0.2",
+        "react": "^18.2.0",
         "react-app-rewired": "^2.2.1",
-        "react-dom": "^17.0.2",
+        "react-dom": "^18.2.0",
         "wait-on": "^6.0.1"
     },
     "scripts": {
@@ -48,15 +48,15 @@
         ]
     },
     "dependencies": {
-        "@mantine/core": "^4.2.12",
-        "@mantine/modals": "^4.2.12",
-        "@mantine/notifications": "^4.2.12",
+        "@mantine/core": "^5.0.2",
+        "@mantine/modals": "^5.0.2",
+        "@mantine/notifications": "^5.0.2",
         "appdata-path": "^1.0.0",
         "axios": "^0.27.2",
         "custom-electron-titlebar": "^4.1.0",
         "decompress": "^4.2.1",
         "electron-is": "github:Nadwey/electron-is",
-        "electron-store": "^8.0.2",
+        "electron-store": "^8.1.0",
         "electronbb": "^1.0.0-beta.3",
         "github-markdown-css": "^5.1.0",
         "lodash": "^4.17.21",

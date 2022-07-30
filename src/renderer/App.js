@@ -17,7 +17,7 @@ import InstalledVersion from "./InstalledVersion";
 let versions = {};
 
 export default function App() {
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState("home");
     const [versionsSelectorVersions, setVersionsSelectorVersions] = useState([]);
     const [versionSelectorShown, setVersionSelectorShown] = useState(false);
     const [launcherText, setLauncherText] = useState("Failed to load launcher info");
@@ -257,26 +257,28 @@ export default function App() {
     return (
         <Container>
             <Tabs
-                active={activeTab}
+                value={activeTab}
                 onTabChange={setActiveTab}
                 style={{
                     height: "100%",
                 }}
             >
-                <Tabs.Tab label="Home">
+                <Tabs.List>
+                    <Tabs.Tab value="home">Home</Tabs.Tab>
+                    <Tabs.Tab value="versions">Versions</Tabs.Tab>
+                    <Tabs.Tab value="launcher">Launcher</Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel value="home">
                     <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
-                </Tabs.Tab>
-                <Tabs.Tab label="Versions">
-                    <div
-                        style={{
-                            marginTop: "40px",
-                            height: "calc(100% - 40px)",
-                        }}
-                    >
+                </Tabs.Panel>
+                <Tabs.Panel style={{
+                    height: "calc(100% - 45px)",
+                    marginTop: "45px",
+                }} value="versions">
                         <Autocomplete
                             style={{
                                 width: "calc(100% - 20px)",
-                                margin: "5px 10px 10px",
+                                margin: "5px 10px 0",
                             }}
                             value={versionFilter}
                             onChange={setVersionFilter}
@@ -298,9 +300,8 @@ export default function App() {
                             versions={versionsSelectorVersions}
                         />
                         <button onClick={showVersionSelector} className={styles.addButton} />
-                    </div>
-                </Tabs.Tab>
-                <Tabs.Tab label="Launcher">
+                </Tabs.Panel>
+                <Tabs.Panel value="launcher">
                     <div
                         style={{
                             paddingTop: "40px",
@@ -313,7 +314,7 @@ export default function App() {
                     >
                         <ReactMarkdown className="markdown-body" children={launcherText} remarkPlugins={[remarkGfm]} />
                     </div>
-                </Tabs.Tab>
+                </Tabs.Panel>
             </Tabs>
         </Container>
     );
