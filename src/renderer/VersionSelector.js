@@ -1,31 +1,51 @@
 import { Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useModals } from "@mantine/modals";
+import { GetVersionState } from "./SE3Api/versionsApi";
 
 export default function VersionSelector({ versions, shown, onCancel, onInstall }) {
     const [showHidden, setShowHidden] = useState(false);
     const [versionSelectValue, setVersionSelectValue] = useState();
     const modals = useModals();
 
+    useEffect(() => {
+        if (shown === false) setVersionSelectValue(null);
+    }, [shown]);
+
     // TODO: do something with this
     const Version = (e) => {
+        const versionState = GetVersionState(e.value);
+        const isInstalledOrInstalling = versionState !== "not_installed";
         return (
             <Radio
                 key={e.value}
                 value={e.value}
+                disabled={isInstalledOrInstalling}
                 label={
                     e.hidden ? (
                         <Tooltip wrapLines withArrow transition="fade" transitionDuration={200} label="Hidden version, may cause issues!">
                             <span
                                 style={{
-                                    color: "#ff3020",
+                                    color: isInstalledOrInstalling ? "#990502" : "#ff3020",
                                 }}
                             >
                                 {e.label}
+                                {isInstalledOrInstalling && (
+                                    <>
+                                        {" -"} {versionState}
+                                    </>
+                                )}
                             </span>
                         </Tooltip>
                     ) : (
-                        e.label
+                        <>
+                            {e.label}
+                            {isInstalledOrInstalling && (
+                                <>
+                                    {" -"} {versionState}
+                                </>
+                            )}
+                        </>
                     )
                 }
             />

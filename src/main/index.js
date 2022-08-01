@@ -1,9 +1,9 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const { setupTitlebar, attachTitlebarToWindow } = require("custom-electron-titlebar/main");
 const isDev = require("electron-is").dev();
 require("electron-store").initRenderer();
-require("./RendererBridge")();
+const { AreInstallationsRunning } = require("./RendererBridge")();
 
 setupTitlebar();
 
@@ -26,9 +26,24 @@ async function createWindow() {
         title: "SE3 Launcher",
     });
 
+    mainWindow.on("close", (e) => {
+        if (!AreInstallationsRunning()) return;
+        const choice = dialog.showMessageBoxSync(mainWindow, {
+            type: "question",
+            buttons: ["Yes", "No"],
+            title: "Are you sure you want to quit?",
+            message: "Installations are running.",
+        });
+        if (choice === 1) {
+            e.preventDefault();
+        }
+    });
+
     process.on("uncaughtException", (ex) => {
-        mainWindow.webContents.send("uncaught_exception", ex);
         console.error(ex);
+        try {
+            mainWindow.webContents.send("uncaught_exception", ex);
+        } catch {}
     });
 
     attachTitlebarToWindow(mainWindow);

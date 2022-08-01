@@ -56,3 +56,12 @@ export function UninstallVersion(versionTag) {
 export function RunVersion(versionTag) {
     return window.se3Api.RunVersion(versionTag);
 }
+
+/**
+ * 
+ * @param {String} versionTag 
+ * @returns {"installed"|"installing"|"not_installed"}
+ */
+export function GetVersionState(versionTag) {
+    return window.se3Api.GetVersionState(versionTag);
+}

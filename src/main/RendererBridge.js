@@ -17,31 +17,35 @@ const RendererBridge = () => {
             delete installers[id];
         };
 
+        const sendMsg = (channel, ...args) => {
+            if (!e.sender.isDestroyed()) e.sender.send(channel, ...args);
+        };
+
         try {
             let versionInstaller = new VersionInstaller(tag);
             installers[id] = versionInstaller;
             versionInstaller.Start();
 
             versionInstaller.on("finished", () => {
-                e.sender.send("installer_finish", id);
+                sendMsg("installer_finish", id);
                 deleteInstaller(id);
             });
             versionInstaller.on("error", (ex) => {
-                e.sender.send("installer_error", id, ex);
+                sendMsg("installer_error", id, ex);
                 deleteInstaller(id);
             });
             versionInstaller.on("progress", (downloadedBytes, totalBytes) => {
-                e.sender.send("installer_progress", id, downloadedBytes, totalBytes);
+                sendMsg("installer_progress", id, downloadedBytes, totalBytes);
             });
             versionInstaller.on("unpacking", () => {
-                e.sender.send("installer_unpacking", id);
+                sendMsg("installer_unpacking", id);
             });
             versionInstaller.on("cancelled", () => {
-                e.sender.send("installer_canceled", id);
+                sendMsg("installer_canceled", id);
                 deleteInstaller(id);
             });
         } catch (err) {
-            e.sender.send("installer_error", id, err);
+            sendMsg("installer_error", id, err);
             deleteInstaller(id);
         }
     });
@@ -55,7 +59,20 @@ const RendererBridge = () => {
         GetInstalledVersions: GetInstalledVersions,
         UninstallVersion: UninstallVersion,
         RunVersion: RunVersion,
+        GetVersionState: (versionTag) => {
+            if (IsVersionInstalled(versionTag)) return "installed";
+            if (typeof Object.values(installers).find((installer) => installer.versionTag === versionTag) !== "undefined") return "installing";
+            return "not_installed";
+        },
     });
+
+    return {
+        AreInstallationsRunning: () => {
+            for (const installer of Object.values(installers)) if (typeof installer !== "undefined") return true;
+
+            return false;
+        },
+    };
 };
 
 module.exports = RendererBridge;
