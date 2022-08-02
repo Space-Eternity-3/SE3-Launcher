@@ -20,7 +20,7 @@ async function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             webSecurity: false,
-            webviewTag: true,
+            sandbox: false,
         },
         frame: false,
         title: "SE3 Launcher",
