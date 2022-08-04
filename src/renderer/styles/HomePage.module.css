@@ -4,7 +4,6 @@
     background-image: url(/public/Background.png);
     background-size: cover;
     background-position: center;
-    filter: blur(2px);
     z-index: -1;
 }
 
