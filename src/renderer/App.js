@@ -289,6 +289,7 @@ export default function App() {
                         onChange={setVersionFilter}
                         placeholder="Version filter"
                         data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
+                        dropdownPosition="bottom"
                     />
                     <div className={styles.versionsContainer}>
                         {installedVersions
