@@ -293,7 +293,7 @@ export default function App() {
                     />
                     <div className={styles.versionsContainer}>
                         {installedVersions
-                            .filter((version) => version.name.includes(versionFilter))
+                            .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
                             .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
                             .reverse()}
                     </div>
