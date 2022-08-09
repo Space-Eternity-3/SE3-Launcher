@@ -58,8 +58,8 @@ export function RunVersion(versionTag) {
 }
 
 /**
- * 
- * @param {String} versionTag 
+ *
+ * @param {String} versionTag
  * @returns {"installed"|"installing"|"not_installed"}
  */
 export function GetVersionState(versionTag) {
