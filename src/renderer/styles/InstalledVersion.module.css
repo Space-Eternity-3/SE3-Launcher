@@ -31,24 +31,27 @@
     background-color: #00000090;
     color: white;
     font-size: 25px;
-    padding: 5px 0;
+    text-align: left;
+    padding: 5px 10px;
     font-family: "Quicksand";
 }
 
 .buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    display: inline-block;
     background-color: #00000090;
     color: white;
     font-size: 25px;
-    padding: 5px 0;
+    padding: 1px 40px;
     font-family: "Quicksand";
 }
 
 .buttons > button {
-    margin: 0 5px;
-    width: 100px;
+    flex: 1;
+    margin: 5px 8px;
 }

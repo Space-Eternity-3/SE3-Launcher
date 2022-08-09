@@ -13,7 +13,7 @@ async function createWindow() {
         height: 600,
         minWidth: 750,
         minHeight: 500,
-        icon: path.join(__dirname, "resources", "ikona.ico"),
+        icon: path.join(__dirname, "resources", "icon.ico"),
         webPreferences: {
             preload: require.resolve("../preload/preload.js"),
             backgroundThrottling: false,

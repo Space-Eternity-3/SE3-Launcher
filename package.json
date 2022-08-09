@@ -1,7 +1,7 @@
 {
     "name": "se3-launcher",
     "description": "Launcher for Space Eternity 3",
-    "version": "3.0.0-beta.2",
+    "version": "3.0.0-beta.3",
     "private": true,
     "homepage": "./",
     "main": "src/main/index.js",
@@ -20,6 +20,9 @@
         "react-app-rewired": "^2.2.1",
         "react-dom": "^18.2.0",
         "wait-on": "^6.0.1"
+    },
+    "repository": {
+        "url": "https://github.com/Space-Eternity-3/SE3-Launcher"
     },
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-app-rewired start\" \"electron .\"",
@@ -48,9 +51,9 @@
         ]
     },
     "dependencies": {
-        "@mantine/core": "^5.1.0",
-        "@mantine/modals": "^5.1.0",
-        "@mantine/notifications": "^5.1.0",
+        "@mantine/core": "^5.1.1",
+        "@mantine/modals": "^5.1.1",
+        "@mantine/notifications": "^5.1.1",
         "appdata-path": "^1.0.0",
         "axios": "^0.27.2",
         "custom-electron-titlebar": "^4.1.0",
@@ -66,7 +69,7 @@
     "build": {
         "productName": "SE3 Launcher",
         "extends": null,
-        "icon": "../resources/ikona.ico",
+        "icon": "../resources/icon.ico",
         "files": [
             "**/*",
             "!.github/",
@@ -92,7 +95,7 @@
             "oneClick": false,
             "perMachine": false,
             "allowToChangeInstallationDirectory": true,
-            "installerIcon": "resources/ikona.ico",
+            "installerIcon": "resources/icon.ico",
             "deleteAppDataOnUninstall": true,
             "installerSidebar": "../resources/Sidebar.bmp",
             "differentialPackage": false

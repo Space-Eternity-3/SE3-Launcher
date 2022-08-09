@@ -1,8 +1,8 @@
-import { Button } from "@mantine/core";
+import { Badge, Button, Highlight } from "@mantine/core";
 import { RunVersion } from "./SE3Api/versionsApi";
 import styles from "./styles/InstalledVersion.module.css";
 
-export default function InstalledVersion({ version, uninstallVersion }) {
+export default function InstalledVersion({ version, uninstallVersion, versionFilter }) {
     return (
         <div
             style={{
@@ -17,7 +17,19 @@ export default function InstalledVersion({ version, uninstallVersion }) {
                     }}
                     className={styles.title}
                 >
-                    {version.name}
+                    <Highlight
+                        style={{
+                            display: "inline",
+                        }}
+                        highlight={versionFilter}
+                    >
+                        {version.name}
+                    </Highlight>
+                    {version.hidden && (
+                        <Badge color="red" size="lg" style={{ float: "right", marginTop: "7px" }}>
+                            Hidden
+                        </Badge>
+                    )}
                 </span>
                 <div className={styles.buttons}>
                     <Button
