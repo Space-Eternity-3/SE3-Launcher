@@ -28,11 +28,9 @@ jobs:
             - name: "Install packages"
               if: matrix.os == 'ubuntu-latest'
               run: |
+                  sudo dpkg --add-architecture i386
                   sudo apt-get update -y && sudo apt-get upgrade -y
-                  sudo apt-get install wine -y
-                  dpkg --add-architecture i386 && apt-get update &&
-                  sudo apt-get install wine32 -y
-                  sudo apt-get install rpm -y
+                  sudo apt-get install wine wine32 rpm -y
 
             - name: Install and build
               run: |
