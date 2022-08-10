@@ -30,7 +30,7 @@ jobs:
               run: |
                   sudo dpkg --add-architecture i386
                   sudo apt-get update -y && sudo apt-get upgrade -y
-                  sudo apt-get install wine rpm -y
+                  sudo apt-get install wine win32 rpm -y
 
             - name: Install and build
               uses: GabrielBB/xvfb-action@v1
