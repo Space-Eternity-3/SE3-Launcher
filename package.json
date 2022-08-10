@@ -7,13 +7,14 @@
     "main": "src/main/index.js",
     "author": {
         "name": "Nadwey",
-        "url": "https://github.com/Nadwey/"
+        "url": "https://github.com/Nadwey/",
+        "email": "nadweyyy@gmail.com"
     },
     "license": "MIT",
     "devDependencies": {
         "concurrently": "^7.3.0",
         "cross-env": "^7.0.3",
-        "electron": "^20.0.1",
+        "electron": "^20.0.2",
         "electron-builder": "^23.3.3",
         "prettier": "2.7.1",
         "react": "^18.2.0",
@@ -27,7 +28,8 @@
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-app-rewired start\" \"electron .\"",
         "react-build": "react-app-rewired build",
-        "electron-build": "electron-builder --win --ia32 --publish=never && electron-builder --win --x64 --publish=never",
+        "windows-electron-build": "electron-builder --win --ia32 --publish=never && electron-builder --win --x64 --publish=never",
+        "linux-electron-build": "electron-builder --linux --x64 --publish=never",
         "debug-electron-build": "electron-builder --win --dir --x64 --publish=never",
         "build": "npm run react-build && npm run electron-build",
         "prettier": "prettier --write ."
@@ -69,7 +71,6 @@
     "build": {
         "productName": "SE3 Launcher",
         "extends": null,
-        "icon": "../resources/icon.ico",
         "files": [
             "**/*",
             "!.github/",
@@ -84,12 +85,22 @@
             "node_modules/",
             "build/"
         ],
+        "linux": {
+            "target": [
+                "deb",
+                "rpm",
+                "tar.gz"
+            ],
+            "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}",
+            "icon": "../resources/icon.png"
+        },
         "win": {
             "target": [
                 "nsis",
                 "zip"
             ],
-            "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}"
+            "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}",
+            "icon": "../resources/icon.ico"
         },
         "nsis": {
             "oneClick": false,
