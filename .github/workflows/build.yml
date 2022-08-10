@@ -5,7 +5,7 @@ on:
     pull_request:
 jobs:
     build:
-        name: Build (Windows)
+        name: Build
 
         permissions:
             actions: read
@@ -30,7 +30,7 @@ jobs:
               run: |
                   sudo dpkg --add-architecture i386
                   sudo apt-get update -y && sudo apt-get upgrade -y
-                  sudo apt-get install wine wine32 rpm -y
+                  sudo apt-get install wine rpm -y
 
             - name: Install and build
               run: |
