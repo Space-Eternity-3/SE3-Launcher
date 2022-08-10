@@ -22,14 +22,17 @@ jobs:
             - name: "Checkout"
               uses: actions/checkout@v3
 
-            - name: "Install node"
+            - name: "Install Node"
               uses: actions/setup-node@v3
 
-            - name: "Install Wine"
+            - name: "Install packages"
               if: matrix.os == 'ubuntu-latest'
               run: |
-                  sudo apt update -y && sudo apt upgrade -y
-                  sudo apt install wine -y
+                  sudo apt-get update -y && sudo apt-get upgrade -y
+                  sudo apt-get install wine -y
+                  dpkg --add-architecture i386 && apt-get update &&
+                  sudo apt-get install wine32 -y
+                  sudo apt-get install rpm -y
 
             - name: Install and build
               run: |
