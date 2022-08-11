@@ -1,7 +1,7 @@
 const { URL } = require("url");
 
 const se3ApiSettings = {
-    root: "https://nadwey.pl/", // no debugConfig lol
+    root: "https://nadwey.pl/",
     SE3Dir: "./kamiloso/SE3/",
     ImagesDir: "./Images/",
     LauncherDir: "./Launcher/",

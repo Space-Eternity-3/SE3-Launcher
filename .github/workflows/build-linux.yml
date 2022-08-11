@@ -15,7 +15,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                os: [windows-latest, ubuntu-22.04]
+                os: [ubuntu-latest]
         runs-on: ${{ matrix.os }}
 
         steps:
@@ -25,16 +25,9 @@ jobs:
             - name: "Install Node"
               uses: actions/setup-node@v3
 
-            - name: "Install packages"
-              if: matrix.os == 'ubuntu-22.04'
-              run: |
-                  sudo dpkg --add-architecture i386
-                  sudo apt-get update -y && sudo apt-get upgrade -y
-                  sudo apt-get install wine wine32 rpm -y
-
             - name: Install and build
               uses: GabrielBB/xvfb-action@v1
               with:
                   run: |
                       npm ci
-                      npm run build
+                      npm run linux-electron-build

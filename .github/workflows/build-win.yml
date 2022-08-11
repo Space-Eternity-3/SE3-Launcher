@@ -1,0 +1,31 @@
+name: "Build"
+
+on:
+    push:
+    pull_request:
+jobs:
+    build:
+        name: Build
+
+        permissions:
+            actions: read
+            contents: read
+            security-events: write
+
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [windows-latest]
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - name: "Checkout"
+              uses: actions/checkout@v3
+
+            - name: "Install Node"
+              uses: actions/setup-node@v3
+
+            - name: Install and build
+              run: |
+                  npm ci
+                  npm run windows-electron-build
