@@ -1,10 +1,10 @@
-name: "Build"
+name: "Build for Windows"
 
 on:
     push:
     pull_request:
 jobs:
-    build:
+    build-for-windows:
         name: Build
 
         permissions:
@@ -25,7 +25,7 @@ jobs:
             - name: "Install Node"
               uses: actions/setup-node@v3
 
-            - name: Install and build
+            - name: Install deps and build
               run: |
                   npm ci
                   npm run windows-electron-build

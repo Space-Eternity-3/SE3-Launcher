@@ -1,10 +1,10 @@
-name: "Build"
+name: "Build for Linux"
 
 on:
     push:
     pull_request:
 jobs:
-    build:
+    build-for-linux:
         name: Build
 
         permissions:
@@ -25,7 +25,7 @@ jobs:
             - name: "Install Node"
               uses: actions/setup-node@v3
 
-            - name: Install and build
+            - name: Install deps and build
               uses: GabrielBB/xvfb-action@v1
               with:
                   run: |
