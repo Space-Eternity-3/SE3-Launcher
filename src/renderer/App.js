@@ -27,8 +27,6 @@ export default function App() {
     const [versionFilter, setVersionFilter] = useState("");
     const [installationsOpened, setInstallationsOpened] = useState(false);
     const [currentInstallations, setCurrentInstallations] = useState([]);
-    const currentInstallationsRef = createRef();
-    currentInstallationsRef.current = currentInstallations;
     const modals = useModals();
 
     const updateInstalledVersions = async () => {
@@ -111,8 +109,13 @@ export default function App() {
     };
 
     const openVersionSelector = () => {
-        setActiveTab(1);
+        setActiveTab("versions");
         showVersionSelector();
+    };
+
+    const removeInstallation = (version) => {
+        const indexToRemove = currentInstallations.findIndex((installation) => installation.version === version.value);
+        setCurrentInstallations([...currentInstallations.slice(0, indexToRemove), ...currentInstallations.slice(indexToRemove + 1)]);
     };
 
     const onInstall = (version) => {
@@ -150,8 +153,7 @@ export default function App() {
                 updateDetails.flush();
                 updateProgress.flush();
 
-                const indexToRemove = currentInstallationsRef.current.findIndex((installation) => installation.version === version.value);
-                setCurrentInstallations([...currentInstallationsRef.current.slice(0, indexToRemove), ...currentInstallationsRef.current.slice(indexToRemove + 1)]);
+                removeInstallation(version.value);
 
                 showNotification({
                     title: `Canceled installing ${version.label}`,
@@ -164,8 +166,7 @@ export default function App() {
                 updateDetails.flush();
                 updateProgress.flush();
 
-                const indexToRemove = currentInstallationsRef.current.findIndex((installation) => installation.version === version.value);
-                setCurrentInstallations([...currentInstallationsRef.current.slice(0, indexToRemove), ...currentInstallationsRef.current.slice(indexToRemove + 1)]);
+                removeInstallation(version.value);
 
                 updateInstalledVersions();
 
@@ -180,8 +181,7 @@ export default function App() {
                 updateDetails.flush();
                 updateProgress.flush();
 
-                const indexToRemove = currentInstallationsRef.current.findIndex((installation) => installation.version === version.value);
-                setCurrentInstallations([...currentInstallationsRef.current.slice(0, indexToRemove), ...currentInstallationsRef.current.slice(indexToRemove + 1)]);
+                removeInstallation(version.value);
 
                 updateInstalledVersions();
 
