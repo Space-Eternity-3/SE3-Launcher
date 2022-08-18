@@ -160,6 +160,13 @@ export default function App() {
             );
         }, 150);
 
+        showNotification({
+            title: `Started installing ${version.label}`,
+            autoClose: true,
+            disallowClose: false,
+            loading: false,
+        });
+
         InstallVersion(version.value, {
             updateDetails,
             updateProgress,
