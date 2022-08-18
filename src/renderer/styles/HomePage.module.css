@@ -1,6 +1,11 @@
+.homePage {
+    height: 100vh;
+    width: 100vw;
+}
+
 .background {
-    width: 100%;
     height: 100%;
+    width: 100%;
     background-image: url(/public/Background.png);
     background-size: cover;
     background-position: center;

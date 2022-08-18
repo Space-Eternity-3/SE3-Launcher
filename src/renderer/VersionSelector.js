@@ -1,7 +1,8 @@
-import { Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
+import { Code, Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useModals } from "@mantine/modals";
 import { GetVersionState } from "./SE3Api/versionsApi";
+import { humanFileSize } from "./utils";
 
 export default function VersionSelector({ versions, shown, onCancel, onInstall }) {
     const [showHidden, setShowHidden] = useState(false);
@@ -29,7 +30,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                                     color: isInstalledOrInstalling ? "#990502" : "#ff3020",
                                 }}
                             >
-                                {e.label}
+                                {e.label} &nbsp; <Code>{humanFileSize(e.size, false, 3)}</Code>
                                 {isInstalledOrInstalling && (
                                     <>
                                         {" -"} {versionState}
@@ -39,7 +40,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         </Tooltip>
                     ) : (
                         <>
-                            {e.label}
+                            {e.label} &nbsp; <Code>{humanFileSize(e.size, false, 3)}</Code>
                             {isInstalledOrInstalling && (
                                 <>
                                     {" -"} {versionState}

@@ -35,10 +35,24 @@
     cursor: pointer;
 }
 
+.versionsTab {
+    padding-top: 45px;
+}
+
 .versionsContainer {
     display: block;
-    height: calc(100% - 30px);
+    bottom: 0;
     text-align: center;
+    height: calc(100vh - 90px);
     margin: 0;
     overflow-y: scroll;
+}
+
+.launcherTabContainer {
+    padding-top: 60px;
+    margin: 0 30px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: calc(100% - 60px);
+    height: calc(100% - 70px);
 }

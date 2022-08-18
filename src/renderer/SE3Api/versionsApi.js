@@ -28,11 +28,9 @@ export async function GetVersions() {
 /**
  * Installs version
  *
- * @param {import("../../preload").InstallVersionSettings} settings
- * @returns {import("../../preload").Installer}
  */
-export function InstallVersion(settings) {
-    return window.se3Api.InstallVersion(settings);
+export function InstallVersion(version, functions) {
+    return window.se3Api.InstallVersion(version, functions);
 }
 
 /**
@@ -64,4 +62,14 @@ export function RunVersion(versionTag) {
  */
 export function GetVersionState(versionTag) {
     return window.se3Api.GetVersionState(versionTag);
+}
+
+/**
+ * Cancels installing
+ * 
+ * @param {String} versionTag 
+ * @returns 
+ */
+export function CancelInstall(versionTag) {
+    return window.se3Api.CancelInstall(versionTag);
 }

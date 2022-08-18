@@ -1,18 +1,19 @@
 import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
 import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, UninstallVersion } from "./SE3Api/versionsApi";
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Container, Tabs, Text, Autocomplete } from "@mantine/core";
+import { Container, Tabs, Text, Autocomplete, Burger, Space, Code, Indicator } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { humanFileSize } from "./utils";
-import { throttle } from "lodash";
 import InstalledVersion from "./InstalledVersion";
+import Installations from "./Installations";
+import { throttle } from "lodash";
 
 let versions = {};
 
@@ -24,6 +25,10 @@ export default function App() {
     const [installedVersions, setInstalledVersions] = useState([]);
     const [playButtonText, setPlayButtonText] = useState("Play");
     const [versionFilter, setVersionFilter] = useState("");
+    const [installationsOpened, setInstallationsOpened] = useState(false);
+    const [currentInstallations, setCurrentInstallations] = useState([]);
+    const currentInstallationsRef = createRef();
+    currentInstallationsRef.current = currentInstallations;
     const modals = useModals();
 
     const updateInstalledVersions = async () => {
@@ -55,10 +60,10 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        window.listeners.add("uncaught_exception", (err) => {
+        window.preloadBridge.set("uncaught_exception", (err) => {
             showNotification({
                 color: "red",
-                title: "Error ocurred in main process.",
+                title: "Error occurred in the main process.",
                 message: (
                     <div>
                         <code>{`${err}`}</code>
@@ -66,11 +71,11 @@ export default function App() {
                         <br />
                         If the error keeps appearing, please report it on{" "}
                         <Text variant="link" component="a" href="https://github.com/Space-Eternity-3/SE3-Launcher/issues">
-                            Github
+                            GitHub
                         </Text>{" "}
                         or{" "}
                         <Text variant="link" component="a" href="https://discord.gg/e4ppBTRKhg">
-                            our discord server
+                            our Discord server
                         </Text>
                         .
                     </div>
@@ -81,7 +86,7 @@ export default function App() {
         });
 
         return () => {
-            window.listeners.remove("uncaught_exception");
+            window.preloadBridge.delete("uncaught_exception");
         };
     }, []);
 
@@ -90,7 +95,8 @@ export default function App() {
         let outVersions = [];
         versions.Versions.reverse().forEach((e) => {
             outVersions.push({
-                label: `${e.name} - ${humanFileSize(e.size, true, 2)}`,
+                label: e.name,
+                size: e.size,
                 value: e.tag,
                 hidden: e.hidden,
                 name: e.name,
@@ -99,114 +105,96 @@ export default function App() {
         return outVersions;
     };
 
-    const onInstall = async (version) => {
-        setVersionSelectorShown(false);
-        const notificationID = `installing-${version.value}`;
-
-        /**
-         * @type {import("../preload").Installer}
-         */
-        let installer;
-
-        showNotification({
-            id: notificationID,
-            loading: true,
-            title: `Installing ${version.name}`,
-            message: "Starting...",
-            autoClose: false,
-            disallowClose: true,
-        });
-
-        const cancelInstallation = (e) => {
-            modals.openConfirmModal({
-                title: "Are you sure you want to cancel the installation?",
-                labels: { confirm: "Cancel", cancel: "No, go back" },
-                onConfirm: () => installer.Cancel(),
-                confirmProps: {
-                    color: "orange",
-                },
-                centered: true,
-                zIndex: 999,
-            });
-        };
-
-        const updateProgress = (downloadedBytes, totalBytes) => {
-            updateNotification({
-                id: notificationID,
-                title: `Installing ${version.name}`,
-                message: (
-                    <>
-                        Downloaded {humanFileSize(downloadedBytes, true, 2)} / {humanFileSize(totalBytes, true, 2)}
-                        <br />
-                        <button className={styles.installingCancelButton} onClick={cancelInstallation}>
-                            Cancel
-                        </button>
-                    </>
-                ),
-                autoClose: false,
-                disallowClose: true,
-                loading: true,
-            });
-        };
-
-        const throttled = throttle(updateProgress, 150);
-
-        installer = InstallVersion({
-            tag: version.value,
-            onProgress: (downloadedBytes, totalBytes) => {
-                throttled(downloadedBytes, totalBytes);
-            },
-            onUnpacking: () => {
-                throttled.flush();
-                updateNotification({
-                    id: notificationID,
-                    title: `Installing ${version.name}`,
-                    message: `Unpacking...`,
-                    autoClose: false,
-                    disallowClose: true,
-                    loading: true,
-                });
-            },
-            onFinish: () => {
-                updateNotification({
-                    id: notificationID,
-                    title: `Finished installing ${version.name}`,
-                    autoClose: true,
-                    disallowClose: false,
-                    loading: false,
-                });
-                updateInstalledVersions();
-            },
-            onCancel: () => {
-                throttled.flush();
-                updateNotification({
-                    id: notificationID,
-                    title: `Canceled ${version.name}`,
-                    autoClose: true,
-                    disallowClose: false,
-                    loading: false,
-                });
-                updateInstalledVersions();
-            },
-            onError: (err) => {
-                throttled.flush();
-                updateNotification({
-                    id: notificationID,
-                    title: `Error installing ${version.name}`,
-                    message: `${err}`,
-                    autoClose: true,
-                    disallowClose: false,
-                    loading: false,
-                    color: "red",
-                });
-                updateInstalledVersions();
-            },
-        });
-    };
-
     const showVersionSelector = async () => {
         setVersionSelectorShown(true);
         setVersionsSelectorVersions(await VersionSelectorVersions());
+    };
+
+    const openVersionSelector = () => {
+        setActiveTab(1);
+        showVersionSelector();
+    };
+
+    const onInstall = (version) => {
+        setCurrentInstallations((installations) => [
+            ...JSON.parse(JSON.stringify(installations)),
+            {
+                version: version.value,
+                name: version.label,
+                progress: 0,
+                details: "Preparing...",
+            },
+        ]);
+
+        const updateDetails = throttle((details) => {
+            setCurrentInstallations((installations) =>
+                installations.map((installation) => {
+                    if (installation.version === version.value) return { ...installation, details: details };
+                })
+            );
+        }, 150);
+
+        const updateProgress = throttle((progress) => {
+            setCurrentInstallations((installations) =>
+                installations.map((installation) => {
+                    console.log(installation);
+                    if (installation.version === version.value) return { ...installation, progress: progress };
+                })
+            );
+        }, 150);
+
+        InstallVersion(version.value, {
+            updateDetails,
+            updateProgress,
+            cancel: () => {
+                updateDetails.flush();
+                updateProgress.flush();
+
+                const indexToRemove = currentInstallationsRef.current.findIndex((installation) => installation.version === version.value);
+                setCurrentInstallations([...currentInstallationsRef.current.slice(0, indexToRemove), ...currentInstallationsRef.current.slice(indexToRemove + 1)]);
+
+                showNotification({
+                    title: `Canceled installing ${version.label}`,
+                    autoClose: true,
+                    disallowClose: false,
+                    loading: false,
+                });
+            },
+            finish: () => {
+                updateDetails.flush();
+                updateProgress.flush();
+
+                const indexToRemove = currentInstallationsRef.current.findIndex((installation) => installation.version === version.value);
+                setCurrentInstallations([...currentInstallationsRef.current.slice(0, indexToRemove), ...currentInstallationsRef.current.slice(indexToRemove + 1)]);
+
+                updateInstalledVersions();
+
+                showNotification({
+                    title: `Finished installing ${version.label}`,
+                    autoClose: true,
+                    disallowClose: false,
+                    loading: false,
+                });
+            },
+            error: (err) => {
+                updateDetails.flush();
+                updateProgress.flush();
+
+                const indexToRemove = currentInstallationsRef.current.findIndex((installation) => installation.version === version.value);
+                setCurrentInstallations([...currentInstallationsRef.current.slice(0, indexToRemove), ...currentInstallationsRef.current.slice(indexToRemove + 1)]);
+
+                updateInstalledVersions();
+
+                showNotification({
+                    title: `Error occurred when installing ${version.label}\n${err}`,
+                    autoClose: true,
+                    disallowClose: false,
+                    loading: false,
+                });
+            },
+        });
+
+        setVersionSelectorShown(false);
     };
 
     const uninstallVersion = (ver) => {
@@ -249,20 +237,9 @@ export default function App() {
         });
     };
 
-    const openVersionSelector = () => {
-        setActiveTab(1);
-        showVersionSelector();
-    };
-
     return (
         <Container>
-            <Tabs
-                value={activeTab}
-                onTabChange={setActiveTab}
-                style={{
-                    height: "100%",
-                }}
-            >
+            <Tabs value={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List>
                     <Tabs.Tab value="home">Home</Tabs.Tab>
                     <Tabs.Tab value="versions">Versions</Tabs.Tab>
@@ -273,52 +250,53 @@ export default function App() {
                     <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
                 </Tabs.Panel>
 
-                <Tabs.Panel
-                    style={{
-                        height: "calc(100% - 45px)",
-                        marginTop: "45px",
-                    }}
-                    value="versions"
-                >
-                    <Autocomplete
-                        style={{
-                            width: "calc(100% - 20px)",
-                            margin: "5px 10px 0",
-                        }}
-                        value={versionFilter}
-                        onChange={setVersionFilter}
-                        placeholder="Version filter"
-                        data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
-                        dropdownPosition="bottom"
-                    />
-                    <div className={styles.versionsContainer}>
-                        {installedVersions
-                            .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
-                            .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
-                            .reverse()}
+                <Tabs.Panel value="versions">
+                    <div className={styles.versionsTab}>
+                        <Installations installations={currentInstallations} opened={installationsOpened} setOpened={setInstallationsOpened} />
+
+                        <Indicator
+                            disabled={currentInstallations.length === 0}
+                            style={{
+                                display: "inline-block",
+                                verticalAlign: "middle",
+                                marginLeft: "10px",
+                                marginTop: "-2px",
+                            }}
+                        >
+                            <Burger opened={installationsOpened} onClick={() => setInstallationsOpened((o) => !o)} />
+                        </Indicator>
+
+                        <Autocomplete
+                            style={{
+                                margin: "5px 10px 0",
+                                display: "inline-block",
+                            }}
+                            value={versionFilter}
+                            onChange={setVersionFilter}
+                            placeholder="Version filter"
+                            data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
+                            dropdownPosition="bottom"
+                        />
+                        <div className={styles.versionsContainer}>
+                            {installedVersions
+                                .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
+                                .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
+                                .reverse()}
+                        </div>
+                        <VersionSelector
+                            onCancel={() => {
+                                setVersionSelectorShown(false);
+                            }}
+                            onInstall={onInstall}
+                            shown={versionSelectorShown}
+                            versions={versionsSelectorVersions}
+                        />
                     </div>
-                    <VersionSelector
-                        onCancel={() => {
-                            setVersionSelectorShown(false);
-                        }}
-                        onInstall={onInstall}
-                        shown={versionSelectorShown}
-                        versions={versionsSelectorVersions}
-                    />
                     <button onClick={showVersionSelector} className={styles.addButton} />
                 </Tabs.Panel>
 
                 <Tabs.Panel value="launcher">
-                    <div
-                        style={{
-                            paddingTop: "40px",
-                            margin: "0 10px 10px",
-                            overflowY: "auto",
-                            overflowX: "hidden",
-                            width: "calc(100% - 20px)",
-                            height: "calc(100% - 50px)",
-                        }}
-                    >
+                    <div className={styles.launcherTabContainer}>
                         <ReactMarkdown className="markdown-body" children={launcherText} remarkPlugins={[remarkGfm]} />
                     </div>
                 </Tabs.Panel>

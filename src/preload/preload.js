@@ -1,73 +1,42 @@
 const { contextBridge, ipcRenderer } = require("electron");
 const { Titlebar, Color } = require("custom-electron-titlebar");
 const electron = require("electron");
-const versionsApiSettings = require("../SE3ApiSettings");
 const { RendererBridge } = require("electronbb");
+
 let rendererBridge = new RendererBridge();
 const versionsApi = rendererBridge.GetSync("versionsApi");
 
-window.addEventListener("DOMContentLoaded", () => {
-    // Open external links in browser
-    document.querySelector("body").addEventListener("click", (event) => {
-        if (event.target.tagName.toLowerCase() === "a") {
-            if (!["https:", "http:"].includes(new URL(event.target.href).protocol)) return;
-            const absoluteUrl = new RegExp("^(?:[a-z]+:)?//", "i");
-            event.preventDefault();
-            if (!absoluteUrl.test(event.target.href)) return;
-            electron.shell.openExternal(event.target.href);
-        }
-    });
-
-    new Titlebar({
-        icon: "ikona.png",
-        backgroundColor: Color.fromHex("#363636"),
-        menu: null,
-    });
-});
-
+const versionsApiSettings = require("../SE3ApiSettings");
+const { humanFileSize } = require("./utils");
 contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
 
-const GetLauncherInfo = async () => {
-    return await ipcRenderer.invoke("get_launcher_info");
-};
+let rendererExports = {};
+contextBridge.exposeInMainWorld("preloadBridge", {
+    set: (name, object) => {
+        if (!(name in rendererExports)) rendererExports[name] = object;
+    },
+    delete: (name) => {
+        if (!(name in rendererExports)) return;
+        delete rendererExports[name];
+        rendererExports[name] = [];
+    },
+});
+ipcRenderer.on("uncaught_exception", (event, err) => {
+    rendererExports["uncaught_exception"](err);
+});
 
-/**
- * @typedef {Object} InstallVersionSettings
- * @property {String} tag
- * @property {function(Number, Number)} onProgress
- * @property {function()} onUnpacking
- * @property {function()} onFinish
- * @property {function(err)} onError
- * @property {function()} onCancel
- */
-
-/**
- * @typedef {Object} Installer
- * @property {function()} Cancel
- */
-
-/**
- * @type {Object.<string, InstallVersionSettings>}
- */
 let workers = {};
 
-/**
- * Installs version
- *
- * @param {InstallVersionSettings} settings
- * @returns {Installer}
- */
-const InstallVersion = (settings) => {
-    const id = crypto.randomUUID();
-    workers[id] = settings;
+const InstallVersion = (version, functions) => {
+    const id = version;
 
-    ipcRenderer.invoke("install_version", id, settings.tag);
+    workers[id] = { version, ...functions };
 
-    return {
-        Cancel: () => {
-            versionsApi.installerCancel(id);
-        },
-    };
+    ipcRenderer.invoke("install_version", id, version);
+};
+
+const CancelInstall = (id) => {
+    versionsApi.installerCancel(id);
 };
 
 const deleteWorker = (id) => {
@@ -76,60 +45,32 @@ const deleteWorker = (id) => {
 };
 
 ipcRenderer.on("installer_progress", (event, id, downloadedBytes, totalBytes) => {
-    workers[id].onProgress(downloadedBytes, totalBytes);
+    workers[id].updateDetails(`Downloading...\n\n${humanFileSize(downloadedBytes, false, 2)} / ${humanFileSize(totalBytes, false, 2)}`);
+    workers[id].updateProgress(downloadedBytes / totalBytes * 90);
 });
 
 ipcRenderer.on("installer_unpacking", (event, id) => {
-    workers[id].onUnpacking();
+    workers[id].updateDetails("Unpacking...");
+    workers[id].updateProgress(95);
 });
 
 ipcRenderer.on("installer_finish", (event, id) => {
-    workers[id].onFinish();
+    workers[id].finish();
     deleteWorker(id);
 });
 
 ipcRenderer.on("installer_canceled", (event, id) => {
-    workers[id].onCancel();
+    workers[id].cancel();
     deleteWorker(id);
 });
 
 ipcRenderer.on("installer_error", (event, id, err) => {
-    workers[id].onError(err);
+    workers[id].error(err);
     deleteWorker(id);
 });
 
 contextBridge.exposeInMainWorld("se3Api", {
-    GetLauncherInfo,
     InstallVersion,
+    CancelInstall,
     ...versionsApi,
 });
-
-// :)
-(() => {
-    let listeners = {};
-
-    const callListener = (name, ...args) => {
-        if (!(name in listeners) || !Array.isArray(listeners[name])) return;
-        for (const callback of listeners[name]) {
-            callback(...args);
-        }
-    };
-
-    contextBridge.exposeInMainWorld("listeners", {
-        add: (name, callback) => {
-            if (!(name in listeners) || !Array.isArray(listeners[name])) listeners[name] = [];
-            listeners[name].push(callback);
-        },
-        remove: (name) => {
-            if (!(name in listeners) || !Array.isArray(listeners[name])) return;
-            listeners[name] = [];
-        },
-        test: (ex) => {
-            callListener("uncaught_exception", ex);
-        },
-    });
-
-    ipcRenderer.on("uncaught_exception", (event, err) => {
-        callListener("uncaught_exception", err);
-    });
-})();

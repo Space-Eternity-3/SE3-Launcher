@@ -118,7 +118,7 @@ const GetInstalledVersions = async () => {
  */
 const UninstallVersion = (versionTag) => {
     const versionPath = path.join(GetVersionsDirectory(), versionTag);
-    fs.rmSync(versionPath, { recursive: true });
+    fs.rmSync(versionPath, { recursive: true, force: true });
 };
 
 const RunVersion = (versionTag) => {

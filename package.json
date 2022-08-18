@@ -14,7 +14,7 @@
     "devDependencies": {
         "concurrently": "^7.3.0",
         "cross-env": "^7.0.3",
-        "electron": "^20.0.2",
+        "electron": "^20.0.3",
         "electron-builder": "^23.3.3",
         "prettier": "2.7.1",
         "react": "^18.2.0",
@@ -54,9 +54,10 @@
         ]
     },
     "dependencies": {
-        "@mantine/core": "^5.1.6",
-        "@mantine/modals": "^5.1.6",
-        "@mantine/notifications": "^5.1.6",
+        "@mantine/core": "^5.1.7",
+        "@mantine/modals": "^5.1.7",
+        "@mantine/notifications": "^5.1.7",
+        "@tabler/icons": "^1.83.1",
         "appdata-path": "^1.0.0",
         "axios": "^0.27.2",
         "custom-electron-titlebar": "^4.1.0",

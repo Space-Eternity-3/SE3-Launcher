@@ -52,7 +52,7 @@ const RendererBridge = () => {
 
     mainBridge.Export("versionsApi", {
         installerCancel: (id) => {
-            installers[id].Stop();
+            installers[id]?.Stop?.();
         },
         IsVersionInstalled: IsVersionInstalled,
         GetVersions: SE3Api.GetVersions,

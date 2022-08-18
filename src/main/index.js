@@ -22,7 +22,7 @@ async function createWindow() {
             webSecurity: false,
             sandbox: false,
         },
-        frame: false,
+        frame: process.platform !== "win32",
         title: "SE3 Launcher",
     });
 
