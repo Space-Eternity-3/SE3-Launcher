@@ -54,13 +54,12 @@
         ]
     },
     "dependencies": {
-        "@mantine/core": "^5.1.7",
-        "@mantine/modals": "^5.1.7",
-        "@mantine/notifications": "^5.1.7",
+        "@mantine/core": "^5.2.0",
+        "@mantine/modals": "^5.2.0",
+        "@mantine/notifications": "^5.2.0",
         "@tabler/icons": "^1.83.1",
         "appdata-path": "^1.0.0",
         "axios": "^0.27.2",
-        "custom-electron-titlebar": "^4.1.0",
         "decompress": "^4.2.1",
         "electron-is": "github:Nadwey/electron-is",
         "electron-store": "^8.1.0",

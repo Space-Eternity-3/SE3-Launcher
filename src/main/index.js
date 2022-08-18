@@ -1,11 +1,10 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog, nativeTheme } = require("electron");
 const path = require("path");
-const { setupTitlebar, attachTitlebarToWindow } = require("custom-electron-titlebar/main");
 const isDev = require("electron-is").dev();
 require("electron-store").initRenderer();
 const { AreInstallationsRunning } = require("./RendererBridge")();
 
-setupTitlebar();
+nativeTheme.themeSource = "dark";
 
 async function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -22,7 +21,6 @@ async function createWindow() {
             webSecurity: false,
             sandbox: false,
         },
-        frame: process.platform !== "win32",
         title: "SE3 Launcher",
     });
 
@@ -45,8 +43,6 @@ async function createWindow() {
             mainWindow.webContents.send("uncaught_exception", ex);
         } catch {}
     });
-
-    attachTitlebarToWindow(mainWindow);
 
     if (isDev) {
         mainWindow.setMenuBarVisibility(false); // dev tools

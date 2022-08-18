@@ -1,4 +1,3 @@
-const { Titlebar, Color } = require("custom-electron-titlebar");
 const electron = require("electron");
 
 module.exports = () => {
@@ -13,12 +12,5 @@ module.exports = () => {
                 electron.shell.openExternal(event.target.href);
             }
         });
-
-        if (process.platform === "win32")
-            new Titlebar({
-                icon: "ikona.png",
-                backgroundColor: Color.fromHex("#363636"),
-                menu: null,
-            });
     });
 };
