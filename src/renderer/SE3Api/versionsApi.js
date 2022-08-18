@@ -66,9 +66,9 @@ export function GetVersionState(versionTag) {
 
 /**
  * Cancels installing
- * 
- * @param {String} versionTag 
- * @returns 
+ *
+ * @param {String} versionTag
+ * @returns
  */
 export function CancelInstall(versionTag) {
     return window.se3Api.CancelInstall(versionTag);

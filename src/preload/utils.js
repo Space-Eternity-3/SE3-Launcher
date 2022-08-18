@@ -15,8 +15,8 @@ const humanFileSize = (bytes, si = false, dp = 1) => {
     } while (Math.round(Math.abs(bytes) * r) / r >= thresh && u < units.length - 1);
 
     return bytes.toFixed(dp) + " " + units[u];
-}
+};
 
 module.exports = {
-    humanFileSize
+    humanFileSize,
 };

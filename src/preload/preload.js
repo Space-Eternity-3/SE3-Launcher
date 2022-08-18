@@ -45,7 +45,7 @@ const deleteWorker = (id) => {
 
 ipcRenderer.on("installer_progress", (event, id, downloadedBytes, totalBytes) => {
     workers[id].updateDetails(`Downloading...\n\n${humanFileSize(downloadedBytes, false, 2)} / ${humanFileSize(totalBytes, false, 2)}`);
-    workers[id].updateProgress(downloadedBytes / totalBytes * 90);
+    workers[id].updateProgress((downloadedBytes / totalBytes) * 90);
 });
 
 ipcRenderer.on("installer_unpacking", (event, id) => {
