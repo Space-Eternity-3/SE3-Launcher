@@ -113,26 +113,40 @@ export default function App() {
         showVersionSelector();
     };
 
-    const removeInstallation = (version) => {
-        const indexToRemove = currentInstallations.findIndex((installation) => installation.version === version.value);
-        setCurrentInstallations([...currentInstallations.slice(0, indexToRemove), ...currentInstallations.slice(indexToRemove + 1)]);
-    };
-
     const onInstall = (version) => {
         setCurrentInstallations((installations) => [
-            ...JSON.parse(JSON.stringify(installations)),
+            ...installations,
             {
                 version: version.value,
                 name: version.label,
                 progress: 0,
+                unpacking: false,
                 details: "Preparing...",
             },
         ]);
+
+        const removeInstallation = (version) => {
+            setCurrentInstallations((installations) => {
+                const indexToRemove = installations.findIndex((installation) => installation.version === version);
+                return [...installations.slice(0, indexToRemove), ...installations.slice(indexToRemove + 1)];
+            });
+        };
+
+        const setIsUnpacking = () => {
+            setCurrentInstallations((installations) =>
+                installations.map((installation) => {
+                    console.log(installation.version === version.value);
+                    if (installation.version === version.value) return { ...installation, unpacking: true };
+                    return installation;
+                })
+            );
+        };
 
         const updateDetails = throttle((details) => {
             setCurrentInstallations((installations) =>
                 installations.map((installation) => {
                     if (installation.version === version.value) return { ...installation, details: details };
+                    return installation;
                 })
             );
         }, 150);
@@ -140,8 +154,8 @@ export default function App() {
         const updateProgress = throttle((progress) => {
             setCurrentInstallations((installations) =>
                 installations.map((installation) => {
-                    console.log(installation);
                     if (installation.version === version.value) return { ...installation, progress: progress };
+                    return installation;
                 })
             );
         }, 150);
@@ -161,6 +175,9 @@ export default function App() {
                     disallowClose: false,
                     loading: false,
                 });
+            },
+            unpacking: () => {
+                setIsUnpacking();
             },
             finish: () => {
                 updateDetails.flush();

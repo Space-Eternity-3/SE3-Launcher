@@ -51,6 +51,7 @@ ipcRenderer.on("installer_progress", (event, id, downloadedBytes, totalBytes) =>
 ipcRenderer.on("installer_unpacking", (event, id) => {
     workers[id].updateDetails("Unpacking...");
     workers[id].updateProgress(95);
+    workers[id].unpacking();
 });
 
 ipcRenderer.on("installer_finish", (event, id) => {

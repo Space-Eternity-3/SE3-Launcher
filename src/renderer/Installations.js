@@ -15,8 +15,11 @@ export default function Installations({ installations, opened, setOpened }) {
                             display: "inline-block",
                             verticalAlign: "middle",
                             marginLeft: "10px",
+                            filter: props.unpacking ? "brightness(50%)" : "none",
                         }}
-                        onMouseDown={() => CancelInstall(props.version)}
+                        onMouseDown={() => {
+                            if (!props.unpacking) CancelInstall(props.version);
+                        }}
                         size="lg"
                     >
                         <IconTrash size={20} />
@@ -35,7 +38,7 @@ export default function Installations({ installations, opened, setOpened }) {
             <Drawer size="40%" zIndex={1001} opened={opened} onClose={() => setOpened(false)} title="Current installations" padding="xl">
                 <Accordion chevronPosition="left">
                     {installations.map((installation) => (
-                        <Installation key={installation.version} version={installation.version} name={installation.name} progress={installation.progress}>
+                        <Installation key={installation.version} version={installation.version} name={installation.name} progress={installation.progress} unpacking={installation.unpacking}>
                             {installation.details}
                         </Installation>
                     ))}
