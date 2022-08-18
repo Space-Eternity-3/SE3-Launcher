@@ -1,3 +1,6 @@
+const { Titlebar, Color } = require("custom-electron-titlebar");
+const electron = require("electron");
+
 module.exports = () => {
     window.addEventListener("DOMContentLoaded", () => {
         // Open external links in browser

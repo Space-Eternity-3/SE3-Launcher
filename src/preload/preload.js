@@ -1,7 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
-const { Titlebar, Color } = require("custom-electron-titlebar");
-const electron = require("electron");
 const { RendererBridge } = require("electronbb");
+require("./setup")();
 
 let rendererBridge = new RendererBridge();
 const versionsApi = rendererBridge.GetSync("versionsApi");
