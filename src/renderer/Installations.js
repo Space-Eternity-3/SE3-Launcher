@@ -1,8 +1,7 @@
-import { Accordion, Box, Button, ActionIcon, Drawer, Progress, Text } from "@mantine/core";
+import { Accordion, ActionIcon, Drawer, Progress, Text } from "@mantine/core";
 import styles from "./styles/Installations.module.css";
 import { IconTrash } from "@tabler/icons";
-import { useEffect, useState } from "react";
-import { CancelInstall, InstallVersion } from "./SE3Api/versionsApi";
+import { CancelInstall } from "./SE3Api/versionsApi";
 
 export default function Installations({ installations, opened, setOpened }) {
     function Installation(props) {
@@ -28,7 +27,7 @@ export default function Installations({ installations, opened, setOpened }) {
                 <Text size="sm" color="#bbbbbb">
                     {props.children}
                 </Text>
-                <Progress color="green" size="sm" value={props.progress} />
+                <Progress animate={props.unpacking} color="green" size="sm" value={props.progress} />
             </div>
         );
     }
@@ -36,13 +35,11 @@ export default function Installations({ installations, opened, setOpened }) {
     return (
         <>
             <Drawer size="40%" zIndex={1001} opened={opened} onClose={() => setOpened(false)} title="Current installations" padding="xl">
-                <Accordion chevronPosition="left">
-                    {installations.map((installation) => (
-                        <Installation key={installation.version} version={installation.version} name={installation.name} progress={installation.progress} unpacking={installation.unpacking}>
-                            {installation.details}
-                        </Installation>
-                    ))}
-                </Accordion>
+                {installations.map((installation) => (
+                    <Installation key={installation.version} version={installation.version} name={installation.name} progress={installation.progress} unpacking={installation.unpacking}>
+                        {installation.details}
+                    </Installation>
+                ))}
             </Drawer>
         </>
     );

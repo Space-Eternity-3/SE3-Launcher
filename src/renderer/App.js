@@ -1,16 +1,15 @@
 import styles from "./styles/App.module.css";
 import "github-markdown-css/github-markdown-dark.css";
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import VersionSelector from "./VersionSelector";
 import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, UninstallVersion } from "./SE3Api/versionsApi";
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Container, Tabs, Text, Autocomplete, Burger, Space, Code, Indicator } from "@mantine/core";
+import { Container, Tabs, Text, Autocomplete, Burger, Indicator } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
-import { humanFileSize } from "./utils";
 import InstalledVersion from "./InstalledVersion";
 import Installations from "./Installations";
 import { throttle } from "lodash";
