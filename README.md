@@ -1,13 +1,19 @@
 # SE3 Launcher
 
 ![SE3 Launcher - home tab](https://user-images.githubusercontent.com/81181783/185487380-715fa7d4-40d1-448e-8cf6-5b145e575505.png)
-[![build](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build?style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/actions/workflows/build.yml)
 [![version](https://img.shields.io/github/v/tag/Space-Eternity-3/SE3-Launcher?label=version&style=for-the-badge)](https://github.com/Space-Eternity-3/SE3-Launcher/releases/)
 [![discord badge](https://img.shields.io/discord/909014300088213547?label=Discord&logo=Discord&style=for-the-badge)](https://discord.gg/e4ppBTRKhg)
 
 Launcher for Space Eternity 3
 
 **NOTE**: Launcher is built only for Windows, because there are no game builds for other operating systems. (You can still use Wine I think)
+
+Build & Test status:
+
+| OS      | Build                                                                                                                    | Test                                                                                                                              |
+| ------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Windows | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build%20for%20Windows?style=flat-square) | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Test%20on%20Windows?label=test&style=flat-square) |
+| Linux   | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build%20for%20Linux?style=flat-square)   | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Test%20on%20Linux?label=test&style=flat-square)   |
 
 ## Table of Contents
 
@@ -53,13 +59,13 @@ Root/kamiloso (https://nadwey.pl/kamiloso)
 
 #### Versions
 
-| Name   | Type    | Description                                                                                                              |
-| ------ | ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| name   | string  | Display name.                                                                                                            |
-| tag    | string  | Version tag. Used for images, files, latest version and for installed versions and other things.                         |
-| file   | string  | File name on the server.                                                                                                 |
-| hidden | bool    | Is version hidden (for example: because of critical bugs)                                                                |
-| image  | string? | Image file name on the server. May be null                                                                               |
+| Name   | Type    | Description                                                                                                               |
+| ------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| name   | string  | Display name.                                                                                                             |
+| tag    | string  | Version tag. Used for images, files, latest version and for installed versions and other things.                          |
+| file   | string  | File name on the server.                                                                                                  |
+| hidden | bool    | Is version hidden (for example: because of critical bugs)                                                                 |
+| image  | string? | Image file name on the server. May be null                                                                                |
 | size   | number? | Version size in bytes. (~~Please use this, instead of spamming my servers with HEAD requests. Thank You.~~). May be null. |
 
 #### latest
