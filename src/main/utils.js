@@ -1,11 +1,10 @@
-const getAppDataPath = require("appdata-path");
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
 const GetGameDirectory = () => {
     let dir;
-    if (process.platform === "win32") dir = getAppDataPath("Space Eternity 3");
+    if (process.platform === "win32") dir = process.env.APPDATA;
     else dir = path.join(os.homedir(), ".se3");
 
     fs.mkdirSync(dir, { recursive: true });
