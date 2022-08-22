@@ -16,6 +16,7 @@
         "cross-env": "^7.0.3",
         "electron": "^20.0.3",
         "electron-builder": "^23.3.3",
+        "jest": "^28.1.3",
         "prettier": "2.7.1",
         "react": "^18.2.0",
         "react-app-rewired": "^2.2.1",
@@ -33,7 +34,8 @@
         "electron-build": "npm run windows-electron-build && npm run linux-electron-build",
         "debug-electron-build": "electron-builder --dir --publish=never",
         "build": "npm run react-build && npm run electron-build",
-        "prettier": "prettier --write ."
+        "prettier": "prettier --write .",
+        "test": "jest --runInBand"
     },
     "eslintConfig": {
         "extends": [
@@ -80,6 +82,7 @@
             "!.prettierrc",
             "!.vscode/",
             "!.github/",
+            "!.test/",
             "!README.md",
             "!config-overrides.js",
             "node_modules/",
