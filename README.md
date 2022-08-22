@@ -109,6 +109,6 @@ Example (may be out of date):
 }
 ```
 
-### Launcher.md
+## Launcher.md
 
 [Launcher.md](https://nadwey.pl/kamiloso/SE3/Launcher/Launcher.md) is a markdown file displayed in Launcher tab.
