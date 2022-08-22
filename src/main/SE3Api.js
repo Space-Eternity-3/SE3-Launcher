@@ -4,6 +4,7 @@ const Store = require("electron-store");
 const { URL } = require("url");
 
 const store = new Store();
+const ABSOLUTE_URL_REGEX = new RegExp("^(?:[a-z+]+:)?//", "i");
 
 /**
  * @typedef {Object} FetchedVersion
@@ -50,8 +51,12 @@ const GetVersions = async () => {
 const GetVersionZipFile = async (versionTag) => {
     const version = (await GetVersions()).Versions.find((version) => version.tag === versionTag);
 
+    let url;
+    if (ABSOLUTE_URL_REGEX.test(version.file)) url = version.file;
+    else url = new URL(version.file, se3ApiSettings.GetVersionsFilesDir()).toString();
+
     return {
-        url: new URL(version.file, se3ApiSettings.GetVersionsFilesDir()).toString(),
+        url,
         version,
     };
 };

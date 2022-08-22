@@ -53,14 +53,14 @@ Root/kamiloso (https://nadwey.pl/kamiloso)
 
 #### Versions
 
-| Name   | Type    | Description                                                                                                 |
-| ------ | ------- | ----------------------------------------------------------------------------------------------------------- |
-| name   | string  | Display name.                                                                                               |
-| tag    | string  | Version tag. Used for images, files, latest version and for installed versions and other things.            |
-| file   | string  | File name on the server.                                                                                    |
-| hidden | bool    | Is version hidden (for example: because of critical bugs)                                                   |
-| image  | string? | Image file name on the server. May be null                                                                  |
-| size   | number  | Version size in bytes. (~~Please use this, instead of spamming my servers with HEAD requests. Thank You.~~) |
+| Name   | Type    | Description                                                                                                              |
+| ------ | ------- | ------------------------------------------------------------------------------------------------------------------------ |
+| name   | string  | Display name.                                                                                                            |
+| tag    | string  | Version tag. Used for images, files, latest version and for installed versions and other things.                         |
+| file   | string  | File name on the server.                                                                                                 |
+| hidden | bool    | Is version hidden (for example: because of critical bugs)                                                                |
+| image  | string? | Image file name on the server. May be null                                                                               |
+| size   | number? | Version size in bytes. (~~Please use this, instead of spamming my servers with HEAD requests. Thank You.~~). May be null. |
 
 #### latest
 

@@ -30,7 +30,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                                     color: isInstalledOrInstalling ? "#990502" : "#ff3020",
                                 }}
                             >
-                                {e.label} &nbsp; <Code>{humanFileSize(e.size, false, 3)}</Code>
+                                {e.label} &nbsp; {e.size && <Code>{humanFileSize(e.size, false, 3)}</Code>}
                                 {isInstalledOrInstalling && (
                                     <>
                                         {" -"} {versionState}
@@ -40,7 +40,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         </Tooltip>
                     ) : (
                         <>
-                            {e.label} &nbsp; <Code>{humanFileSize(e.size, false, 3)}</Code>
+                            {e.label} &nbsp; {e.size && <Code>{humanFileSize(e.size, false, 3)}</Code>}
                             {isInstalledOrInstalling && (
                                 <>
                                     {" -"} {versionState}
