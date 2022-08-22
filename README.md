@@ -17,13 +17,13 @@ Build & Test status:
 
 ## Table of Contents
 
--   [SE3 Launcher](#se3-launcher)
-    -   [Table of Contents](#table-of-contents)
-    -   [Version api](#version-api)
-        -   [Versions.php](#versionsphp)
-            -   [Versions](#versions)
-            -   [latest](#latest)
-        -   [Launcher.md](#launchermd)
+- [SE3 Launcher](#se3-launcher)
+  - [Table of Contents](#table-of-contents)
+  - [Version api](#version-api)
+    - [Versions.php](#versionsphp)
+      - [Versions](#versions)
+      - [latest](#latest)
+  - [Launcher.md](#launchermd)
 
 ## Version api
 
