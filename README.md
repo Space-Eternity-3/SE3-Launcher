@@ -19,13 +19,13 @@ Build & Test status:
 
 - [SE3 Launcher](#se3-launcher)
   - [Table of Contents](#table-of-contents)
-  - [Version api](#version-api)
+  - [SE3 api](#se3-api)
     - [Versions.php](#versionsphp)
       - [Versions](#versions)
       - [latest](#latest)
-  - [Launcher.md](#launchermd)
+    - [Launcher.md](#launchermd)
 
-## Version api
+## SE3 api
 
 Root: `https://nadwey.pl/` (this may change)
 
@@ -63,7 +63,7 @@ Root/kamiloso (https://nadwey.pl/kamiloso)
 | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
 | name   | string  | Display name.                                                                                                             |
 | tag    | string  | Version tag. Used for images, files, latest version and for installed versions and other things.                          |
-| file   | string  | File name on the server.                                                                                                  |
+| file   | string  | If relative: File name in Releases directory. If absolute: URL to the file.                                               |
 | hidden | bool    | Is version hidden (for example: because of critical bugs)                                                                 |
 | image  | string? | Image file name on the server. May be null                                                                                |
 | size   | number? | Version size in bytes. (~~Please use this, instead of spamming my servers with HEAD requests. Thank You.~~). May be null. |
@@ -109,6 +109,6 @@ Example (may be out of date):
 }
 ```
 
-## Launcher.md
+### Launcher.md
 
 [Launcher.md](https://nadwey.pl/kamiloso/SE3/Launcher/Launcher.md) is a markdown file displayed in Launcher tab.
