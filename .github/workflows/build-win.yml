@@ -29,3 +29,15 @@ jobs:
               run: |
                   npm ci
                   npm run windows-electron-build
+
+            - uses: actions/upload-artifact@v3
+              name: Upload portable builds
+              with:
+                  path: |
+                      dist/*.zip
+
+            - uses: actions/upload-artifact@v3
+              name: Upload installer builds
+              with:
+                  path: |
+                      dist/*.exe
