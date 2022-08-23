@@ -56,7 +56,6 @@ const GetVersionZipFile = async (versionTag) => {
     if (ABSOLUTE_URL_REGEX.test(versionFile)) url = versionFile;
     else url = new URL(versionFile, se3ApiSettings.GetVersionsFilesDir()).toString();
 
-    console.log(url);
     return {
         url,
         version,

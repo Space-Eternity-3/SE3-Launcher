@@ -135,7 +135,6 @@ export default function App() {
         const setIsUnpacking = () => {
             setCurrentInstallations((installations) =>
                 installations.map((installation) => {
-                    console.log(installation.version === version.value);
                     if (installation.version === version.value) return { ...installation, unpacking: true };
                     return installation;
                 })
