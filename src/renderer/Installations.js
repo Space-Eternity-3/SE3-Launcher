@@ -1,4 +1,4 @@
-import { Accordion, ActionIcon, Drawer, Progress, Text } from "@mantine/core";
+import { ActionIcon, Drawer, Progress, Text } from "@mantine/core";
 import styles from "./styles/Installations.module.css";
 import { IconTrash } from "@tabler/icons";
 import { CancelInstall } from "./SE3Api/versionsApi";

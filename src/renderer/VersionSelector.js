@@ -103,7 +103,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 spacing="sm"
             >
                 {versions.map((e) => {
-                    if (e.hidden && !showHidden || (Platform() === "linux" && !e.isLinuxSupported)) return null;
+                    if ((e.hidden && !showHidden) || (Platform() === "linux" && !e.isLinuxSupported)) return null;
                     return Version(e);
                 })}
             </Radio.Group>
