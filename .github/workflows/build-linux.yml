@@ -31,3 +31,12 @@ jobs:
                   run: |
                       npm ci
                       npm run linux-electron-build
+
+            - uses: actions/upload-artifact@v3
+              name: Upload builds
+              with:
+                  path: |
+                      dist/*.deb
+                      dist/*.rpm
+                      dist/*.tar.gz
+                      dist/*.AppImage
