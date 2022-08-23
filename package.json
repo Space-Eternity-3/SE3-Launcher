@@ -92,7 +92,8 @@
             "target": [
                 "deb",
                 "rpm",
-                "tar.gz"
+                "tar.gz",
+                "AppImage"
             ],
             "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}",
             "icon": "../resources/icon.png"
