@@ -35,8 +35,6 @@ test("Installing versions", () => {
 });
 
 test("Cancelling installation", () => {
-    const VERSION_TAG = "SE3-Alpha-0.1";
-    const VERSION_DIR = path.join(utils.GetVersionsDirectory(), VERSION_TAG);
     return new Promise(async (resolve, reject) => {
         try {
             fs.rmSync(VERSION_DIR, { force: true, recursive: true });
