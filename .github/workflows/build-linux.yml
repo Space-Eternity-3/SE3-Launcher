@@ -35,23 +35,27 @@ jobs:
             - uses: actions/upload-artifact@v3
               name: Upload deb build
               with:
+                  name: "SE3-Launcher-linux-deb"
                   path: |
                       dist/*.deb
 
             - uses: actions/upload-artifact@v3
               name: Upload rpm build
               with:
+                  name: "SE3-Launcher-linux-rpm"
                   path: |
                       dist/*.rpm
 
             - uses: actions/upload-artifact@v3
               name: Upload tar.gz build
               with:
+                  name: "SE3-Launcher-linux-tar.gz"
                   path: |
                       dist/*.tar.gz
 
             - uses: actions/upload-artifact@v3
               name: Upload AppImage build
               with:
+                  name: "SE3-Launcher-linux-AppImage"
                   path: |
                       dist/*.AppImage

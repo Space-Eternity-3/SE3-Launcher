@@ -33,11 +33,13 @@ jobs:
             - uses: actions/upload-artifact@v3
               name: Upload portable builds
               with:
+                  name: "SE3-Launcher-win32-portable"
                   path: |
                       dist/*.zip
 
             - uses: actions/upload-artifact@v3
               name: Upload installer builds
               with:
+                  name: "SE3-Launcher-win32-installer"
                   path: |
                       dist/*.exe
