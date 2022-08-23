@@ -3,7 +3,7 @@ const utils = require("../src/main/utils");
 const fs = require("fs");
 const path = require("path");
 
-const VERSION_TAG = "SE3-Alpha-0.1";
+const VERSION_TAG = "SE3-Beta-1.13";
 const VERSION_DIR = path.join(utils.GetVersionsDirectory(), VERSION_TAG);
 
 jest.setTimeout(2 * 1000 * 60); // 2 minutes
