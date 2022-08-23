@@ -59,14 +59,15 @@ Root/kamiloso (https://nadwey.pl/kamiloso)
 
 #### Versions
 
-| Name   | Type    | Description                                                                                                               |
-| ------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
-| name   | string  | Display name.                                                                                                             |
-| tag    | string  | Version tag. Used for images, files, latest version and for installed versions and other things.                          |
-| file   | string  | If relative: File name in Releases directory. If absolute: URL to the file.                                               |
-| hidden | bool    | Is version hidden (for example: because of critical bugs)                                                                 |
-| image  | string? | Image file name on the server. May be null                                                                                |
-| size   | number? | Version size in bytes. (~~Please use this, instead of spamming my servers with HEAD requests. Thank You.~~). May be null. |
+| Name      | Type    | Description                                                                                                                                        |
+| --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name      | string  | Display name.                                                                                                                                      |
+| tag       | string  | Version tag. Used for images, files, latest version and for installed versions and other things.                                                   |
+| file      | string  | If relative: File name in Releases directory. If absolute: URL to the file.                                                                        |
+| hidden    | bool    | Is version hidden (for example: because of critical bugs)                                                                                          |
+| image     | string? | Image file name on the server. May be null                                                                                                         |
+| size      | number  | Version size in bytes (Windows). (~~Please use this, instead of spamming my servers with HEAD requests. Thank You.~~). If 0, then size is unknown. |
+| linuxFile | string? | Path to linux build. If relative: File name in Releases directory. If absolute: URL to the file. May be null.                                      |
 
 #### latest
 

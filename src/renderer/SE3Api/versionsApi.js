@@ -73,3 +73,12 @@ export function GetVersionState(versionTag) {
 export function CancelInstall(versionTag) {
     return window.se3Api.CancelInstall(versionTag);
 }
+
+/**
+ * Returns process.platform
+ * 
+ * @returns {String} platform
+ */
+export function Platform() {
+    return window.se3Api.Platform();
+}

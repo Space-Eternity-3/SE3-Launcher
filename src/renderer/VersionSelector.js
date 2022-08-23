@@ -1,7 +1,7 @@
 import { Code, Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useModals } from "@mantine/modals";
-import { GetVersionState } from "./SE3Api/versionsApi";
+import { GetVersionState, Platform } from "./SE3Api/versionsApi";
 import { humanFileSize } from "./utils";
 
 export default function VersionSelector({ versions, shown, onCancel, onInstall }) {
@@ -30,7 +30,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                                     color: isInstalledOrInstalling ? "#990502" : "#ff3020",
                                 }}
                             >
-                                {e.label} &nbsp; {e.size && <Code>{humanFileSize(e.size, false, 3)}</Code>}
+                                {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
                                 {isInstalledOrInstalling && (
                                     <>
                                         {" -"} {versionState}
@@ -40,7 +40,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                         </Tooltip>
                     ) : (
                         <>
-                            {e.label} &nbsp; {e.size && <Code>{humanFileSize(e.size, false, 3)}</Code>}
+                            {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
                             {isInstalledOrInstalling && (
                                 <>
                                     {" -"} {versionState}
@@ -103,7 +103,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 spacing="sm"
             >
                 {versions.map((e) => {
-                    if (e.hidden && !showHidden) return null;
+                    if (e.hidden && !showHidden || (Platform() === "linux" && !e.isLinuxSupported)) return null;
                     return Version(e);
                 })}
             </Radio.Group>

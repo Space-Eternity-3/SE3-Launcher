@@ -97,6 +97,7 @@ export default function App() {
                 value: e.tag,
                 hidden: e.hidden,
                 name: e.name,
+                isLinuxSupported: !!e.linuxFile,
             });
         });
         return outVersions;

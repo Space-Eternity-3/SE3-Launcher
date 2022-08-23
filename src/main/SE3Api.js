@@ -52,9 +52,11 @@ const GetVersionZipFile = async (versionTag) => {
     const version = (await GetVersions()).Versions.find((version) => version.tag === versionTag);
 
     let url;
-    if (ABSOLUTE_URL_REGEX.test(version.file)) url = version.file;
-    else url = new URL(version.file, se3ApiSettings.GetVersionsFilesDir()).toString();
+    const versionFile = process.platform === "win32" ? version.file : version.linuxFile;
+    if (ABSOLUTE_URL_REGEX.test(versionFile)) url = versionFile;
+    else url = new URL(versionFile, se3ApiSettings.GetVersionsFilesDir()).toString();
 
+    console.log(url);
     return {
         url,
         version,

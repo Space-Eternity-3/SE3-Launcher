@@ -69,8 +69,11 @@ ipcRenderer.on("installer_error", (event, id, err) => {
     deleteWorker(id);
 });
 
+const Platform = () => process.platform;
+
 contextBridge.exposeInMainWorld("se3Api", {
     InstallVersion,
     CancelInstall,
+    Platform,
     ...versionsApi,
 });
