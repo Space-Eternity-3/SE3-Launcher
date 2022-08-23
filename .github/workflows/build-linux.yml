@@ -30,6 +30,7 @@ jobs:
               with:
                   run: |
                       npm ci
+                      npm run react-build
                       npm run linux-electron-build
 
             - uses: actions/upload-artifact@v3
