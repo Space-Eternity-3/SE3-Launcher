@@ -33,10 +33,25 @@ jobs:
                       npm run linux-electron-build
 
             - uses: actions/upload-artifact@v3
-              name: Upload builds
+              name: Upload deb build
               with:
                   path: |
                       dist/*.deb
+
+            - uses: actions/upload-artifact@v3
+              name: Upload rpm build
+              with:
+                  path: |
                       dist/*.rpm
+
+            - uses: actions/upload-artifact@v3
+              name: Upload tar.gz build
+              with:
+                  path: |
                       dist/*.tar.gz
+
+            - uses: actions/upload-artifact@v3
+              name: Upload AppImage build
+              with:
+                  path: |
                       dist/*.AppImage
