@@ -59,7 +59,7 @@
         "@mantine/core": "^5.2.3",
         "@mantine/modals": "^5.2.3",
         "@mantine/notifications": "^5.2.3",
-        "@tabler/icons": "^1.86.0",
+        "@tabler/icons": "^1.88.0",
         "axios": "^0.27.2",
         "decompress": "^4.2.1",
         "electron-is": "github:Nadwey/electron-is",
