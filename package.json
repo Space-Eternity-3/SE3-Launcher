@@ -29,7 +29,7 @@
     "scripts": {
         "start": "concurrently --kill-others \"cross-env BROWSER=none react-app-rewired start\" \"electron .\"",
         "react-build": "react-app-rewired build",
-        "windows-electron-build": "electron-builder --win --ia32 --publish=never && electron-builder --win --x64 --publish=never",
+        "windows-electron-build": "electron-builder --win --x64 --publish=never",
         "linux-electron-build": "electron-builder --linux --x64 --publish=never",
         "macos-electron-build": "electron-builder --macos --x64 --publish=never",
         "debug-electron-build": "electron-builder --dir --publish=never",
@@ -96,7 +96,9 @@
                 "AppImage"
             ],
             "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}",
-            "icon": "../resources/icon.png"
+            "icon": "../resources/icons/",
+            "executableName": "SE3 Launcher",
+            "category": "Game"
         },
         "win": {
             "target": [
