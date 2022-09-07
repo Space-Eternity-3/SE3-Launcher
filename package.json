@@ -12,10 +12,10 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "concurrently": "^7.3.0",
+        "concurrently": "^7.4.0",
         "cross-env": "^7.0.3",
         "electron": "^20.1.1",
-        "electron-builder": "^23.3.3",
+        "electron-builder": "^23.5.0",
         "jest": "^29.0.2",
         "prettier": "2.7.1",
         "react": "^18.2.0",
@@ -56,9 +56,9 @@
         ]
     },
     "dependencies": {
-        "@mantine/core": "^5.2.4",
-        "@mantine/modals": "^5.2.4",
-        "@mantine/notifications": "^5.2.4",
+        "@mantine/core": "^5.2.6",
+        "@mantine/modals": "^5.2.6",
+        "@mantine/notifications": "^5.2.6",
         "@tabler/icons": "^1.93.0",
         "axios": "^0.27.2",
         "decompress": "^4.2.1",
