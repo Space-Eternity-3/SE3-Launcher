@@ -4,7 +4,7 @@ const os = require("os");
 
 const GetGameDirectory = () => {
     let dir;
-    if (process.platform === "win32") dir = process.env.APPDATA;
+    if (process.platform === "win32") dir = path.join(process.env.APPDATA, "Space Eternity 3");
     else dir = path.join(os.homedir(), ".se3");
 
     fs.mkdirSync(dir, { recursive: true });
