@@ -6,6 +6,8 @@ const path = require("path");
 const VERSION_TAG = "SE3-Beta-1.13";
 const VERSION_DIR = path.join(utils.GetVersionsDirectory(), VERSION_TAG);
 
+console.log(`Game directory: ${utils.GetGameDirectory()}`);
+
 jest.setTimeout(2 * 1000 * 60); // 2 minutes
 test("Installing versions", () => {
     return new Promise(async (resolve, reject) => {
@@ -78,7 +80,7 @@ test("GetInstalledVersions", () => {
 
             const versionInstaller = new VersionInstaller(VERSION_TAG);
 
-            versionInstaller.on("finished", async() => {
+            versionInstaller.on("finished", async () => {
                 if (IsVersionInstalled(VERSION_TAG)) {
                     const installedVersions = await GetInstalledVersions();
                     if (installedVersions.length === 1 && installedVersions[0].tag === VERSION_TAG) resolve();
