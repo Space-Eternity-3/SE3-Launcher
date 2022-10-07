@@ -1,4 +1,4 @@
-const axios = require("axios").default;
+const axios = require("axios");
 const { GetVersionZipFile, GetVersions } = require("./SE3Api");
 const fs = require("fs");
 const path = require("path");
