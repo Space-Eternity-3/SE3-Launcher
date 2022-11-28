@@ -58,7 +58,7 @@
     "dependencies": {
         "@mantine/core": "^5.8.0",
         "@mantine/modals": "^5.8.0",
-        "@mantine/notifications": "^5.8.0",
+        "@mantine/notifications": "^5.8.4",
         "@tabler/icons": "^1.112.0",
         "axios": "^1.2.0",
         "decompress": "^4.2.1",
