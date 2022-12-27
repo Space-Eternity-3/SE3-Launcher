@@ -10,8 +10,8 @@ Build & Test status:
 
 | OS      | Build                                                                                                                    | Test                                                                                                                              |
 | ------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| Windows | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build%20for%20Windows?style=flat-square) | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Test%20on%20Windows?label=test&style=flat-square) |
-| Linux   | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Build%20for%20Linux?style=flat-square)   | ![](https://img.shields.io/github/workflow/status/Space-Eternity-3/SE3-Launcher/Test%20on%20Linux?label=test&style=flat-square)   |
+| Windows | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/build-win.yml?style=flat-square) | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/test-win.yml?label=test&style=flat-square) |
+| Linux   | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/build-linux.yml?style=flat-square)   | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/test-linux.yml?label=test&style=flat-square)   |
 
 ## Table of Contents
 
