@@ -1,6 +1,6 @@
 import { ActionIcon, Drawer, Progress, Text } from "@mantine/core";
 import styles from "./styles/Installations.module.css";
-import { IconTrash } from "@tabler/icons";
+import { IconTrash } from "@tabler/icons-react";
 import { CancelInstall } from "./SE3Api/versionsApi";
 
 export default function Installations({ installations, opened, setOpened }) {

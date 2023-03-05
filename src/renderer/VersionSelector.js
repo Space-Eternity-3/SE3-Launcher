@@ -129,6 +129,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                     uppercase
                     style={{
                         float: "right",
+                        marginBottom: "5px"
                     }}
                 >
                     install
