@@ -8,20 +8,20 @@ Launcher for Space Eternity 3
 
 Build & Test status:
 
-| OS      | Build                                                                                                                    | Test                                                                                                                              |
-| ------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| Windows | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/build-win.yml?style=flat-square) | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/test-win.yml?label=test&style=flat-square) |
-| Linux   | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/build-linux.yml?style=flat-square)   | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/test-linux.yml?label=test&style=flat-square)   |
+| OS      | Build                                                                                                                      | Test                                                                                                                                 |
+| ------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Windows | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/build-win.yml?style=flat-square)   | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/test-win.yml?label=test&style=flat-square)   |
+| Linux   | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/build-linux.yml?style=flat-square) | ![](https://img.shields.io/github/actions/workflow/status/Space-Eternity-3/SE3-Launcher/test-linux.yml?label=test&style=flat-square) |
 
 ## Table of Contents
 
-- [SE3 Launcher](#se3-launcher)
-  - [Table of Contents](#table-of-contents)
-  - [SE3 api](#se3-api)
-    - [Versions.php](#versionsphp)
-      - [Versions](#versions)
-      - [latest](#latest)
-    - [Launcher.md](#launchermd)
+-   [SE3 Launcher](#se3-launcher)
+    -   [Table of Contents](#table-of-contents)
+    -   [SE3 api](#se3-api)
+        -   [Versions.php](#versionsphp)
+            -   [Versions](#versions)
+            -   [latest](#latest)
+        -   [Launcher.md](#launchermd)
 
 ## SE3 api
 

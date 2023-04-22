@@ -76,7 +76,7 @@ export function CancelInstall(versionTag) {
 
 /**
  * Returns process.platform
- * 
+ *
  * @returns {String} platform
  */
 export function Platform() {

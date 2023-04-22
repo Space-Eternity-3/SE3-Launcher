@@ -1,4 +1,4 @@
-import { Code, Radio, Switch, Tooltip, Text, Button, Modal } from "@mantine/core";
+import { Code, Radio, Switch, Tooltip, Text, Button, Modal, Group } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useModals } from "@mantine/modals";
 import { GetVersionState, Platform } from "./SE3Api/versionsApi";
@@ -99,27 +99,20 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 }}
                 value={versionSelectValue}
                 onChange={setVersionSelectValue}
-                orientation="vertical"
-                spacing="sm"
             >
-                {versions.map((e) => {
-                    if ((e.hidden && !showHidden) || (Platform() === "linux" && !e.isLinuxSupported)) return null;
-                    return Version(e);
-                })}
+                <Group spacing="xs">
+                    {versions.map((e) => {
+                        if ((e.hidden && !showHidden) || (Platform() === "linux" && !e.isLinuxSupported)) return null;
+                        return Version(e);
+                    })}
+                </Group>
             </Radio.Group>
             <div
                 style={{
                     marginTop: "20px",
                 }}
             >
-                <Switch
-                    style={{ float: "left", marginTop: "5px" }}
-                    checked={showHidden}
-                    onChange={(event) => setShowHidden(event.currentTarget.checked)}
-                    label={<span style={{ color: "#ffffff" }}>Show hidden</span>}
-                    color="orange"
-                    size="md"
-                />
+                <Switch style={{ float: "left", marginTop: "5px" }} checked={showHidden} onChange={(event) => setShowHidden(event.currentTarget.checked)} label={<span style={{ color: "#ffffff" }}>Show hidden</span>} color="orange" size="md" />
                 <Button
                     onClick={() => {
                         onInstall && onInstallPre();
@@ -129,7 +122,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                     uppercase
                     style={{
                         float: "right",
-                        marginBottom: "5px"
+                        marginBottom: "5px",
                     }}
                 >
                     install
