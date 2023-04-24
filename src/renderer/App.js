@@ -13,6 +13,7 @@ import ReactMarkdown from "react-markdown";
 import InstalledVersion from "./InstalledVersion";
 import Installations from "./Installations";
 import { throttle } from "lodash";
+import ServerManager from "./ServerManager";
 
 let versions = {};
 
@@ -266,6 +267,7 @@ export default function App() {
                 <Tabs.List>
                     <Tabs.Tab value="home">Home</Tabs.Tab>
                     <Tabs.Tab value="versions">Versions</Tabs.Tab>
+                    <Tabs.Tab value="server">Server</Tabs.Tab>
                     <Tabs.Tab value="launcher">Launcher</Tabs.Tab>
                 </Tabs.List>
 
@@ -316,6 +318,10 @@ export default function App() {
                         />
                     </div>
                     <button onClick={showVersionSelector} className={styles.addButton} />
+                </Tabs.Panel>
+
+                <Tabs.Panel value="server">
+                    <ServerManager />
                 </Tabs.Panel>
 
                 <Tabs.Panel value="launcher">

@@ -68,7 +68,8 @@
         "github-markdown-css": "^5.2.0",
         "lodash": "^4.17.21",
         "react-markdown": "^8.0.7",
-        "remark-gfm": "^3.0.1"
+        "remark-gfm": "^3.0.1",
+        "tar-stream": "^3.0.0"
     },
     "build": {
         "productName": "SE3 Launcher",

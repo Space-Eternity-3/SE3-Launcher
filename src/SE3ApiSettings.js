@@ -9,6 +9,8 @@ const se3ApiSettings = {
     VersionsFilesDir: "./Versions/Releases/",
     VersionsInfo: "./Versions/Versions.php",
     LauncherInfo: "./Launcher.md",
+    ServerDir: "./Server/",
+    ServersList: "./Server.json",
 
     GetSE3Dir: () => {
         return new URL(se3ApiSettings.SE3Dir, se3ApiSettings.root).toString();
@@ -36,6 +38,14 @@ const se3ApiSettings = {
 
     GetLauncherInfo: () => {
         return new URL(se3ApiSettings.LauncherInfo, se3ApiSettings.GetLauncherDir()).toString();
+    },
+
+    GetServerDir: () => {
+        return new URL(se3ApiSettings.ServerDir, se3ApiSettings.GetSE3Dir()).toString();
+    },
+
+    GetServersList: () => {
+        return new URL(se3ApiSettings.ServersList, se3ApiSettings.GetServerDir()).toString();
     },
 };
 

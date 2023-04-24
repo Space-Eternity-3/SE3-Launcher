@@ -35,10 +35,9 @@ const GetVersions = async () => {
         store.set("versions", res);
         return res;
     } catch (ex) {
-        if (store.has("versions")) {
+        if (store.has("versions"))
             return store.get("versions");
-        }
-        throw new Error("Can't load versions");
+        throw new Error("Can't get versions");
     }
 };
 
@@ -62,7 +61,38 @@ const GetVersionZipFile = async (versionTag) => {
     };
 };
 
+/**
+ * @typedef ServerVersion
+ * @type {object}
+ * @property {string} name - Name of this server version.
+ * @property {string} version - Version tag of this server.
+ * @property {string} downloadUrl - Download link to the server.
+ * @property {string} linuxRuntime - Download link to Linux x64 Node.js runtime (tar.gz)
+ * @property {string} windowsRuntime - Download link to Windows x64 Node.js runtime (.zip)
+ * @property {string} runtimeVersion - Version of the Node.js runtime
+ */
+
+/**
+ * Returns avaiable server versions.
+ * 
+ * @returns {ServerVersion[]}
+ */
+const GetServerVersions = async () => {
+    try {
+        const res = (await axios.get(se3ApiSettings.GetServersList())).data;
+        store.set("servers", res);
+        return res;
+    } catch (ex) {
+        if (store.has("servers"))
+            return store.get("servers");
+        throw new Error("Can't get servers");
+    }
+
+    return;
+};
+
 module.exports = {
     GetVersions,
     GetVersionZipFile,
+    GetServerVersions,
 };

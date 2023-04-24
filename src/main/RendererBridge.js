@@ -9,6 +9,12 @@ let mainBridge = new MainBridge();
  */
 let installers = {};
 
+const GetVersionState = (versionTag) => {
+    if (IsVersionInstalled(versionTag)) return "installed";
+    if (typeof Object.values(installers).find((installer) => installer.versionTag === versionTag) !== "undefined") return "installing";
+    return "not_installed";
+};
+
 const RendererBridge = () => {
     // Installer
     ipcMain.handle("install_version", (e, id, tag) => {
@@ -54,16 +60,13 @@ const RendererBridge = () => {
         installerCancel: (id) => {
             installers[id]?.Stop?.();
         },
-        IsVersionInstalled: IsVersionInstalled,
+        IsVersionInstalled,
         GetVersions: SE3Api.GetVersions,
-        GetInstalledVersions: GetInstalledVersions,
-        UninstallVersion: UninstallVersion,
-        RunVersion: RunVersion,
-        GetVersionState: (versionTag) => {
-            if (IsVersionInstalled(versionTag)) return "installed";
-            if (typeof Object.values(installers).find((installer) => installer.versionTag === versionTag) !== "undefined") return "installing";
-            return "not_installed";
-        },
+        GetInstalledVersions,
+        UninstallVersion,
+        RunVersion,
+        GetVersionState,
+        GetServerVersions: SE3Api.GetServerVersions,
     });
 
     return {
