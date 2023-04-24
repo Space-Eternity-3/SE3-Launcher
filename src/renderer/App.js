@@ -42,7 +42,7 @@ export default function App() {
         (async () => {
             try {
                 setLauncherText(await GetLauncherInfo());
-            } catch (ex) {}
+            } catch (ex) { }
 
             versions = await GetVersions();
             if (!versions) {
@@ -307,6 +307,14 @@ export default function App() {
                                 .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
                                 .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
                                 .reverse()}
+                            {installedVersions
+                                .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase())).length === 0 &&
+                                <div style={{ height: "calc(100% - 60px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                    <div>
+                                        Empty here...<br />
+                                        <Text style={{ cursor: "pointer" }} size="lg" onClick={showVersionSelector} color="blue" underline>Install a version.</Text>
+                                    </div>
+                                </div>}
                         </div>
                         <VersionSelector
                             onCancel={() => {
