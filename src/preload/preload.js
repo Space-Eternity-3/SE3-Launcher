@@ -43,30 +43,37 @@ const deleteWorker = (id) => {
     delete workers[id];
 };
 
-ipcRenderer.on("installer_progress", (event, id, downloadedBytes, totalBytes) => {
-    workers[id].updateDetails(`Downloading...\n\n${humanFileSize(downloadedBytes, false, 2)} / ${humanFileSize(totalBytes, false, 2)}`);
-    workers[id].updateProgress((downloadedBytes / totalBytes) * 90);
-});
+ipcRenderer.on("installer_event", (event, id, type, data) => {
+    if (!(id in workers)) return;
+    switch (type) {
+        case "progress":
+            const downloadedBytes = data.downloadedBytes;
+            const totalBytes = data.totalBytes;
+        
+            workers[id].updateDetails(`Downloading...\n\n${humanFileSize(downloadedBytes, false, 2)} / ${humanFileSize(totalBytes, false, 2)}`);
+            workers[id].updateProgress((downloadedBytes / totalBytes) * 90);
 
-ipcRenderer.on("installer_unpacking", (event, id) => {
-    workers[id].updateDetails("Unpacking...");
-    workers[id].updateProgress(95);
-    workers[id].unpacking();
-});
-
-ipcRenderer.on("installer_finish", (event, id) => {
-    workers[id].finish();
-    deleteWorker(id);
-});
-
-ipcRenderer.on("installer_canceled", (event, id) => {
-    workers[id].cancel();
-    deleteWorker(id);
-});
-
-ipcRenderer.on("installer_error", (event, id, err) => {
-    workers[id].error(err);
-    deleteWorker(id);
+            break;
+        case "unpacking":
+            workers[id].updateDetails("Unpacking...");
+            workers[id].updateProgress(95);
+            workers[id].unpacking();
+            break;
+        case "finish":
+            workers[id].finish();
+            deleteWorker(id);
+            break;
+        case "canceled":
+            workers[id].cancel();
+            deleteWorker(id);
+            break;
+        case "error":
+            workers[id].error(data);
+            deleteWorker(id);
+            break;
+        default:
+            break;
+    }
 });
 
 const Platform = () => process.platform;

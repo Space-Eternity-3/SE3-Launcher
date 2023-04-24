@@ -17,8 +17,8 @@ const RendererBridge = () => {
             delete installers[id];
         };
 
-        const sendMsg = (channel, ...args) => {
-            if (!e.sender.isDestroyed()) e.sender.send(channel, ...args);
+        const InstallerEvent = (type, ...args) => {
+            if (!e.sender.isDestroyed()) e.sender.send("installer_event", id, type, ...args);
         };
 
         try {
@@ -27,25 +27,25 @@ const RendererBridge = () => {
             versionInstaller.Start();
 
             versionInstaller.on("finished", () => {
-                sendMsg("installer_finish", id);
+                InstallerEvent("finish");
                 deleteInstaller(id);
             });
             versionInstaller.on("error", (ex) => {
-                sendMsg("installer_error", id, ex);
+                InstallerEvent("error", ex);
                 deleteInstaller(id);
             });
             versionInstaller.on("progress", (downloadedBytes, totalBytes) => {
-                sendMsg("installer_progress", id, downloadedBytes, totalBytes);
+                InstallerEvent("progress", { downloadedBytes, totalBytes });
             });
             versionInstaller.on("unpacking", () => {
-                sendMsg("installer_unpacking", id);
+                InstallerEvent("unpacking");
             });
             versionInstaller.on("cancelled", () => {
-                sendMsg("installer_canceled", id);
+                InstallerEvent("cancelled");
                 deleteInstaller(id);
             });
         } catch (err) {
-            sendMsg("installer_error", id, err);
+            InstallerEvent("error", err);
             deleteInstaller(id);
         }
     });
