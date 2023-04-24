@@ -6,7 +6,7 @@ import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, 
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Container, Tabs, Text, Autocomplete, Burger, Indicator } from "@mantine/core";
+import { Container, Tabs, Text, Autocomplete, Burger, Indicator, Button, Group } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
@@ -263,12 +263,36 @@ export default function App() {
 
     return (
         <Container>
+            <Installations installations={currentInstallations} opened={installationsOpened} setOpened={setInstallationsOpened} />
             <Tabs value={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List>
-                    <Tabs.Tab value="home">Home</Tabs.Tab>
-                    <Tabs.Tab value="versions">Versions</Tabs.Tab>
-                    <Tabs.Tab value="server">Server</Tabs.Tab>
-                    <Tabs.Tab value="launcher">Launcher</Tabs.Tab>
+                    <Container style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%"
+                    }}>
+
+                        <Group spacing={0}>
+                            <Tabs.Tab value="home">Home</Tabs.Tab>
+                            <Tabs.Tab value="versions">Versions</Tabs.Tab>
+                            <Tabs.Tab value="server">Server</Tabs.Tab>
+                            <Tabs.Tab value="launcher">Launcher</Tabs.Tab>
+                        </Group>
+
+                        <Indicator
+                            disabled={currentInstallations.length === 0}
+                            style={{
+                                display: "block",
+                                verticalAlign: "middle",
+                            }}
+                            position="middle-start"
+                            size={15}
+                            withBorder
+                        >
+                            <Burger opened={installationsOpened} onClick={() => setInstallationsOpened((o) => !o)} />
+                        </Indicator>
+                    </Container>
                 </Tabs.List>
 
                 <Tabs.Panel value="home">
@@ -277,20 +301,6 @@ export default function App() {
 
                 <Tabs.Panel value="versions">
                     <div className={styles.versionsTab}>
-                        <Installations installations={currentInstallations} opened={installationsOpened} setOpened={setInstallationsOpened} />
-
-                        <Indicator
-                            disabled={currentInstallations.length === 0}
-                            style={{
-                                display: "inline-block",
-                                verticalAlign: "middle",
-                                marginLeft: "10px",
-                                marginTop: "-2px",
-                            }}
-                        >
-                            <Burger opened={installationsOpened} onClick={() => setInstallationsOpened((o) => !o)} />
-                        </Indicator>
-
                         <Autocomplete
                             style={{
                                 margin: "5px 10px 0",
