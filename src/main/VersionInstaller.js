@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const EventEmitter = require("events");
 const { GetLauncherDirectory, GetVersionsDirectory } = require("./utils");
-const decompress = require("decompress");
+const compressing = require("compressing");
 const child_process = require("child_process");
 
 class VersionInstaller extends EventEmitter {
@@ -46,9 +46,7 @@ class VersionInstaller extends EventEmitter {
                 if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true });
 
                 try {
-                    await decompress(savePath, dir, {
-                        filter: (file) => !file.path.endsWith("/"),
-                    });
+                    await compressing.zip.uncompress(savePath, dir);
                 } catch (ex) {
                     this.emit("error", ex);
                     return;
