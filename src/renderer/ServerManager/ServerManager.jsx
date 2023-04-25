@@ -1,9 +1,11 @@
 import { Badge, Button, Card, Code, Divider, Group, Space, Text, Title } from "@mantine/core";
 import styles from "./styles/ServerManager.module.css";
 import { useEffect, useState } from "react";
+import { CreateServerDialog } from "./CreateServerDialog";
 
 export default function ServerManager() {
     const [serverVersions, setServerVersions] = useState([]);
+    const [createServerDialogVisible, setCreateServerDialogVisible] = useState(false);
 
     useEffect(() => {
         async function fetchServerVersions() {
@@ -13,12 +15,22 @@ export default function ServerManager() {
         fetchServerVersions();
     }, []);
 
+    const onCreateServerDialogCancel = () => {
+        setCreateServerDialogVisible(false);
+    }
+    
+    const onCreateServerDialogShow = () => {
+        setCreateServerDialogVisible(true);
+    }
+
     return (
-        <div className={styles.container}>
-            <Title order={1}>Server Manager</Title>
-            <Button>Create server</Button>
-            <div>
-{/* //                     return <Card key={version.version}>
+        <>
+            <CreateServerDialog onCancel={onCreateServerDialogCancel} visible={createServerDialogVisible} serverVersions={serverVersions} />
+            <div className={styles.container}>
+                <Title order={1}>Server Manager (beta)</Title>
+                <Button onClick={onCreateServerDialogShow}>Create server</Button>
+                <div>
+                    {/* //                     return <Card key={version.version}>
 //                         <Title order={3}>{version.name}</Title>
 //                         <Group spacing="sm">
 //                             <Badge color="blue">Installed</Badge><Badge color="green">Node.js v18.16.0</Badge><Badge color="yellow">Port 27683</Badge>
@@ -46,7 +58,9 @@ export default function ServerManager() {
 //                         <Text fz="xs" c="dimmed">Server running for 00:02:43</Text>
 
 //                     </Card> */}
+                </div>
             </div>
-        </div>
+        </>
+
     );
 }

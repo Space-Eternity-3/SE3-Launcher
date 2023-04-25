@@ -13,7 +13,7 @@ import ReactMarkdown from "react-markdown";
 import InstalledVersion from "./InstalledVersion";
 import Installations from "./Installations";
 import { throttle } from "lodash";
-import ServerManager from "./ServerManager";
+import ServerManager from "./ServerManager/ServerManager";
 
 let versions = {};
 
