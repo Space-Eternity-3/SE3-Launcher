@@ -6,7 +6,7 @@ import { GetInstalledVersions, GetVersions, InstallVersion, IsVersionInstalled, 
 import { GetLauncherInfo } from "./SE3Api/launcherApi";
 import HomePage from "./HomePage";
 import { showNotification, updateNotification } from "@mantine/notifications";
-import { Container, Tabs, Text, Autocomplete, Burger, Indicator, Button, Group } from "@mantine/core";
+import { Container, Tabs, Text, Autocomplete, Burger, Indicator, Group } from "@mantine/core";
 import { useModals } from "@mantine/modals";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";

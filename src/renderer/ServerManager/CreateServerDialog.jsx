@@ -1,6 +1,6 @@
-import { Accordion, ActionIcon, Button, Card, Divider, Group, Modal, NumberInput, Select, Space, Tabs, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Button, Group, Modal, Select, Space, TextInput } from "@mantine/core";
 import { IconRefresh } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ServerConfig from "./CreateServerDialog/ServerConfig";
 
 const generatePassword = (length = 20, wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') =>

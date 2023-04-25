@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Code, Divider, Group, Space, Text, Title } from "@mantine/core";
+import { Button, Title } from "@mantine/core";
 import styles from "./styles/ServerManager.module.css";
 import { useEffect, useState } from "react";
 import { CreateServerDialog } from "./CreateServerDialog";

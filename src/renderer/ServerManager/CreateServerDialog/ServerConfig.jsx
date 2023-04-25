@@ -1,4 +1,4 @@
-import { Checkbox, NumberInput, Space, Switch } from "@mantine/core";
+import { NumberInput, Space, Switch } from "@mantine/core";
 import { useState } from "react";
 
 function ConfigNumber({ configValue, onChange }) {
@@ -37,6 +37,7 @@ function ConfigBoolean({ configValue, onChange  }) {
 
 export default function ServerConfig({ configValues }) {
     return <>
+        {/* eslint-disable-next-line */}
         {configValues?.map(configValue => {
             switch (configValue.type) {
                 case "number":
@@ -49,7 +50,6 @@ export default function ServerConfig({ configValues }) {
                         <ConfigBoolean configValue={configValue} />
                         <Space h="sm" />
                     </div>
-
                 default:
                     break;
             }
