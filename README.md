@@ -40,6 +40,8 @@ Root/kamiloso (https://nadwey.pl/kamiloso)
     │
     ├───Launcher
     |       Launcher.md
+    ├───Server
+    |       Server.json
     └───Versions
         │   Versions.json
         │   Versions.php
@@ -111,3 +113,7 @@ Example (may be out of date):
 ### Launcher.md
 
 [Launcher.md](https://nadwey.pl/kamiloso/SE3/Launcher/Launcher.md) is a markdown file displayed in Launcher tab.
+
+### Server.json
+
+TODO
