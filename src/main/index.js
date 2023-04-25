@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog, nativeTheme } = require("electron");
 const path = require("path");
+const NodejsInstaller = require("./ServerManager/NodeJsInstaller");
 const isDev = require("electron-is").dev();
 require("electron-store").initRenderer();
 const { AreInstallationsRunning } = require("./RendererBridge")();
@@ -70,3 +71,6 @@ app.whenReady().then(() => {
 app.on("window-all-closed", function () {
     if (process.platform !== "darwin") app.quit();
 });
+
+let nodeJsInstaller = new NodejsInstaller("Beta-1.15");
+nodeJsInstaller.Start();

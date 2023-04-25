@@ -23,8 +23,15 @@ const GetLauncherDirectory = () => {
     return dir;
 };
 
+const GetNodejsDirectory = () => {
+    const dir = path.join(GetGameDirectory(), "nodejs");
+    fs.mkdirSync(dir, { recursive: true });
+    return dir;
+};
+
 module.exports = {
     GetGameDirectory,
     GetVersionsDirectory,
     GetLauncherDirectory,
+    GetNodejsDirectory
 };
