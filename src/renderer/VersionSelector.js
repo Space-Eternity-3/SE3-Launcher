@@ -1,4 +1,4 @@
-import { Code, Radio, Switch, Tooltip, Text, Button, Modal, Group } from "@mantine/core";
+import { Code, Radio, Switch, Tooltip, Text, Button, Modal, Group, Space } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useModals } from "@mantine/modals";
 import { GetVersionState, Platform } from "./SE3Api/versionsApi";
@@ -18,38 +18,42 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
         const versionState = GetVersionState(e.value);
         const isInstalledOrInstalling = versionState !== "not_installed";
         return (
-            <Radio
-                key={e.value}
-                value={e.value}
-                disabled={isInstalledOrInstalling}
-                label={
-                    e.hidden ? (
-                        <Tooltip wrapLines withArrow transition="fade" transitionDuration={200} label="Hidden version, may cause issues!">
-                            <span
-                                style={{
-                                    color: isInstalledOrInstalling ? "#990502" : "#ff3020",
-                                }}
-                            >
+            <>
+                <Radio
+                    key={e.value}
+                    value={e.value}
+                    disabled={isInstalledOrInstalling}
+                    label={
+                        e.hidden ? (
+                            <Tooltip wrapLines withArrow transition="fade" transitionDuration={200} label="Hidden version, may cause issues!">
+                                <span
+                                    style={{
+                                        color: isInstalledOrInstalling ? "#990502" : "#ff3020",
+                                    }}
+                                >
+                                    {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
+                                    {isInstalledOrInstalling && (
+                                        <>
+                                            {" -"} {versionState}
+                                        </>
+                                    )}
+                                </span>
+                            </Tooltip>
+                        ) : (
+                            <>
                                 {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
                                 {isInstalledOrInstalling && (
                                     <>
                                         {" -"} {versionState}
                                     </>
                                 )}
-                            </span>
-                        </Tooltip>
-                    ) : (
-                        <>
-                            {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
-                            {isInstalledOrInstalling && (
-                                <>
-                                    {" -"} {versionState}
-                                </>
-                            )}
-                        </>
-                    )
-                }
-            />
+                            </>
+                        )
+                    }
+                />
+                <Space h="sm" />
+            </>
+
         );
     };
 
@@ -100,12 +104,10 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 value={versionSelectValue}
                 onChange={setVersionSelectValue}
             >
-                <Group spacing="xs">
-                    {versions.map((e) => {
-                        if ((e.hidden && !showHidden) || (Platform() === "linux" && !e.isLinuxSupported)) return null;
-                        return Version(e);
-                    })}
-                </Group>
+                {versions.map((e) => {
+                    if ((e.hidden && !showHidden) || (Platform() === "linux" && !e.isLinuxSupported)) return null;
+                    return Version(e);
+                })}
             </Radio.Group>
             <div
                 style={{
