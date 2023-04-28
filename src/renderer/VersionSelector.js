@@ -14,24 +14,24 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
     }, [shown]);
 
     // TODO: do something with this
-    const Version = (e) => {
-        const versionState = GetVersionState(e.value);
+    const Version = (version) => {
+        const versionState = GetVersionState(version.value);
         const isInstalledOrInstalling = versionState !== "not_installed";
         return (
             <>
                 <Radio
-                    key={e.value}
-                    value={e.value}
+                    key={version.value}
+                    value={version.value}
                     disabled={isInstalledOrInstalling}
                     label={
-                        e.hidden ? (
+                        version.hidden ? (
                             <Tooltip wrapLines withArrow transition="fade" transitionDuration={200} label="Hidden version, may cause issues!">
                                 <span
                                     style={{
                                         color: isInstalledOrInstalling ? "#990502" : "#ff3020",
                                     }}
                                 >
-                                    {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
+                                    {version.label} &nbsp; {version.size ? <Code>{humanFileSize(version.size, false, 3)}</Code> : <Code>unknown</Code>}
                                     {isInstalledOrInstalling && (
                                         <>
                                             {" -"} {versionState}
@@ -41,7 +41,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                             </Tooltip>
                         ) : (
                             <>
-                                {e.label} &nbsp; {e.size ? <Code>{humanFileSize(e.size, false, 3)}</Code> : <Code>unknown</Code>}
+                                {version.label} &nbsp; {version.size ? <Code>{humanFileSize(version.size, false, 3)}</Code> : <Code>unknown</Code>}
                                 {isInstalledOrInstalling && (
                                     <>
                                         {" -"} {versionState}

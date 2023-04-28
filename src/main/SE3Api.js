@@ -87,12 +87,26 @@ const GetServerVersions = async () => {
             return store.get("servers");
         throw new Error("Can't get servers");
     }
+};
 
-    return;
+/**
+ * Gets server versions
+ * 
+ * @param {string} serverVersion 
+ * @returns {ServerVersion}
+ */
+const GetServerVersion = async(serverVersion) => {
+    try {
+        return (await GetServerVersions()).find(version => version.version === this.serverVersion);
+    } catch (ex) {
+        throw new Error("Could not get server info");
+    }
+
 };
 
 module.exports = {
     GetVersions,
     GetVersionZipFile,
     GetServerVersions,
+    GetServerVersion,
 };

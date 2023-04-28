@@ -1,5 +1,5 @@
 import { NumberInput, Space, Switch } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function ConfigNumber({ configValue, onChange }) {
     const [value, setValue] = useState(configValue.default_value);
@@ -36,18 +36,24 @@ function ConfigBoolean({ configValue, onChange  }) {
 };
 
 export default function ServerConfig({ configValues }) {
+    const [currentConfig, setCurrentConfig] = useState({});
+
+    function onChange(id, value) {
+
+    };
+
     return <>
         {/* eslint-disable-next-line */}
         {configValues?.map(configValue => {
             switch (configValue.type) {
                 case "number":
                     return <div key={configValue.id}>
-                        <ConfigNumber configValue={configValue} />
+                        <ConfigNumber onChange={onChange} configValue={configValue} />
                         <Space h="sm" />
                     </div>
                 case "boolean":
                     return <div key={configValue.id}>
-                        <ConfigBoolean configValue={configValue} />
+                        <ConfigBoolean onChange={onChange}  configValue={configValue} />
                         <Space h="sm" />
                     </div>
                 default:
