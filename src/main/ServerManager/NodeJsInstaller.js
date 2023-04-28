@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { GetVersionZipFile, GetServerVersions } = require("../SE3Api");
+const { GetServerVersions } = require("../SE3Api");
 const { URL } = require("url");
 const path = require("path");
 const { GetNodejsDirectory, GetLauncherDirectory } = require("../utils");
