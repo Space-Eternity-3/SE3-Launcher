@@ -1,4 +1,4 @@
-import { Code, Radio, Switch, Tooltip, Text, Button, Modal, Group, Space } from "@mantine/core";
+import { Code, Radio, Switch, Tooltip, Text, Button, Modal, Space } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useModals } from "@mantine/modals";
 import { GetVersionState, Platform } from "./SE3Api/versionsApi";
