@@ -75,6 +75,7 @@ const RendererBridge = () => {
 
             return false;
         },
+        mainBridge
     };
 };
 

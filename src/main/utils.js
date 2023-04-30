@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const { dialog } = require("electron");
 
 const GetGameDirectory = () => {
     let dir;

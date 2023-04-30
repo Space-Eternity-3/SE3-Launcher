@@ -4,6 +4,7 @@ require("./setup")();
 
 let rendererBridge = new RendererBridge();
 const versionsApi = rendererBridge.GetSync("versionsApi");
+const dialog = rendererBridge.GetSync("dialog");
 
 const versionsApiSettings = require("../SE3ApiSettings");
 const { humanFileSize } = require("./utils");
@@ -84,3 +85,5 @@ contextBridge.exposeInMainWorld("se3Api", {
     Platform,
     ...versionsApi,
 });
+
+contextBridge.exposeInMainWorld("dialog", dialog);

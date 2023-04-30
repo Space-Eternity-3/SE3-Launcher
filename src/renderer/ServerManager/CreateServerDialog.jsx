@@ -1,7 +1,8 @@
-import { ActionIcon, Button, Group, Modal, Select, Space, TextInput } from "@mantine/core";
-import { IconRefresh } from "@tabler/icons-react";
+import { ActionIcon, Button, Group, Modal, Select, Space, Text, TextInput } from "@mantine/core";
+import { IconFolder, IconRefresh } from "@tabler/icons-react";
 import { useState } from "react";
 import ServerConfig from "./CreateServerDialog/ServerConfig";
+import { SelectDirectory } from "../SE3Api/dialog";
 
 const generatePassword = (length = 20, wishlist = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') =>
     Array.from(crypto.getRandomValues(new Uint32Array(length)))
@@ -11,6 +12,7 @@ const generatePassword = (length = 20, wishlist = '0123456789ABCDEFGHIJKLMNOPQRS
 export function CreateServerDialog({ visible, serverVersions, onCancel }) {
     const [selectedVersion, setSelectedVersion] = useState(null);
     const [adminPassword, setAdminPassword] = useState("");
+    const [serverDirectory, setServerDirectory] = useState("");
 
     function setRandomPassword() {
         setAdminPassword(generatePassword(20));
@@ -18,7 +20,14 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
         console.log(serverVersions.find(version => version.version === selectedVersion));
     }
 
-    return <Modal size="lg" opened={visible} onClose={onCancel} centered title="Create server">
+    function selectServerDirectory() {
+        const directory = SelectDirectory();
+        if (directory) {
+            setServerDirectory(directory);
+        }
+    }
+
+    return <Modal scroll size="lg" opened={visible} onClose={onCancel} centered title="Create server">
         <Group grow position="center">
             <TextInput
                 placeholder="My Great Server!"
@@ -51,10 +60,22 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
         <Space h="xs" />
         <ServerConfig configValues={(serverVersions.find(version => version.version === selectedVersion))?.configValues} />
 
+        {/* TODO: validation etc. */}
+        <TextInput
+            value={serverDirectory}
+            onChange={e => setServerDirectory(e.target.value)}
+            placeholder="Pick a directory..."
+            label="Server directory"
+            description={<Text color="red">The server directory will be wiped!</Text>}
+            rightSection={<ActionIcon title="Select directory" onClick={selectServerDirectory}>
+                <IconFolder size="1.125rem" />
+            </ActionIcon>}
+        />
 
         <Space h="sm" />
         <Group position="apart">
             <Button color="green">Create</Button>
         </Group>
+
     </Modal>
 };

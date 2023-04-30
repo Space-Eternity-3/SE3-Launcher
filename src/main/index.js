@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain, dialog, nativeTheme } = require("electron")
 const path = require("path");
 const isDev = require("electron-is").dev();
 require("electron-store").initRenderer();
-const { AreInstallationsRunning } = require("./RendererBridge")();
+const { AreInstallationsRunning, mainBridge } = require("./RendererBridge")();
 
 nativeTheme.themeSource = "dark";
 
@@ -22,6 +22,15 @@ async function createWindow() {
             sandbox: false,
         },
         title: "SE3 Launcher",
+    });
+
+
+    mainBridge.Export("dialog", {
+        SelectDirectory: () => {
+            return dialog.showOpenDialogSync(mainWindow, {
+                properties: ["openDirectory"],
+            });
+        },
     });
 
     mainWindow.on("close", (e) => {

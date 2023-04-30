@@ -19,7 +19,7 @@ function ConfigNumber({ configValue, onChange }) {
     />
 };
 
-function ConfigBoolean({ configValue, onChange  }) {
+function ConfigBoolean({ configValue, onChange }) {
     const [value, setValue] = useState(configValue.default_value);
 
     function updateValue(e) {
@@ -36,11 +36,24 @@ function ConfigBoolean({ configValue, onChange  }) {
 };
 
 export default function ServerConfig({ configValues }) {
+    // TODO: remove this
+    // eslint-disable-next-line
     const [currentConfig, setCurrentConfig] = useState({});
 
     function onChange(id, value) {
+        setCurrentConfig((currentConfig) => ({
+            ...currentConfig,
+            [id]: value,
+        }));
+    }
 
-    };
+    useEffect(() => {
+        const newConfig = {};
+        configValues?.forEach(configValue => {
+            newConfig[configValue.id] = configValue.default_value;
+        });
+        setCurrentConfig(newConfig);
+    }, [configValues]);
 
     return <>
         {/* eslint-disable-next-line */}
@@ -53,7 +66,7 @@ export default function ServerConfig({ configValues }) {
                     </div>
                 case "boolean":
                     return <div key={configValue.id}>
-                        <ConfigBoolean onChange={onChange}  configValue={configValue} />
+                        <ConfigBoolean onChange={onChange} configValue={configValue} />
                         <Space h="sm" />
                     </div>
                 default:

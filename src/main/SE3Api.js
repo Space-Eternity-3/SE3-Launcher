@@ -97,7 +97,7 @@ const GetServerVersions = async () => {
  */
 const GetServerVersion = async(serverVersion) => {
     try {
-        return (await GetServerVersions()).find(version => version.version === this.serverVersion);
+        return (await GetServerVersions()).find(version => version.version === serverVersion);
     } catch (ex) {
         throw new Error("Could not get server info");
     }
