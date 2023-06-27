@@ -57,7 +57,7 @@
     },
     "dependencies": {
         "@mantine/core": "^6.0.9",
-        "@mantine/modals": "^6.0.9",
+        "@mantine/modals": "^6.0.15",
         "@mantine/notifications": "^6.0.9",
         "@tabler/icons-react": "^2.17.0",
         "axios": "^1.4.0",
