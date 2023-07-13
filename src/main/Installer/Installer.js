@@ -1,7 +1,11 @@
 const fs = require("fs");
+const axios = require("axios");
+const EventEmitter = require("events");
 
-class Action {
+class Action extends EventEmitter {
     constructor() {
+        super();
+
         if (this.constructor == Action) {
             throw new Error("Action class can't be instantiated.");
         }
@@ -13,6 +17,35 @@ class Action {
     async execute() {
         throw new Error("execute() not implemented");
     }
+
+    /**
+     * Text that gets displayed in the UI
+     *
+     * @type {string}
+     */
+    displayText;
+
+    /**
+     * Details that get displayed in the UI
+     *
+     * @type {string}
+     */
+    detailsText;
+
+    /**
+     * Progress of the action
+     *
+     * @type {number}
+     */
+    progress;
+
+    updateData() {
+        this.emit("update", {
+            displayText: this.displayText,
+            detailsText: this.detailsText,
+            progress: this.progress,
+        });
+    }
 }
 
 class DownloadAction extends Action {
@@ -23,11 +56,17 @@ class DownloadAction extends Action {
      * @param {String} savePath
      */
     constructor(url, savePath) {
+        super();
+
         this.url = url;
         this.savePath = savePath;
+
+        this.displayText = "Downloading...";
     }
 
     async execute() {
+        this.updateData();
+
         if (fs.existsSync(this.savePath)) fs.rmSync(this.savePath);
         const res = await axios.get(this.url, {
             responseType: "stream",
@@ -35,30 +74,23 @@ class DownloadAction extends Action {
 
         const totalLength = parseInt(res.headers["content-length"], 10);
 
-        this.writer = fs.createWriteStream(savePath);
-        this.writer.on("error", (err) => {
+        this.writeStream = fs.createWriteStream(this.savePath);
+        this.writeStream.on("error", (err) => {
             this.emit("error", err);
         });
-        this.writer.on("close", async () => {
-            this.emit("unpacking");
-            const dir = path.join(GetVersionsDirectory(), file.version.tag);
-            if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true });
-
-            try {
-                await compressing.zip.uncompress(savePath, dir);
-            } catch (ex) {
-                this.emit("error", ex);
-                return;
-            }
-
+        this.writeStream.on("close", async () => {
             this.emit("finished");
         });
 
+        let downloadedBytes = 0;
         res.data.on("data", (chunk) => {
-            this.downloadedBytes += chunk.length;
-            this.emit("progress", this.downloadedBytes, totalLength);
+            downloadedBytes += chunk.length;
+            this.progress = (downloadedBytes / totalLength) * 100;
+            this.detailsText = `${(downloadedBytes / 1024 / 1024).toFixed(2)}MiB / ${(totalLength / 1024 / 1024).toFixed(2)}MiB bytes`;
+            this.updateData();
         });
-        res.data.pipe(this.writer);
+
+        res.data.pipe(this.writeStream);
     }
 
     /**
@@ -77,3 +109,7 @@ class DownloadAction extends Action {
      */
     writeStream;
 }
+
+module.exports = {
+    DownloadAction,
+};
