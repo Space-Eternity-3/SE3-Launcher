@@ -8,16 +8,16 @@ export default function Installations({ installations, opened, setOpened }) {
         return (
             <div className={styles.installation}>
                 <div>
-                    {props.name}
+                    {props.displayText}
                     <ActionIcon
                         style={{
                             display: "inline-block",
                             verticalAlign: "middle",
                             marginLeft: "10px",
-                            filter: props.unpacking ? "brightness(50%)" : "none",
+                            filter: (props.progress === null) ? "brightness(50%)" : "none",
                         }}
                         onMouseDown={() => {
-                            if (!props.unpacking) CancelInstall(props.version);
+                            CancelInstall(props.version);
                         }}
                         size="lg"
                     >
@@ -27,7 +27,7 @@ export default function Installations({ installations, opened, setOpened }) {
                 <Text size="sm" color="#bbbbbb">
                     {props.children}
                 </Text>
-                <Progress animate={props.unpacking} color="green" size="sm" value={props.progress} />
+                <Progress animate={props.progress === null} color="green" size="sm" value={(props.progress === null) ? 100 : props.progress} />
             </div>
         );
     }
@@ -36,8 +36,8 @@ export default function Installations({ installations, opened, setOpened }) {
         <>
             <Drawer size="40%" zIndex={1001} opened={opened} onClose={() => setOpened(false)} title="Current installations" padding="xl">
                 {installations.map((installation) => (
-                    <Installation key={installation.version} version={installation.version} name={installation.name} progress={installation.progress} unpacking={installation.unpacking}>
-                        {installation.details}
+                    <Installation key={installation.version} version={installation.version} displayText={installation.displayText} progress={installation.progress}>
+                        {installation.detailsText}
                     </Installation>
                 ))}
             </Drawer>

@@ -27,7 +27,7 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
         }
     }
 
-    return <Modal scroll size="lg" opened={visible} onClose={onCancel} centered title="Create server">
+    return <Modal size="lg" opened={visible} onClose={onCancel} centered title="Create server">
         <Group grow position="center">
             <TextInput
                 placeholder="My Great Server!"

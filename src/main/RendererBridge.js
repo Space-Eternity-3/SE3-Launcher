@@ -1,7 +1,9 @@
 const { ipcMain } = require("electron");
 const SE3Api = require("./SE3Api");
-const { VersionInstaller, IsVersionInstalled, GetInstalledVersions, UninstallVersion, RunVersion } = require("./VersionInstaller");
+const { IsVersionInstalled, GetInstalledVersions, UninstallVersion, RunVersion } = require("./VersionManager");
 const { MainBridge } = require("electronbb");
+const { Installer } = require("./Installer/Installer");
+const GameInstall = require("./Installer/GameInstall");
 let mainBridge = new MainBridge();
 
 /**
@@ -17,7 +19,7 @@ const GetVersionState = (versionTag) => {
 
 const RendererBridge = () => {
     // Installer
-    ipcMain.handle("install_version", (e, id, tag) => {
+    ipcMain.handle("install_version", async (e, id, version) => {
         const deleteInstaller = (id) => {
             installers[id] = null;
             delete installers[id];
@@ -28,9 +30,8 @@ const RendererBridge = () => {
         };
 
         try {
-            let versionInstaller = new VersionInstaller(tag);
+            let versionInstaller = new Installer(await GameInstall(version));
             installers[id] = versionInstaller;
-            versionInstaller.Start();
 
             versionInstaller.on("finished", () => {
                 InstallerEvent("finish");
@@ -40,16 +41,11 @@ const RendererBridge = () => {
                 InstallerEvent("error", ex);
                 deleteInstaller(id);
             });
-            versionInstaller.on("progress", (downloadedBytes, totalBytes) => {
-                InstallerEvent("progress", { downloadedBytes, totalBytes });
+            versionInstaller.on("data", (data) => {
+                InstallerEvent("data", data);
             });
-            versionInstaller.on("unpacking", () => {
-                InstallerEvent("unpacking");
-            });
-            versionInstaller.on("cancelled", () => {
-                InstallerEvent("cancelled");
-                deleteInstaller(id);
-            });
+
+            versionInstaller.Start();
         } catch (err) {
             InstallerEvent("error", err);
             deleteInstaller(id);
@@ -75,7 +71,7 @@ const RendererBridge = () => {
 
             return false;
         },
-        mainBridge
+        mainBridge,
     };
 };
 

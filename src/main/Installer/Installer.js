@@ -1,6 +1,8 @@
 const fs = require("fs");
 const axios = require("axios");
 const EventEmitter = require("events");
+const compressing = require("compressing");
+const path = require("path");
 
 class Action extends EventEmitter {
     constructor() {
@@ -16,6 +18,13 @@ class Action extends EventEmitter {
      */
     async execute() {
         throw new Error("execute() not implemented");
+    }
+
+    /**
+     * Cancels the action
+     */
+    cancel() {
+        throw new Error("cancel() not implemented");
     }
 
     /**
@@ -40,7 +49,7 @@ class Action extends EventEmitter {
     progress;
 
     updateData() {
-        this.emit("update", {
+        this.emit("data", {
             displayText: this.displayText,
             detailsText: this.detailsText,
             progress: this.progress,
@@ -68,8 +77,11 @@ class DownloadAction extends Action {
         this.updateData();
 
         if (fs.existsSync(this.savePath)) fs.rmSync(this.savePath);
+
+        this.abortController = new AbortController();
         const res = await axios.get(this.url, {
             responseType: "stream",
+            signal: this.abortController.signal,
         });
 
         const totalLength = parseInt(res.headers["content-length"], 10);
@@ -94,6 +106,14 @@ class DownloadAction extends Action {
     }
 
     /**
+     * Cancels the action
+     */
+    cancel() {
+        this.abortController.abort();
+        this.writeStream.close();
+    }
+
+    /**
      * @type {string}
      */
     url;
@@ -108,8 +128,139 @@ class DownloadAction extends Action {
      * @type {fs.WriteStream}
      */
     writeStream;
+
+    /**
+     * @private
+     * @type {AbortController}
+     */
+    abortController;
+}
+
+class ExtractAction extends Action {
+    /**
+     * Extracts an archive
+     *
+     * @param {String} archivePath
+     * @param {String} extractPath
+     */
+    constructor(archivePath, extractPath) {
+        super();
+
+        this.archivePath = archivePath;
+        this.extractPath = extractPath;
+
+        this.displayText = "Extracting...";
+    }
+
+    async execute() {
+        this.progress = null;
+        this.updateData();
+
+        if (!fs.existsSync(this.archivePath)) {
+            this.emit("error", "Archive does not exist");
+            return;
+        }
+
+        if (fs.existsSync(this.extractPath)) fs.rmSync(this.extractPath, { recursive: true, force: true });
+
+        const filename = path.basename(this.archivePath);
+
+        try {
+            if (filename.endsWith(".zip")) {
+                await compressing.zip.uncompress(this.archivePath, this.extractPath);
+            } else if (filename.endsWith(".tar.gz")) {
+                await compressing.tgz.uncompress(this.archivePath, this.extractPath);
+            } else {
+                this.emit("error", "Unknown archive type");
+                return;
+            }
+        } catch (ex) {
+            this.emit("error", ex);
+            return;
+        }
+    }
+
+    /**
+     * @type {string}
+     */
+    archivePath;
+
+    /**
+     * @type {string}
+     */
+    extractPath;
+}
+
+class Installer extends EventEmitter {
+    /**
+     * @param {Action[]} actions
+     */
+    constructor(actions) {
+        super();
+
+        this.actions = actions;
+    }
+
+    async Start() {
+        for await (const action of this.actions) {
+            if (this.failed) break;
+            await new Promise((resolve) => {
+                action.on("data", (data) => {
+                    this.emit("data", data);
+                });
+
+                action.on("error", (err) => {
+                    this.emit("error", err);
+                    this.failed = true;
+                    resolve();
+                });
+
+                action.on("finished", () => {
+                    this.emit("finished");
+                    resolve();
+                });
+
+                action.execute();
+            });
+            this.currentAction++;
+        }
+    }
+
+    Stop() {
+        try {
+            this.actions[this.currentAction]?.cancel?.();
+            failed = true;
+            return true;
+        } catch (ex) { 
+            return false; // cancel is not implemented
+        }
+    }
+
+    /**
+     * @private
+     * List of actions to execute
+     *
+     * @type {Action[]}
+     */
+    actions;
+
+    /**
+     * @private
+     * Current action
+     *
+     * @type {Number}
+     */
+    currentAction = 0;
+
+    /**
+     * @private
+     * @type {Boolean}
+     */
+    failed = false;
 }
 
 module.exports = {
     DownloadAction,
+    ExtractAction,
+    Installer,
 };

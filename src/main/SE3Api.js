@@ -52,6 +52,7 @@ const GetVersionZipFile = async (versionTag) => {
 
     let url;
     const versionFile = process.platform === "win32" ? version.file : version.linuxFile;
+    
     if (ABSOLUTE_URL_REGEX.test(versionFile)) url = versionFile;
     else url = new URL(versionFile, se3ApiSettings.GetVersionsFilesDir()).toString();
 

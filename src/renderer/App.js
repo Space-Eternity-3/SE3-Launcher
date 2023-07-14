@@ -42,7 +42,7 @@ export default function App() {
         (async () => {
             try {
                 setLauncherText(await GetLauncherInfo());
-            } catch (ex) { }
+            } catch (ex) {}
 
             versions = await GetVersions();
             if (!versions) {
@@ -50,7 +50,7 @@ export default function App() {
                     title: "Failed to get versions. Check your internet connection.",
                     color: "red",
                     autoClose: true,
-                    disallowClose: false,
+                    withCloseButton: true,
                 });
             }
             updateInstalledVersions();
@@ -78,7 +78,7 @@ export default function App() {
                         .
                     </div>
                 ),
-                disallowClose: false,
+                withCloseButton: true,
                 autoClose: true,
             });
         });
@@ -119,10 +119,10 @@ export default function App() {
             ...installations,
             {
                 version: version.value,
-                name: version.label,
+                displayText: version.label,
                 progress: 0,
                 unpacking: false,
-                details: "Preparing...",
+                detailsText: "Preparing...",
             },
         ]);
 
@@ -133,86 +133,65 @@ export default function App() {
             });
         };
 
-        const setIsUnpacking = () => {
+        const updateData = throttle((details) => {
             setCurrentInstallations((installations) =>
                 installations.map((installation) => {
-                    if (installation.version === version.value) return { ...installation, unpacking: true };
+                    if (installation.version === version.value)
+                        return {
+                            ...installation,
+                            displayText: details.displayText,
+                            detailsText: details.detailsText,
+                            progress: details.progress,
+                        };
                     return installation;
-                })
-            );
-        };
-
-        const updateDetails = throttle((details) => {
-            setCurrentInstallations((installations) =>
-                installations.map((installation) => {
-                    if (installation.version === version.value) return { ...installation, details: details };
-                    return installation;
-                })
-            );
-        }, 150);
-
-        const updateProgress = throttle((progress) => {
-            setCurrentInstallations((installations) =>
-                installations.map((installation) => {
-                    if (installation.version === version.value) return { ...installation, progress: progress };
-                    return installation;
-                })
+                }),
             );
         }, 150);
 
         showNotification({
             title: `Started installing ${version.label}`,
             autoClose: true,
-            disallowClose: false,
+            withCloseButton: true,
             loading: false,
         });
 
         InstallVersion(version.value, {
-            updateDetails,
-            updateProgress,
+            updateData,
             cancel: () => {
-                updateDetails.flush();
-                updateProgress.flush();
+                updateData.flush();
 
                 removeInstallation(version.value);
 
                 showNotification({
                     title: `Canceled installing ${version.label}`,
                     autoClose: true,
-                    disallowClose: false,
+                    withCloseButton: true,
                     loading: false,
                 });
             },
-            unpacking: () => {
-                setIsUnpacking();
-            },
             finish: () => {
-                updateDetails.flush();
-                updateProgress.flush();
+                updateData.flush();
 
                 removeInstallation(version.value);
-
                 updateInstalledVersions();
 
                 showNotification({
                     title: `Finished installing ${version.label}`,
                     autoClose: true,
-                    disallowClose: false,
+                    withCloseButton: true,
                     loading: false,
                 });
             },
             error: (err) => {
-                updateDetails.flush();
-                updateProgress.flush();
+                updateData.flush();
 
                 removeInstallation(version.value);
-
                 updateInstalledVersions();
 
                 showNotification({
-                    title: `Error occurred when installing ${version.label}\n${err}`,
+                    title: `Error occured when installing ${version.label}\n${err}`,
                     autoClose: true,
-                    disallowClose: false,
+                    withCloseButton: true,
                     loading: false,
                 });
             },
@@ -229,9 +208,9 @@ export default function App() {
                 try {
                     showNotification({
                         id: `uninstalling-${ver.tag}`,
-                        title: `Uninstalled ${ver.name}`,
+                        title: `Uninstalling... ${ver.name}`,
                         autoClose: false,
-                        disallowClose: true,
+                        withCloseButton: false,
                         loading: true,
                     });
                     await UninstallVersion(ver.tag);
@@ -240,15 +219,15 @@ export default function App() {
                         id: `uninstalling-${ver.tag}`,
                         title: `Uninstalled ${ver.name}`,
                         autoClose: true,
-                        disallowClose: false,
+                        withCloseButton: true,
                         loading: false,
                     });
                 } catch (ex) {
                     updateNotification({
                         id: `uninstalling-${ver.tag}`,
                         title: `Failed to uninstall ${ver.name}\n${ex}`,
-                        autoClose: true,
-                        disallowClose: false,
+                        autoClose: false,
+                        withCloseButton: true,
                         loading: false,
                     });
                 }
@@ -266,13 +245,14 @@ export default function App() {
             <Installations installations={currentInstallations} opened={installationsOpened} setOpened={setInstallationsOpened} />
             <Tabs value={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List>
-                    <Container style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        width: "100%"
-                    }}>
-
+                    <Container
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            width: "100%",
+                        }}
+                    >
                         <Group spacing={0}>
                             <Tabs.Tab value="home">Home</Tabs.Tab>
                             <Tabs.Tab value="versions">Versions</Tabs.Tab>
@@ -317,14 +297,17 @@ export default function App() {
                                 .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
                                 .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
                                 .reverse()}
-                            {installedVersions
-                                .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase())).length === 0 &&
+                            {installedVersions.filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase())).length === 0 && (
                                 <div style={{ height: "calc(100% - 60px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <div>
-                                        Empty here...<br />
-                                        <Text style={{ cursor: "pointer" }} size="lg" onClick={showVersionSelector} color="blue" underline>Install a version.</Text>
+                                        Empty here...
+                                        <br />
+                                        <Text style={{ cursor: "pointer" }} size="lg" onClick={showVersionSelector} color="blue" underline>
+                                            Install a version.
+                                        </Text>
                                     </div>
-                                </div>}
+                                </div>
+                            )}
                         </div>
                         <VersionSelector
                             onCancel={() => {

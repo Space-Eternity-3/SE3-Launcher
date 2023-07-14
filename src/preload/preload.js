@@ -7,7 +7,6 @@ const versionsApi = rendererBridge.GetSync("versionsApi");
 const dialog = rendererBridge.GetSync("dialog");
 
 const versionsApiSettings = require("../SE3ApiSettings");
-const { humanFileSize } = require("./utils");
 contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
 
 let rendererExports = {};
@@ -20,9 +19,6 @@ contextBridge.exposeInMainWorld("preloadBridge", {
         delete rendererExports[name];
         rendererExports[name] = [];
     },
-});
-ipcRenderer.on("uncaught_exception", (event, err) => {
-    rendererExports["uncaught_exception"](err);
 });
 
 let workers = {};
@@ -47,25 +43,12 @@ const deleteWorker = (id) => {
 ipcRenderer.on("installer_event", (event, id, type, data) => {
     if (!(id in workers)) return;
     switch (type) {
-        case "progress":
-            const downloadedBytes = data.downloadedBytes;
-            const totalBytes = data.totalBytes;
-        
-            workers[id].updateDetails(`Downloading...\n\n${humanFileSize(downloadedBytes, false, 2)} / ${humanFileSize(totalBytes, false, 2)}`);
-            workers[id].updateProgress((downloadedBytes / totalBytes) * 90);
+        case "data":
+            workers[id].updateData(data);
 
-            break;
-        case "unpacking":
-            workers[id].updateDetails("Unpacking...");
-            workers[id].updateProgress(95);
-            workers[id].unpacking();
             break;
         case "finish":
             workers[id].finish();
-            deleteWorker(id);
-            break;
-        case "canceled":
-            workers[id].cancel();
             deleteWorker(id);
             break;
         case "error":
@@ -75,6 +58,9 @@ ipcRenderer.on("installer_event", (event, id, type, data) => {
         default:
             break;
     }
+});
+ipcRenderer.on("uncaught_exception", (event, err) => {
+    rendererExports["uncaught_exception"](err);
 });
 
 const Platform = () => process.platform;

@@ -10,7 +10,6 @@ export default function ServerManager() {
     useEffect(() => {
         async function fetchServerVersions() {
             setServerVersions(await window.se3Api.GetServerVersions());
-            console.log(await window.se3Api.GetServerVersions());
         }
         fetchServerVersions();
     }, []);

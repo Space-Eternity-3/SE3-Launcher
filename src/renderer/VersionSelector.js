@@ -14,7 +14,7 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
     }, [shown]);
 
     // TODO: do something with this
-    const Version = (version) => {
+    const Version = ({ version }) => {
         const versionState = GetVersionState(version.value);
         const isInstalledOrInstalling = versionState !== "not_installed";
         return (
@@ -104,9 +104,9 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 value={versionSelectValue}
                 onChange={setVersionSelectValue}
             >
-                {versions.map((e) => {
-                    if ((e.hidden && !showHidden) || (Platform() === "linux" && !e.isLinuxSupported)) return null;
-                    return Version(e);
+                {versions.map((version) => {
+                    if ((version.hidden && !showHidden) || (Platform() === "linux" && !version.isLinuxSupported)) return null;
+                    return <Version version={version} key={version.value} />;
                 })}
             </Radio.Group>
             <div
