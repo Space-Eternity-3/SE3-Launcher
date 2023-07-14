@@ -28,7 +28,10 @@ const InstallVersion = (version, functions) => {
 
     workers[id] = { version, ...functions };
 
-    ipcRenderer.invoke("install_version", id, version);
+    ipcRenderer.invoke("install", id, {
+        type: "version",
+        version,
+    });
 };
 
 const CancelInstall = (id) => {

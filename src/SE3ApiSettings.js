@@ -11,6 +11,7 @@ const se3ApiSettings = {
     LauncherInfo: "./Launcher.md",
     ServerDir: "./Server/",
     ServersList: "./Server.json",
+    ServerRuntimes: "./Runtimes.json",
 
     GetSE3Dir: () => {
         return new URL(se3ApiSettings.SE3Dir, se3ApiSettings.root).toString();
@@ -46,6 +47,10 @@ const se3ApiSettings = {
 
     GetServersList: () => {
         return new URL(se3ApiSettings.ServersList, se3ApiSettings.GetServerDir()).toString();
+    },
+
+    GetServerRuntimes: () => {
+        return new URL(se3ApiSettings.ServerRuntimes, se3ApiSettings.GetServerDir()).toString();
     },
 };
 

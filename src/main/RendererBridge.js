@@ -4,10 +4,11 @@ const { IsVersionInstalled, GetInstalledVersions, UninstallVersion, RunVersion }
 const { MainBridge } = require("electronbb");
 const { Installer } = require("./Installer/Installer");
 const GameInstall = require("./Installer/GameInstall");
+const NodeJsInstall = require("./Installer/NodeJsInstall");
 let mainBridge = new MainBridge();
 
 /**
- * @type {Object.<string, VersionInstaller>}
+ * @type {Object.<string, Installer>}
  */
 let installers = {};
 
@@ -19,7 +20,7 @@ const GetVersionState = (versionTag) => {
 
 const RendererBridge = () => {
     // Installer
-    ipcMain.handle("install_version", async (e, id, version) => {
+    ipcMain.handle("install", async (e, id, data) => {
         const deleteInstaller = (id) => {
             installers[id] = null;
             delete installers[id];
@@ -30,7 +31,22 @@ const RendererBridge = () => {
         };
 
         try {
-            let versionInstaller = new Installer(await GameInstall(version));
+            let versionInstaller;
+            switch (data.type) {
+                case "version": {
+                    versionInstaller = new Installer(await GameInstall(data.version));
+                    break;
+                }
+                case "server": {
+                    
+                    break;
+                }
+                case "nodejs": {
+                    versionInstaller = new Installer(await NodeJsInstall(data.version));
+                    break;
+                }
+            }
+            
             installers[id] = versionInstaller;
 
             versionInstaller.on("finished", () => {

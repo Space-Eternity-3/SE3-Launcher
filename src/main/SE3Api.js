@@ -35,8 +35,7 @@ const GetVersions = async () => {
         store.set("versions", res);
         return res;
     } catch (ex) {
-        if (store.has("versions"))
-            return store.get("versions");
+        if (store.has("versions")) return store.get("versions");
         throw new Error("Can't get versions");
     }
 };
@@ -52,7 +51,7 @@ const GetVersionZipFile = async (versionTag) => {
 
     let url;
     const versionFile = process.platform === "win32" ? version.file : version.linuxFile;
-    
+
     if (ABSOLUTE_URL_REGEX.test(versionFile)) url = versionFile;
     else url = new URL(versionFile, se3ApiSettings.GetVersionsFilesDir()).toString();
 
@@ -75,7 +74,7 @@ const GetVersionZipFile = async (versionTag) => {
 
 /**
  * Returns avaiable server versions.
- * 
+ *
  * @returns {ServerVersion[]}
  */
 const GetServerVersions = async () => {
@@ -84,25 +83,62 @@ const GetServerVersions = async () => {
         store.set("servers", res);
         return res;
     } catch (ex) {
-        if (store.has("servers"))
-            return store.get("servers");
+        if (store.has("servers")) return store.get("servers");
         throw new Error("Can't get servers");
     }
 };
 
 /**
  * Gets server versions
- * 
- * @param {string} serverVersion 
+ *
+ * @param {string} serverVersion
  * @returns {ServerVersion}
  */
-const GetServerVersion = async(serverVersion) => {
+const GetServerVersion = async (serverVersion) => {
     try {
-        return (await GetServerVersions()).find(version => version.version === serverVersion);
+        return (await GetServerVersions()).find((version) => version.version === serverVersion);
     } catch (ex) {
         throw new Error("Could not get server info");
     }
+};
 
+/**
+ * @typedef ServerRuntime
+ * @type {object}
+ * @property {string} windowsRuntime - URL to Windows x64 Node.js runtime (.zip)
+ * @property {string} linuxRuntime - URL to Linux x64 Node.js runtime (.tar.gz)
+ */
+
+/**
+ * Returns server runtimes.
+ *
+ * @returns {ServerRuntime[]}
+ */
+const GetServerRuntimes = async () => {
+    try {
+        const res = (await axios.get(se3ApiSettings.GetServerRuntimes())).data;
+        store.set("server_runtimes", res);
+        return res;
+    } catch (ex) {
+        if (store.has("server_runtimes")) return store.get("server_runtimes");
+        throw new Error("Can't get server runtimes");
+    }
+};
+
+/**
+ * Returns server runtime
+ *
+ * @param {string} serverRuntimeVersion
+ * @returns {ServerRuntime}
+ */
+const GetServerRuntime = async (serverRuntimeVersion) => {
+    try {
+        const runtime = (await GetServerRuntimes())[serverRuntimeVersion];
+        if (!runtime) throw new Error("Could not find server runtime");
+        return runtime;
+    } catch (ex) {
+        throw new Error("Could not server runtime");
+    }
 };
 
 module.exports = {
@@ -110,4 +146,6 @@ module.exports = {
     GetVersionZipFile,
     GetServerVersions,
     GetServerVersion,
+    GetServerRuntimes,
+    GetServerRuntime,
 };
