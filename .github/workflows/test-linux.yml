@@ -29,5 +29,5 @@ jobs:
               uses: GabrielBB/xvfb-action@v1
               with:
                   run: |
-                      npm ci
+                      npm i
                       npm test
