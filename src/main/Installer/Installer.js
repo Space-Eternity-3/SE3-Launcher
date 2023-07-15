@@ -228,8 +228,8 @@ class Installer extends EventEmitter {
 
     Stop() {
         try {
+            this.failed = true;
             this.actions[this.currentAction]?.cancel?.();
-            failed = true;
             return true;
         } catch (ex) { 
             return false; // cancel is not implemented

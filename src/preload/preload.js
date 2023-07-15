@@ -1,35 +1,34 @@
 const { contextBridge, ipcRenderer } = require("electron");
 const { RendererBridge } = require("electronbb");
-require("./setup")();
+const versionsApiSettings = require("../SE3ApiSettings");
 
 let rendererBridge = new RendererBridge();
 const versionsApi = rendererBridge.GetSync("versionsApi");
 const dialog = rendererBridge.GetSync("dialog");
 
-const versionsApiSettings = require("../SE3ApiSettings");
-contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
+require("./setup")();
 
 let rendererExports = {};
-contextBridge.exposeInMainWorld("preloadBridge", {
-    set: (name, object) => {
-        if (!(name in rendererExports)) rendererExports[name] = object;
-    },
-    delete: (name) => {
-        if (!(name in rendererExports)) return;
-        delete rendererExports[name];
-        rendererExports[name] = [];
-    },
-});
-
 let workers = {};
 
-const InstallVersion = (version, functions) => {
+const InstallVersion = (version, callbacks) => {
     const id = version;
 
-    workers[id] = { version, ...functions };
+    workers[id] = { version, ...callbacks };
 
     ipcRenderer.invoke("install", id, {
         type: "version",
+        version,
+    });
+};
+
+const InstallNodeJs = (version, callbacks) => {
+    const id = version;
+
+    workers[id] = { version, ...callbacks };
+
+    ipcRenderer.invoke("install", id, {
+        type: "nodejs",
         version,
     });
 };
@@ -47,15 +46,15 @@ ipcRenderer.on("installer_event", (event, id, type, data) => {
     if (!(id in workers)) return;
     switch (type) {
         case "data":
-            workers[id].updateData(data);
+            workers[id]?.updateData(data);
 
             break;
         case "finish":
-            workers[id].finish();
+            workers[id]?.finish();
             deleteWorker(id);
             break;
         case "error":
-            workers[id].error(data);
+            workers[id]?.error(data);
             deleteWorker(id);
             break;
         default:
@@ -68,11 +67,26 @@ ipcRenderer.on("uncaught_exception", (event, err) => {
 
 const Platform = () => process.platform;
 
-contextBridge.exposeInMainWorld("se3Api", {
+const SE3Api = {
     InstallVersion,
+    InstallNodeJs,
     CancelInstall,
     Platform,
     ...versionsApi,
+};
+
+
+contextBridge.exposeInMainWorld("preloadBridge", {
+    set: (name, object) => {
+        if (!(name in rendererExports)) rendererExports[name] = object;
+    },
+    delete: (name) => {
+        if (!(name in rendererExports)) return;
+        delete rendererExports[name];
+        rendererExports[name] = [];
+    },
 });
 
+contextBridge.exposeInMainWorld("versionsApiSettings", versionsApiSettings);
+contextBridge.exposeInMainWorld("se3Api", SE3Api);
 contextBridge.exposeInMainWorld("dialog", dialog);

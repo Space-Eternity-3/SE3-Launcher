@@ -35,13 +35,9 @@ function ConfigBoolean({ configValue, onChange }) {
     />
 };
 
-export default function ServerConfig({ configValues }) {
-    // TODO: remove this
-    // eslint-disable-next-line
-    const [currentConfig, setCurrentConfig] = useState({});
-
+export default function ServerConfig({ configValues, configChange }) {
     function onChange(id, value) {
-        setCurrentConfig((currentConfig) => ({
+        configChange((currentConfig) => ({
             ...currentConfig,
             [id]: value,
         }));
@@ -52,8 +48,8 @@ export default function ServerConfig({ configValues }) {
         configValues?.forEach(configValue => {
             newConfig[configValue.id] = configValue.default_value;
         });
-        setCurrentConfig(newConfig);
-    }, [configValues]);
+        configChange(newConfig);
+    }, [configValues, configChange]);
 
     return <>
         {/* eslint-disable-next-line */}

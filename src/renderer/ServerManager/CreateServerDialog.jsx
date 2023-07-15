@@ -13,11 +13,11 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
     const [selectedVersion, setSelectedVersion] = useState(null);
     const [adminPassword, setAdminPassword] = useState("");
     const [serverDirectory, setServerDirectory] = useState("");
+    const [currentConfig, setCurrentConfig] = useState({});
 
     function setRandomPassword() {
         setAdminPassword(generatePassword(20));
-        console.log(selectedVersion);
-        console.log(serverVersions.find(version => version.version === selectedVersion));
+        console.log(currentConfig);
     }
 
     function selectServerDirectory() {
@@ -25,6 +25,25 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
         if (directory) {
             setServerDirectory(directory);
         }
+    }
+
+    function installNodeJsInternal(runtimeVersion) {
+        return new Promise((resolve, reject) => {
+            window.se3Api.InstallNodeJs(runtimeVersion, {
+                finish: () => {
+                    resolve();
+                },
+                error: (err) => {
+                    reject();
+                },
+            });
+        });
+    }
+
+    async function createServer() {
+        const server = serverVersions.find(version => version.version === selectedVersion);
+
+        await installNodeJsInternal(server.runtimeVersion);
     }
 
     return <Modal size="lg" opened={visible} onClose={onCancel} centered title="Create server">
@@ -58,7 +77,7 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
             </ActionIcon>}
         />
         <Space h="xs" />
-        <ServerConfig configValues={(serverVersions.find(version => version.version === selectedVersion))?.configValues} />
+        <ServerConfig configChange={setCurrentConfig} configValues={(serverVersions.find(version => version.version === selectedVersion))?.configValues} />
 
         {/* TODO: validation etc. */}
         <TextInput
@@ -74,7 +93,7 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
 
         <Space h="sm" />
         <Group position="apart">
-            <Button color="green">Create</Button>
+            <Button onClick={createServer} color="green">Create</Button>
         </Group>
 
     </Modal>

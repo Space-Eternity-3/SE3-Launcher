@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { GetVersionsDirectory } = require("./utils");
 const child_process = require("child_process");
+const { dialog } = require("electron");
 
 /**
  * Checks if version folder exists
@@ -51,7 +52,7 @@ const RunVersion = (versionTag) => {
         }
     }
 
-    throw new Error("Failed to run version");
+    dialog.showErrorBox("Couldn't find game executable", "Please try reinstalling the game.");
 };
 
 module.exports = {

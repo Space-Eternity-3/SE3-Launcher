@@ -157,18 +157,6 @@ export default function App() {
 
         InstallVersion(version.value, {
             updateData,
-            cancel: () => {
-                updateData.flush();
-
-                removeInstallation(version.value);
-
-                showNotification({
-                    title: `Canceled installing ${version.label}`,
-                    autoClose: true,
-                    withCloseButton: true,
-                    loading: false,
-                });
-            },
             finish: () => {
                 updateData.flush();
 
