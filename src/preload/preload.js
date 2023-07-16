@@ -11,26 +11,22 @@ require("./setup")();
 let rendererExports = {};
 let workers = {};
 
-const InstallVersion = (version, callbacks) => {
-    const id = version;
+const Install = (data, callbacks) => {
+    let id;
+    // for safety lol
+    while (true) {
+        id = crypto.randomUUID();
+        if (!(id in workers)) break;
+    }
 
-    workers[id] = { version, ...callbacks };
-
-    ipcRenderer.invoke("install", id, {
-        type: "version",
-        version,
-    });
-};
-
-const InstallNodeJs = (version, callbacks) => {
-    const id = version;
-
-    workers[id] = { version, ...callbacks };
+    workers[id] = { version: data.version, ...callbacks };
 
     ipcRenderer.invoke("install", id, {
-        type: "nodejs",
-        version,
+        type: data.type,
+        version: data.version,
     });
+
+    return id;
 };
 
 const CancelInstall = (id) => {
@@ -61,6 +57,7 @@ ipcRenderer.on("installer_event", (event, id, type, data) => {
             break;
     }
 });
+
 ipcRenderer.on("uncaught_exception", (event, err) => {
     rendererExports["uncaught_exception"](err);
 });
@@ -68,8 +65,7 @@ ipcRenderer.on("uncaught_exception", (event, err) => {
 const Platform = () => process.platform;
 
 const SE3Api = {
-    InstallVersion,
-    InstallNodeJs,
+    Install,
     CancelInstall,
     Platform,
     ...versionsApi,

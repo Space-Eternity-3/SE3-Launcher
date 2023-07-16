@@ -43,9 +43,10 @@
     display: block;
     bottom: 0;
     text-align: center;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 100px);
     margin: 0;
     overflow-y: scroll;
+    background-color: #1d1f22;
 }
 
 .launcherTabContainer {

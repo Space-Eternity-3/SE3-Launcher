@@ -12,6 +12,7 @@
     },
     "license": "MIT",
     "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "concurrently": "^8.2.0",
         "cross-env": "^7.0.3",
         "electron": "^22.3.17",
@@ -21,8 +22,7 @@
         "react": "^18.2.0",
         "react-app-rewired": "^2.2.1",
         "react-dom": "^18.2.0",
-        "wait-on": "^7.0.1",
-        "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+        "wait-on": "^7.0.1"
     },
     "repository": {
         "url": "https://github.com/Space-Eternity-3/SE3-Launcher"
@@ -64,6 +64,7 @@
         "electron-is": "github:Nadwey/electron-is",
         "electron-store": "^8.1.0",
         "electronbb": "^1.0.0-beta.3",
+        "eventemitter3": "^5.0.1",
         "github-markdown-css": "^5.2.0",
         "lodash": "^4.17.21",
         "react-markdown": "^8.0.7",

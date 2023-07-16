@@ -14,7 +14,7 @@ let installers = {};
 
 const GetVersionState = (versionTag) => {
     if (IsVersionInstalled(versionTag)) return "installed";
-    if (typeof Object.values(installers).find((installer) => installer.versionTag === versionTag) !== "undefined") return "installing";
+    if (typeof Object.values(installers).find((installer) => (installer.version === versionTag && installer.type === "version")) !== "undefined") return "installing";
     return "not_installed";
 };
 

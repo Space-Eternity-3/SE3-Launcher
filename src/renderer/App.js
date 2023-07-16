@@ -12,8 +12,8 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import InstalledVersion from "./InstalledVersion";
 import Installations from "./Installations";
-import { throttle } from "lodash";
 import ServerManager from "./ServerManager/ServerManager";
+import Installer from "./Installer";
 
 let versions = {};
 
@@ -26,7 +26,7 @@ export default function App() {
     const [playButtonText, setPlayButtonText] = useState("Play");
     const [versionFilter, setVersionFilter] = useState("");
     const [installationsOpened, setInstallationsOpened] = useState(false);
-    const [currentInstallations, setCurrentInstallations] = useState([]);
+    const [areInstallationsRunning, setAreInstallationsRunning] = useState(false);
     const modals = useModals();
 
     const updateInstalledVersions = async () => {
@@ -87,6 +87,19 @@ export default function App() {
             window.preloadBridge.delete("uncaught_exception");
         };
     }, []);
+    
+    function checkIfInstallationsAreRunning() {
+        setAreInstallationsRunning(Object.entries(new Installer().getInstallations()).length > 0);
+    }
+
+    useEffect(() => {
+        const installer = new Installer();
+
+        installer.getEmitter().on("update", checkIfInstallationsAreRunning);
+        return () => {
+            installer.getEmitter().removeListener("update", checkIfInstallationsAreRunning);
+        };
+    }, []);
 
     const VersionSelectorVersions = async () => {
         const versions = await GetVersions();
@@ -114,40 +127,7 @@ export default function App() {
         showVersionSelector();
     };
 
-    const onInstall = (version) => {
-        setCurrentInstallations((installations) => [
-            ...installations,
-            {
-                version: version.value,
-                displayText: version.label,
-                progress: 0,
-                unpacking: false,
-                detailsText: "Preparing...",
-            },
-        ]);
-
-        const removeInstallation = (version) => {
-            setCurrentInstallations((installations) => {
-                const indexToRemove = installations.findIndex((installation) => installation.version === version);
-                return [...installations.slice(0, indexToRemove), ...installations.slice(indexToRemove + 1)];
-            });
-        };
-
-        const updateData = throttle((details) => {
-            setCurrentInstallations((installations) =>
-                installations.map((installation) => {
-                    if (installation.version === version.value)
-                        return {
-                            ...installation,
-                            displayText: details.displayText,
-                            detailsText: details.detailsText,
-                            progress: details.progress,
-                        };
-                    return installation;
-                }),
-            );
-        }, 150);
-
+    const onInstall = async(version) => {
         showNotification({
             title: `Started installing ${version.label}`,
             autoClose: true,
@@ -155,37 +135,21 @@ export default function App() {
             loading: false,
         });
 
-        InstallVersion(version.value, {
-            updateData,
-            finish: () => {
-                updateData.flush();
+        setVersionSelectorShown(false);
 
-                removeInstallation(version.value);
-                updateInstalledVersions();
+        await (new Installer().install({
+            type: "version",
+            version: version.value,
+        }));
 
-                showNotification({
-                    title: `Finished installing ${version.label}`,
-                    autoClose: true,
-                    withCloseButton: true,
-                    loading: false,
-                });
-            },
-            error: (err) => {
-                updateData.flush();
-
-                removeInstallation(version.value);
-                updateInstalledVersions();
-
-                showNotification({
-                    title: `Error occured when installing ${version.label}\n${err}`,
-                    autoClose: true,
-                    withCloseButton: true,
-                    loading: false,
-                });
-            },
+        showNotification({
+            title: `Finished installing ${version.label}`,
+            autoClose: true,
+            withCloseButton: true,
+            loading: false,
         });
 
-        setVersionSelectorShown(false);
+        updateInstalledVersions();
     };
 
     const uninstallVersion = (ver) => {
@@ -230,7 +194,7 @@ export default function App() {
 
     return (
         <Container>
-            <Installations installations={currentInstallations} opened={installationsOpened} setOpened={setInstallationsOpened} />
+            <Installations opened={installationsOpened} setOpened={setInstallationsOpened} />
             <Tabs value={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List>
                     <Container
@@ -249,7 +213,7 @@ export default function App() {
                         </Group>
 
                         <Indicator
-                            disabled={currentInstallations.length === 0}
+                            disabled={!areInstallationsRunning}
                             style={{
                                 display: "block",
                                 verticalAlign: "middle",
@@ -271,8 +235,8 @@ export default function App() {
                     <div className={styles.versionsTab}>
                         <Autocomplete
                             style={{
-                                margin: "5px 10px 0",
-                                display: "inline-block",
+                                margin: "5px 10px 10px",
+                                display: "block",
                             }}
                             value={versionFilter}
                             onChange={setVersionFilter}

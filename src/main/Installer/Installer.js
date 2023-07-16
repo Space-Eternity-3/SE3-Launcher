@@ -1,6 +1,6 @@
 const fs = require("fs");
 const axios = require("axios");
-const EventEmitter = require("events");
+const EventEmitter = require("node:events");
 const compressing = require("compressing");
 const path = require("path");
 
@@ -178,6 +178,7 @@ class ExtractAction extends Action {
             this.emit("error", ex);
             return;
         }
+        this.emit("finished");
     }
 
     /**
@@ -191,14 +192,23 @@ class ExtractAction extends Action {
     extractPath;
 }
 
+/**
+ * @typedef {Object} InstallerArgs
+ * @property {Action[]} actions
+ * @property {string} type
+ * @property {string} version
+ */
+
 class Installer extends EventEmitter {
     /**
-     * @param {Action[]} actions
+     * @param {InstallerArgs} args
      */
-    constructor(actions) {
+    constructor(args) {
         super();
 
-        this.actions = actions;
+        this.actions = args.actions;
+        this.type = args.type;
+        this.version = args.version;
     }
 
     async Start() {
@@ -216,7 +226,6 @@ class Installer extends EventEmitter {
                 });
 
                 action.on("finished", () => {
-                    this.emit("finished");
                     resolve();
                 });
 
@@ -224,6 +233,7 @@ class Installer extends EventEmitter {
             });
             this.currentAction++;
         }
+        if (!this.failed) this.emit("finished");
     }
 
     Stop() {
@@ -231,7 +241,7 @@ class Installer extends EventEmitter {
             this.failed = true;
             this.actions[this.currentAction]?.cancel?.();
             return true;
-        } catch (ex) { 
+        } catch (ex) {
             return false; // cancel is not implemented
         }
     }
@@ -257,6 +267,20 @@ class Installer extends EventEmitter {
      * @type {Boolean}
      */
     failed = false;
+
+    /**
+     * The thing that gets installed
+     * 
+     * @type {string}
+     */
+    type;
+
+    /**
+     * Version of the thing that gets installed
+     * 
+     * @type {string}
+     */
+    version;
 }
 
 module.exports = {

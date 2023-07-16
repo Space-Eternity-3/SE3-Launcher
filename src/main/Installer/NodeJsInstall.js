@@ -3,6 +3,10 @@ const path = require("path");
 const { DownloadAction, ExtractAction, Installer } = require("./Installer");
 const { GetServerRuntime } = require("../SE3Api");
 
+/**
+ * @param {string} version
+ * @returns {import("./Installer").InstallerArgs}
+ */
 const NodeJsInstall = async (version) => {
     let url;
     switch (process.platform) {
@@ -17,7 +21,11 @@ const NodeJsInstall = async (version) => {
     const filename = path.basename(new URL(url).pathname);
     const downloadedFile = path.join(GetLauncherDirectory(), filename);
 
-    return [new DownloadAction(url, downloadedFile), new ExtractAction(downloadedFile, path.join(GetNodejsDirectory(), version))];
+    return {
+        actions: [new DownloadAction(url, downloadedFile), new ExtractAction(downloadedFile, path.join(GetNodejsDirectory(), version))],
+        type: "nodejs",
+        version,
+    };
 };
 
 module.exports = NodeJsInstall;
