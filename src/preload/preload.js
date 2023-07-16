@@ -21,10 +21,7 @@ const Install = (data, callbacks) => {
 
     workers[id] = { version: data.version, ...callbacks };
 
-    ipcRenderer.invoke("install", id, {
-        type: data.type,
-        version: data.version,
-    });
+    ipcRenderer.invoke("install", id, data);
 
     return id;
 };

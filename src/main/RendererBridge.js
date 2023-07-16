@@ -5,6 +5,8 @@ const { MainBridge } = require("electronbb");
 const { Installer } = require("./Installer/Installer");
 const GameInstall = require("./Installer/GameInstall");
 const NodeJsInstall = require("./Installer/NodeJsInstall");
+const { IsNodeInstalled } = require("./NodeJsManager");
+const ServerInstall = require("./Installer/ServerInstall");
 let mainBridge = new MainBridge();
 
 /**
@@ -38,7 +40,7 @@ const RendererBridge = () => {
                     break;
                 }
                 case "server": {
-                    
+                    versionInstaller = new Installer(await ServerInstall(data.version, data.serverDirectory));
                     break;
                 }
                 case "nodejs": {
@@ -79,6 +81,7 @@ const RendererBridge = () => {
         RunVersion,
         GetVersionState,
         GetServerVersions: SE3Api.GetServerVersions,
+        IsNodeInstalled,
     });
 
     return {

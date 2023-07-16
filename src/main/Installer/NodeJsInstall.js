@@ -1,6 +1,6 @@
 const { GetLauncherDirectory, GetNodejsDirectory } = require("../utils");
 const path = require("path");
-const { DownloadAction, ExtractAction, Installer } = require("./Installer");
+const { DownloadAction, ExtractAction } = require("./Installer");
 const { GetServerRuntime } = require("../SE3Api");
 
 /**

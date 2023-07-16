@@ -2,8 +2,12 @@ import { Button, Title } from "@mantine/core";
 import styles from "./styles/ServerManager.module.css";
 import { useEffect, useState } from "react";
 import { CreateServerDialog } from "./CreateServerDialog";
+import Installer from "../Installer";
 
 export default function ServerManager() {
+    /**
+     * @type {[import("../../main/SE3Api").ServerVersion[]]}
+     */
     const [serverVersions, setServerVersions] = useState([]);
     const [createServerDialogVisible, setCreateServerDialogVisible] = useState(false);
 
@@ -16,15 +20,33 @@ export default function ServerManager() {
 
     const onCreateServerDialogCancel = () => {
         setCreateServerDialogVisible(false);
-    }
-    
+    };
+
     const onCreateServerDialogShow = () => {
         setCreateServerDialogVisible(true);
+    };
+
+    async function onCreateServer(data) {
+        const server = serverVersions.find((version) => version.version === data.version);
+        setCreateServerDialogVisible(false);
+
+        if (!window.se3Api.IsNodeInstalled(server.runtimeVersion)) {
+            await new Installer().install({
+                type: "nodejs",
+                version: server.runtimeVersion,
+            });
+        }
+
+        await new Installer().install({
+            type: "server",
+            version: server.version,
+            serverDirectory: data.serverDirectory,
+        });
     }
 
     return (
         <>
-            <CreateServerDialog onCancel={onCreateServerDialogCancel} visible={createServerDialogVisible} serverVersions={serverVersions} />
+            <CreateServerDialog onCreateServer={onCreateServer} onCancel={onCreateServerDialogCancel} visible={createServerDialogVisible} serverVersions={serverVersions} />
             <div className={styles.container}>
                 <Title order={1}>Server Manager (beta)</Title>
                 <Button onClick={onCreateServerDialogShow}>Create server</Button>
@@ -60,6 +82,5 @@ export default function ServerManager() {
                 </div>
             </div>
         </>
-
     );
 }

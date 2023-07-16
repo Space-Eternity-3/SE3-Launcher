@@ -2,6 +2,14 @@ const { GetNodejsDirectory } = require("./utils");
 const path = require("path");
 const fs = require("fs");
 
+const IsNodeInstalled = (version) => {
+    const nodeJsDir = GetNodejsDirectory();
+    const versionPath = path.join(nodeJsDir, version);
+    if (!fs.existsSync(versionPath)) return false;
+
+    return true;
+};
+
 const GetNodeExecutablesPath = (version) => {
     const nodeJsDir = GetNodejsDirectory();
 
@@ -30,4 +38,5 @@ const GetNodeExecutablesPath = (version) => {
 
 module.exports = {
     GetNodeExecutablesPath,
+    IsNodeInstalled,
 };

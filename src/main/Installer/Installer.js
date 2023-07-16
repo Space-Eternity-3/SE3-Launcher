@@ -192,6 +192,36 @@ class ExtractAction extends Action {
     extractPath;
 }
 
+class RemoveAction extends Action {
+    /**
+     * Removes something
+     *
+     * @param {String} archivePath
+     * @param {String} extractPath
+     */
+    constructor(removePath) {
+        super();
+
+        this.removePath = removePath;
+
+        this.displayText = "Removing...";
+    }
+
+    async execute() {
+        this.progress = null;
+        this.updateData();
+
+        fs.rmSync(this.removePath, { recursive: true, force: true });
+
+        this.emit("finished");
+    }
+
+    /**
+     * @type {string}
+     */
+    removePath;
+}
+
 /**
  * @typedef {Object} InstallerArgs
  * @property {Action[]} actions
@@ -286,5 +316,6 @@ class Installer extends EventEmitter {
 module.exports = {
     DownloadAction,
     ExtractAction,
+    RemoveAction,
     Installer,
 };

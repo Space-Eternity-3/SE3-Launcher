@@ -9,41 +9,45 @@ const generatePassword = (length = 20, wishlist = '0123456789ABCDEFGHIJKLMNOPQRS
         .map((x) => wishlist[x % wishlist.length])
         .join('')
 
-export function CreateServerDialog({ visible, serverVersions, onCancel }) {
+export function CreateServerDialog({ onCreateServer, visible, serverVersions, onCancel }) {
     const [selectedVersion, setSelectedVersion] = useState(null);
     const [adminPassword, setAdminPassword] = useState("");
     const [serverDirectory, setServerDirectory] = useState("");
     const [currentConfig, setCurrentConfig] = useState({});
+    const [serverName, setServerName] = useState("My Great Server!");
 
     function setRandomPassword() {
         setAdminPassword(generatePassword(20));
-        console.log(currentConfig);
     }
 
     function selectServerDirectory() {
         const directory = SelectDirectory();
-        if (directory) {
-            setServerDirectory(directory);
+        if (directory[0]) {
+            setServerDirectory(directory[0]);
         }
     }
 
-    function installNodeJsInternal(runtimeVersion) {
-        return new Promise((resolve, reject) => {
-            window.se3Api.InstallNodeJs(runtimeVersion, {
-                finish: () => {
-                    resolve();
-                },
-                error: (err) => {
-                    reject();
-                },
-            });
-        });
+    function canCreateServer() {
+        const server = serverVersions.find(version => version.version === selectedVersion);
+        if (server) {
+            if (server.supportedFeatures.includes("admin_access")) {
+                if (!adminPassword) return false;
+            }
+        }
+
+        return selectedVersion && serverDirectory && serverName;
     }
 
-    async function createServer() {
-        const server = serverVersions.find(version => version.version === selectedVersion);
+    function createServer() {
+        const data = {
+            version: selectedVersion,
+            adminPassword,
+            serverDirectory,
+            config: currentConfig,
+        }
 
-        await installNodeJsInternal(server.runtimeVersion);
+        if (!canCreateServer()) return;
+        onCreateServer(data);
     }
 
     return <Modal size="lg" opened={visible} onClose={onCancel} centered title="Create server">
@@ -51,6 +55,8 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
             <TextInput
                 placeholder="My Great Server!"
                 label="Server name"
+                value={serverName}
+                onChange={e => setServerName(e.target.value)}
             />
             <Select
                 label="Server version"
@@ -70,6 +76,7 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
             disabled={!(serverVersions.find(version => version.version === selectedVersion))?.supportedFeatures?.includes("admin_access")}
             value={adminPassword}
             onChange={e => setAdminPassword(e.target.value)}
+            error={(adminPassword.length < 8 && adminPassword.length > 0) ? "It is recommended to use a password with at least 8 characters." : null}
             placeholder="Enter a password..."
             label="Admin password"
             rightSection={<ActionIcon title="Generate random password..." onClick={setRandomPassword}>
@@ -93,7 +100,7 @@ export function CreateServerDialog({ visible, serverVersions, onCancel }) {
 
         <Space h="sm" />
         <Group position="apart">
-            <Button onClick={createServer} color="green">Create</Button>
+            <Button disabled={!canCreateServer()} onClick={createServer} color="green">Create</Button>
         </Group>
 
     </Modal>
