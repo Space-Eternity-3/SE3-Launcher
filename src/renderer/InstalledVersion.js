@@ -20,6 +20,7 @@ export default function InstalledVersion({ version, uninstallVersion, versionFil
                     <Highlight
                         style={{
                             display: "inline",
+                            fontSize: "25px"
                         }}
                         highlight={versionFilter}
                     >

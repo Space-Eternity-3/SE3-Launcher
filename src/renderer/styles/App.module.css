@@ -35,10 +35,6 @@
     cursor: pointer;
 }
 
-.versionsTab {
-    padding-top: 45px;
-}
-
 .versionsContainer {
     display: block;
     bottom: 0;

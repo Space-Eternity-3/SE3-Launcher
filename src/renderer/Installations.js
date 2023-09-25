@@ -39,10 +39,13 @@ export default function Installations({ opened, setOpened }) {
                             marginLeft: "10px",
                             filter: props.progress === null ? "brightness(50%)" : "none",
                         }}
+                        variant="transparent"
+                        color="red"
                         onMouseDown={() => {
                             CancelInstall(props.id);
                         }}
                         size="lg"
+
                     >
                         <IconTrash size={20} />
                     </ActionIcon>
@@ -50,7 +53,7 @@ export default function Installations({ opened, setOpened }) {
                 <Text size="sm" color="#bbbbbb">
                     {props.children}
                 </Text>
-                <Progress animate={props.progress === null} color="green" size="sm" value={props.progress === null ? 100 : props.progress} />
+                <Progress animated={props.progress === null} color="green" size="sm" value={props.progress === null ? 100 : props.progress} />
             </div>
         );
     }

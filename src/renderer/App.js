@@ -87,7 +87,7 @@ export default function App() {
             window.preloadBridge.delete("uncaught_exception");
         };
     }, []);
-    
+
     function checkIfInstallationsAreRunning() {
         setAreInstallationsRunning(Object.entries(new Installer().getInstallations()).length > 0);
     }
@@ -127,7 +127,7 @@ export default function App() {
         showVersionSelector();
     };
 
-    const onInstall = async(version) => {
+    const onInstall = async (version) => {
         showNotification({
             title: `Started installing ${version.label}`,
             autoClose: true,
@@ -137,10 +137,10 @@ export default function App() {
 
         setVersionSelectorShown(false);
 
-        await (new Installer().install({
+        await new Installer().install({
             type: "version",
             version: version.value,
-        }));
+        });
 
         showNotification({
             title: `Finished installing ${version.label}`,
@@ -193,9 +193,22 @@ export default function App() {
     };
 
     return (
-        <Container>
+        <div
+            style={{
+                height: "100%",
+            }}
+        >
             <Installations opened={installationsOpened} setOpened={setInstallationsOpened} />
-            <Tabs value={activeTab} onTabChange={setActiveTab}>
+            <Tabs
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    justifyContent: "start",
+                }}
+                value={activeTab}
+                onChange={setActiveTab}
+            >
                 <Tabs.List>
                     <Container
                         style={{
@@ -203,6 +216,9 @@ export default function App() {
                             justifyContent: "space-between",
                             alignItems: "center",
                             width: "100%",
+                            padding: "0",
+                            margin: "0",
+                            maxWidth: "100%",
                         }}
                     >
                         <Group spacing={0}>
@@ -242,7 +258,6 @@ export default function App() {
                             onChange={setVersionFilter}
                             placeholder="Version filter"
                             data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
-                            dropdownPosition="bottom"
                         />
                         <div className={styles.versionsContainer}>
                             {installedVersions
@@ -250,11 +265,11 @@ export default function App() {
                                 .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
                                 .reverse()}
                             {installedVersions.filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase())).length === 0 && (
-                                <div style={{ height: "calc(100% - 60px)", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                <div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <div>
                                         Empty here...
                                         <br />
-                                        <Text style={{ cursor: "pointer" }} size="lg" onClick={showVersionSelector} color="blue" underline>
+                                        <Text style={{ cursor: "pointer", textDecoration: "underline" }} size="lg" onClick={showVersionSelector} c="blue">
                                             Install a version.
                                         </Text>
                                     </div>
@@ -283,6 +298,6 @@ export default function App() {
                     </div>
                 </Tabs.Panel>
             </Tabs>
-        </Container>
+        </div>
     );
 }

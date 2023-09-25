@@ -5,15 +5,16 @@ import "./index.css";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import "@mantine/core/styles.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
-        <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme: "dark" }}>
+        <MantineProvider defaultColorScheme="dark">
+            <Notifications zIndex={998} position="bottom-left" />
             <ModalsProvider>
-                <Notifications zIndex={998} position="bottom-left" />
                 <App />
             </ModalsProvider>
         </MantineProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
 );

@@ -25,7 +25,10 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                     disabled={isInstalledOrInstalling}
                     label={
                         version.hidden ? (
-                            <Tooltip wrapLines withArrow transition="fade" transitionDuration={200} label="Hidden version, may cause issues!">
+                            <Tooltip withArrow transitionProps={{
+                                duration: 200,
+                                transition: "fade"
+                            }} label="Hidden version, may cause issues!">
                                 <span
                                     style={{
                                         color: isInstalledOrInstalling ? "#990502" : "#ff3020",
@@ -53,7 +56,6 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                 />
                 <Space h="sm" />
             </>
-
         );
     };
 
@@ -121,10 +123,10 @@ export default function VersionSelector({ versions, shown, onCancel, onInstall }
                     }}
                     color="green"
                     disabled={installButtonDisabled()}
-                    uppercase
                     style={{
                         float: "right",
                         marginBottom: "5px",
+                        textTransform: "uppercase",
                     }}
                 >
                     install

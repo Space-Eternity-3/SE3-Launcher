@@ -4,24 +4,19 @@ body {
     background-color: #222222;
 }
 
-.mantine-Container-root {
-    margin: 0 !important;
-    padding: 0 !important;
-    max-width: none !important;
+#root {
+    height: 100%;
 }
 
-.custom-titlebar {
-    z-index: 10000;
-}
-
-.mantine-Tabs-tabsList {
-    z-index: 1000;
-    position: fixed;
-    left: 0;
-    right: 0;
+.mantine-Tabs-list {
+    width: 100%;
     background-color: #00000050;
     backdrop-filter: blur(2px);
     user-select: none;
+}
+
+.mantine-Tabs-panel {
+    height: 100%;
 }
 
 .markdown-body {
