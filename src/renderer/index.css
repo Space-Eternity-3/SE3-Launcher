@@ -15,10 +15,6 @@ body {
     user-select: none;
 }
 
-.mantine-Tabs-panel {
-    height: 100%;
-}
-
 .markdown-body {
     background-color: transparent !important;
 }

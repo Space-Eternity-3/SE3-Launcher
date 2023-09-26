@@ -196,18 +196,20 @@ export default function App() {
         <div
             style={{
                 height: "100%",
+                width: "100%",
+                display: "flex",
             }}
         >
             <Installations opened={installationsOpened} setOpened={setInstallationsOpened} />
             <Tabs
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    justifyContent: "start",
-                }}
                 value={activeTab}
                 onChange={setActiveTab}
+                style={{
+                    height: "100%",
+                    width: "100%",
+                    display: "flex",
+                    flexFlow: "column",
+                }}
             >
                 <Tabs.List>
                     <Container
@@ -243,60 +245,98 @@ export default function App() {
                     </Container>
                 </Tabs.List>
 
-                <Tabs.Panel value="home">
-                    <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
-                </Tabs.Panel>
+                <div
+                    style={{
+                        flex: "1",
+                        display: "flex",
+                        justifyContent: "stretch",
+                        position: "relative",
+                    }}
+                >
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "0",
+                            bottom: "0",
+                            left: "0",
+                            right: "0",
+                        }}
+                    >
+                        <Tabs.Panel value="home">
+                            <HomePage openVersionSelector={openVersionSelector} versions={versions} playButtonText={playButtonText} />
+                        </Tabs.Panel>
 
-                <Tabs.Panel value="versions">
-                    <div className={styles.versionsTab}>
-                        <Autocomplete
+                        <Tabs.Panel
                             style={{
-                                margin: "5px 10px 10px",
-                                display: "block",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "stretch",
                             }}
-                            value={versionFilter}
-                            onChange={setVersionFilter}
-                            placeholder="Version filter"
-                            data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
-                        />
-                        <div className={styles.versionsContainer}>
-                            {installedVersions
-                                .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
-                                .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
-                                .reverse()}
-                            {installedVersions.filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase())).length === 0 && (
-                                <div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                    <div>
-                                        Empty here...
-                                        <br />
-                                        <Text style={{ cursor: "pointer", textDecoration: "underline" }} size="lg" onClick={showVersionSelector} c="blue">
-                                            Install a version.
-                                        </Text>
-                                    </div>
+                            value="versions"
+                        >
+                            <Autocomplete
+                                style={{
+                                    margin: "5px 10px 10px",
+                                    display: "block",
+                                }}
+                                value={versionFilter}
+                                onChange={setVersionFilter}
+                                placeholder="Version filter"
+                                data={["Alpha", "Beta", "Gamma", "Release", "DEV"]}
+                            />
+                            <div
+                                style={{
+                                    flex: "1",
+                                    overflowY: "scroll",
+                                    position: "relative",
+                                    textAlign: "center",
+                                }}
+                            >
+                                <div>
+                                    {installedVersions
+                                        .filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase()))
+                                        .map((version) => <InstalledVersion versionFilter={versionFilter} key={version.tag} version={version} uninstallVersion={uninstallVersion} />)
+                                        .reverse()}
                                 </div>
-                            )}
-                        </div>
-                        <VersionSelector
-                            onCancel={() => {
-                                setVersionSelectorShown(false);
-                            }}
-                            onInstall={onInstall}
-                            shown={versionSelectorShown}
-                            versions={versionsSelectorVersions}
-                        />
-                    </div>
-                    <button onClick={showVersionSelector} className={styles.addButton} />
-                </Tabs.Panel>
+                                {installedVersions.filter((version) => version.name.toLowerCase().includes(versionFilter.toLowerCase())).length === 0 && (
+                                    <div style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <div style={{
+                                            color: "#999999",
+                                            fontSize: "1.2rem"
+                                        }}>
+                                            Empty here,{" "}
+                                            <span style={{ cursor: "pointer", textDecoration: "underline", color: "#2080ff" }} onClick={showVersionSelector}>
+                                                Install a version.
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
-                <Tabs.Panel value="server">
-                    <ServerManager />
-                </Tabs.Panel>
+                            <VersionSelector
+                                onCancel={() => {
+                                    setVersionSelectorShown(false);
+                                }}
+                                onInstall={onInstall}
+                                shown={versionSelectorShown}
+                                versions={versionsSelectorVersions}
+                            />
 
-                <Tabs.Panel value="launcher">
-                    <div className={styles.launcherTabContainer}>
-                        <ReactMarkdown className="markdown-body" children={launcherText} remarkPlugins={[remarkGfm]} />
+                            <button onClick={showVersionSelector} className={styles.addButton} />
+                        </Tabs.Panel>
+
+                        <Tabs.Panel value="server">
+                            <ServerManager />
+                        </Tabs.Panel>
+
+                        <Tabs.Panel value="launcher">
+                            <div className={styles.launcherTabContainer}>
+                                <ReactMarkdown className="markdown-body" children={launcherText} remarkPlugins={[remarkGfm]} />
+                            </div>
+                        </Tabs.Panel>
                     </div>
-                </Tabs.Panel>
+                </div>
             </Tabs>
         </div>
     );
