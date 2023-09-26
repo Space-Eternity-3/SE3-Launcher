@@ -226,7 +226,7 @@ export default function App() {
                         <Group spacing={0}>
                             <Tabs.Tab value="home">Home</Tabs.Tab>
                             <Tabs.Tab value="versions">Versions</Tabs.Tab>
-                            <Tabs.Tab value="server">Server</Tabs.Tab>
+                            {/* <Tabs.Tab value="server">Server</Tabs.Tab> - Removed for v3.0.2 */}
                             <Tabs.Tab value="launcher">Launcher</Tabs.Tab>
                         </Group>
 
