@@ -26,9 +26,7 @@ jobs:
               uses: actions/setup-node@v3
 
             - name: Install deps and build
-              uses: GabrielBB/xvfb-action@v1
-              with:
-                  run: |
+              run: |
                       npm i
                       npm run react-build
                       npm run linux-electron-build
