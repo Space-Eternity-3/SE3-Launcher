@@ -9,17 +9,17 @@ import { throttle } from "lodash";
 export default function Installations({ opened, setOpened }) {
     const [installations, setInstallations] = useState([]);
 
-    const updateInstallations = throttle(() => {
-        setInstallations(
-            Object.entries(new Installer().getInstallations()).map(([id, value]) => ({
-                ...value,
-                id,
-            })),
-        );
-    }, 100);
-
     useEffect(() => {
         const installer = new Installer();
+
+        const updateInstallations = throttle(() => {
+            setInstallations(
+                Object.entries(new Installer().getInstallations()).map(([id, value]) => ({
+                    ...value,
+                    id,
+                })),
+            );
+        }, 100);
 
         installer.getEmitter().on("update", updateInstallations);
         return () => {
@@ -45,7 +45,6 @@ export default function Installations({ opened, setOpened }) {
                             CancelInstall(props.id);
                         }}
                         size="lg"
-
                     >
                         <IconTrash size={20} />
                     </ActionIcon>
