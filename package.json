@@ -55,11 +55,11 @@
         ]
     },
     "dependencies": {
-        "@mantine/core": "^7.0.1",
-        "@mantine/modals": "^7.0.1",
-        "@mantine/notifications": "^7.0.1",
+        "@mantine/core": "^7.0.2",
+        "@mantine/modals": "^7.0.2",
+        "@mantine/notifications": "^7.0.2",
         "@tabler/icons-react": "^2.35.0",
-        "axios": "^1.5.0",
+        "axios": "^1.5.1",
         "compressing": "^1.10.0",
         "electron-is": "github:Nadwey/electron-is",
         "electron-store": "^8.1.0",
@@ -68,7 +68,7 @@
         "github-markdown-css": "^5.2.0",
         "lodash": "^4.17.21",
         "react-markdown": "^8.0.7",
-        "remark-gfm": "^3.0.1"
+        "remark-gfm": "^4.0.0"
     },
     "build": {
         "productName": "SE3 Launcher",
