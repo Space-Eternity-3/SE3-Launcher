@@ -30,8 +30,8 @@ async function createWindow() {
         const choice = dialog.showMessageBoxSync(mainWindow, {
             type: "question",
             buttons: ["Yes", "No"],
-            title: "Are you sure you want to quit?",
-            message: "Installations are running.",
+            title: "Confirm",
+            message: "Are you sure you want to quit? There are installations in progress.",
         });
         if (choice === 1) {
             e.preventDefault();

@@ -86,5 +86,5 @@ ipcMain.handle(IpcMessages.VERSION_MANAGER.RUN_VERSION, (e, versionTag) => {
 });
 
 export function areInstallationsRunning() {
-    return false;
+    return Object.values(installers).some((installer) => installer !== null);
 }
