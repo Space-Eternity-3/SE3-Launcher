@@ -31,15 +31,22 @@ jobs:
                   npm run build:win
 
             - uses: actions/upload-artifact@v4
-              name: Upload portable builds
+              name: Upload portable .zip build
               with:
                   name: "SE3-Launcher-win32-portable"
                   path: |
-                      dist/*.zip
+                      dist/*-portable.zip
+
+            - uses: actions/upload-artifact@v4
+              name: Upload portable .exe build
+              with:
+                  name: "SE3-Launcher-win32-portable"
+                  path: |
+                      dist/*-portable.exe
 
             - uses: actions/upload-artifact@v4
               name: Upload installer builds
               with:
                   name: "SE3-Launcher-win32-installer"
                   path: |
-                      dist/*.exe
+                      dist/*-setup.exe
