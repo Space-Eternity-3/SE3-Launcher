@@ -28,8 +28,7 @@ jobs:
             - name: Install deps and build
               run: |
                       npm i
-                      npm run react-build
-                      npm run linux-electron-build
+                      npm run build:linux
 
             - uses: actions/upload-artifact@v4
               name: Upload deb build
