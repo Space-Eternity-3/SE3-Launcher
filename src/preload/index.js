@@ -1,5 +1,6 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer, shell } from "electron";
 import "./versionManager";
+import IpcMessages from "../common/IpcMessages";
 
 window.addEventListener("DOMContentLoaded", () => {
     // Open external links in browser
@@ -9,7 +10,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const absoluteUrl = new RegExp("^(?:[a-z]+:)?//", "i");
             event.preventDefault();
             if (!absoluteUrl.test(event.target.href)) return;
-            electron.shell.openExternal(event.target.href);
+            ipcRenderer.invoke(IpcMessages.UTILS.OPEN_EXTERNAL, event.target.href);
         }
     });
 });

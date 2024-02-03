@@ -1,10 +1,15 @@
 {
   "name": "se3-launcher",
   "version": "3.0.2",
-  "description": "An Electron application with React",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": {
+    "name": "Nadwey",
+    "email": "nadweyyy@gmail.com",
+    "url": "https://nadwey.pl"
+  },
+  "homepage": "https://se3.page",
+  "private": true,
+  "license": "MIT",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -22,7 +27,7 @@
     "@mantine/core": "^7.5.1",
     "@mantine/modals": "^7.5.1",
     "@mantine/notifications": "^7.5.1",
-    "@tabler/icons-react": "^2.47.0",
+    "@tabler/icons-react": "3.0.0-alpha.0",
     "axios": "^1.6.7",
     "compressing": "^1.10.0",
     "electron-store": "^8.1.0",

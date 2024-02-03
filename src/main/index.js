@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog, nativeTheme } from "electron";
 import path from "path";
 require("electron-store").initRenderer(); // TODO: remove electron-store from the codebase
 import { areInstallationsRunning } from "./renderer_bridge/versionManager";
+import "./renderer_bridge/utils";
 import { is } from "@electron-toolkit/utils";
 
 const isDev = !app.isPackaged;

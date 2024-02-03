@@ -25,8 +25,10 @@ nsis:
   installerSidebar: "build/installerSidebar.bmp"
 linux:
   target: [AppImage, tar.gz, deb, rpm]
+  artifactName: ${name}-${version}-${os}-${arch}.${ext}
   maintainer: Nadwey
-  category: Utility
+  category: Game
+  executableName: "SE3 Launcher"
 appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false

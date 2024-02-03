@@ -13,6 +13,9 @@ const IpcMessages = {
 
         RUN_VERSION: "version-manager-run-version", // renderer -> main | (versionTag)
     },
+    UTILS: {
+        OPEN_EXTERNAL: "utils-open-external", // renderer -> main | (url)
+    }
 }
 
 export default IpcMessages;
