@@ -1,0 +1,9 @@
+export const installVersion = window.versionManager.installVersion;
+export const cancelInstall = window.versionManager.cancelInstall;
+export const uninstallVersion = window.versionManager.uninstallVersion;
+export const getInstalledVersions = window.versionManager.getInstalledVersions;
+export const getAvailableVersions = window.versionManager.getAvailableVersions;
+export const getVersionState = window.versionManager.getVersionState;
+export const isVersionInstalled = window.versionManager.isVersionInstalled;
+export const runVersion = window.versionManager.runVersion;
+export const getPlatform = window.versionManager.getPlatform;

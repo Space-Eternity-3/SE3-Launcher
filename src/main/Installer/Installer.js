@@ -1,8 +1,8 @@
-const fs = require("fs");
-const axios = require("axios");
-const EventEmitter = require("node:events");
-const compressing = require("compressing");
-const path = require("path");
+import fs from "fs";
+import axios from "axios";
+import EventEmitter from "node:events";
+import compressing from "compressing";
+import path from "path";
 
 class Action extends EventEmitter {
     constructor() {
@@ -57,7 +57,7 @@ class Action extends EventEmitter {
     }
 }
 
-class DownloadAction extends Action {
+export class DownloadAction extends Action {
     /**
      * Action for downloading a file
      *
@@ -76,33 +76,38 @@ class DownloadAction extends Action {
     async execute() {
         this.updateData();
 
-        if (fs.existsSync(this.savePath)) fs.rmSync(this.savePath);
+        try {
+            if (fs.existsSync(this.savePath)) fs.rmSync(this.savePath);
 
-        this.abortController = new AbortController();
-        const res = await axios.get(this.url, {
-            responseType: "stream",
-            signal: this.abortController.signal,
-        });
+            this.abortController = new AbortController();
 
-        const totalLength = parseInt(res.headers["content-length"], 10);
+            const res = await axios.get(this.url, {
+                responseType: "stream",
+                signal: this.abortController.signal,
+            });
 
-        this.writeStream = fs.createWriteStream(this.savePath);
-        this.writeStream.on("error", (err) => {
-            this.emit("error", err);
-        });
-        this.writeStream.on("close", async () => {
-            this.emit("finished");
-        });
+            const totalLength = parseInt(res.headers["content-length"], 10);
 
-        let downloadedBytes = 0;
-        res.data.on("data", (chunk) => {
-            downloadedBytes += chunk.length;
-            this.progress = (downloadedBytes / totalLength) * 100;
-            this.detailsText = `${(downloadedBytes / 1024 / 1024).toFixed(2)}MiB / ${(totalLength / 1024 / 1024).toFixed(2)}MiB bytes`;
-            this.updateData();
-        });
+            this.writeStream = fs.createWriteStream(this.savePath);
+            this.writeStream.on("error", (err) => {
+                this.emit("error", err);
+            });
+            this.writeStream.on("close", async () => {
+                this.emit("finished");
+            });
 
-        res.data.pipe(this.writeStream);
+            let downloadedBytes = 0;
+            res.data.on("data", (chunk) => {
+                downloadedBytes += chunk.length;
+                this.progress = (downloadedBytes / totalLength) * 100;
+                this.detailsText = `${(downloadedBytes / 1024 / 1024).toFixed(2)}MiB / ${(totalLength / 1024 / 1024).toFixed(2)}MiB bytes`;
+                this.updateData();
+            });
+
+            res.data.pipe(this.writeStream);
+        } catch (error) {
+            this.emit("error", `Failed to install version, ${error.toString()}`);
+        }
     }
 
     /**
@@ -136,7 +141,7 @@ class DownloadAction extends Action {
     abortController;
 }
 
-class ExtractAction extends Action {
+export class ExtractAction extends Action {
     /**
      * Extracts an archive
      *
@@ -192,7 +197,7 @@ class ExtractAction extends Action {
     extractPath;
 }
 
-class RemoveAction extends Action {
+export class RemoveAction extends Action {
     /**
      * Removes something
      *
@@ -229,7 +234,7 @@ class RemoveAction extends Action {
  * @property {string} version
  */
 
-class Installer extends EventEmitter {
+export class Installer extends EventEmitter {
     /**
      * @param {InstallerArgs} args
      */
@@ -300,22 +305,15 @@ class Installer extends EventEmitter {
 
     /**
      * The thing that gets installed
-     * 
+     *
      * @type {string}
      */
     type;
 
     /**
      * Version of the thing that gets installed
-     * 
+     *
      * @type {string}
      */
     version;
 }
-
-module.exports = {
-    DownloadAction,
-    ExtractAction,
-    RemoveAction,
-    Installer,
-};

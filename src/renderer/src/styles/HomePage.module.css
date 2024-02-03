@@ -1,0 +1,60 @@
+.homePage {
+    height: 100%;
+    width: 100vw;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -2;
+    background-image: url(../assets/img/background.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.contentContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contentContainer > .content {
+    font-size: 65px;
+    font-family: "Quicksand";
+    font-weight: bold;
+    user-select: none;
+    color: white;
+}
+
+.playContainer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    background-color: #00000050;
+    backdrop-filter: blur(4px);
+    padding: 10px 0;
+}
+
+.playContainer > .playButton {
+    font-family: "Quicksand";
+    font-size: 26px;
+    /* font-weight: lighter; */
+    border: solid 2px white;
+    border-radius: 15px;
+    background-color: #00000000;
+    color: white;
+    padding: 3px 50px;
+    cursor: pointer;
+    user-select: none;
+}

@@ -1,8 +1,8 @@
-const path = require("path");
-const fs = require("fs");
-const os = require("os");
+import path from "path";
+import fs from "fs";
+import os from "os";
 
-const GetGameDirectory = () => {
+export function GetGameDirectory () {
     let dir;
     if (process.platform === "win32") dir = path.join(process.env.APPDATA, "Space Eternity 3");
     else dir = path.join(os.homedir(), ".se3");
@@ -11,27 +11,14 @@ const GetGameDirectory = () => {
     return dir;
 };
 
-const GetVersionsDirectory = () => {
+export function GetVersionsDirectory() {
     const dir = path.join(GetGameDirectory(), "Versions");
     fs.mkdirSync(dir, { recursive: true });
     return dir;
 };
 
-const GetLauncherDirectory = () => {
+export function GetLauncherDirectory () {
     const dir = path.join(GetGameDirectory(), "Launcher", "v3");
     fs.mkdirSync(dir, { recursive: true });
     return dir;
-};
-
-const GetNodejsDirectory = () => {
-    const dir = path.join(GetGameDirectory(), "nodejs");
-    fs.mkdirSync(dir, { recursive: true });
-    return dir;
-};
-
-module.exports = {
-    GetGameDirectory,
-    GetVersionsDirectory,
-    GetLauncherDirectory,
-    GetNodejsDirectory
 };

@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain, dialog, nativeTheme } = require("electron");
-const path = require("path");
-const isDev = require("electron-is").dev();
-require("electron-store").initRenderer();
-const { AreInstallationsRunning, mainBridge } = require("./RendererBridge")();
+import { app, BrowserWindow, ipcMain, dialog, nativeTheme } from "electron";
+import path from "path";
+require("electron-store").initRenderer(); // TODO: remove electron-store from the codebase
+import { areInstallationsRunning } from "./renderer_bridge/versionManager";
+import { is } from "@electron-toolkit/utils";
 
+const isDev = !app.isPackaged;
 nativeTheme.themeSource = "dark";
 
 async function createWindow() {
@@ -14,27 +15,17 @@ async function createWindow() {
         minHeight: 500,
         icon: path.join(__dirname, "resources", "icon.ico"),
         webPreferences: {
-            preload: require.resolve("../preload/preload.js"),
+            preload: path.join(__dirname, "../preload/index.js"),
             backgroundThrottling: false,
             nodeIntegration: false,
             contextIsolation: true,
             webSecurity: false,
-            sandbox: false,
         },
         title: "SE3 Launcher",
     });
 
-
-    mainBridge.Export("dialog", {
-        SelectDirectory: () => {
-            return dialog.showOpenDialogSync(mainWindow, {
-                properties: ["openDirectory"],
-            });
-        },
-    });
-
     mainWindow.on("close", (e) => {
-        if (!AreInstallationsRunning()) return;
+        if (!areInstallationsRunning()) return;
         const choice = dialog.showMessageBoxSync(mainWindow, {
             type: "question",
             buttons: ["Yes", "No"],
@@ -53,19 +44,17 @@ async function createWindow() {
         } catch {}
     });
 
-    if (isDev) {
-        mainWindow.setMenuBarVisibility(false); // dev tools
-        const waitOn = require("wait-on");
-        await waitOn({ resources: ["http://localhost:3000"] });
-        await mainWindow.loadURL("http://localhost:3000");
+    if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
+        mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
+        mainWindow.setMenuBarVisibility(false); // allows devtools
     } else {
+        mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
         mainWindow.setMenu(null);
-        mainWindow.loadFile("build/index.html");
     }
 }
 
 ipcMain.on("isDev", (e) => {
-    e.returnValue = isDev;
+    e.returnValue = is.dev;
 });
 
 app.whenReady().then(() => {

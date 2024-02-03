@@ -1,7 +1,7 @@
-const axios = require("axios");
-const se3ApiSettings = require("../SE3ApiSettings");
-const Store = require("electron-store");
-const { URL } = require("url");
+import axios from "axios";
+import se3ApiSettings from "../common/SE3ApiSettings";
+import Store from "electron-store";
+import { URL } from "url";
 
 const store = new Store();
 const ABSOLUTE_URL_REGEX = new RegExp("^(?:[a-z+]+:)?//", "i");
@@ -23,13 +23,13 @@ const ABSOLUTE_URL_REGEX = new RegExp("^(?:[a-z+]+:)?//", "i");
  */
 
 /**
- * Gets versions list
- * Throws an error if can't get
- * Works with internet off (If version list exists arleady), but it will not fetch the latest version list
+ * Returns Fetched version list from the server 
+ * Returns cached version list if available
+ * Throws if both are not available
  *
  * @returns {FetchedVersions}
  */
-const GetVersions = async () => {
+export async function GetAvailableVersions () {
     try {
         const res = (await axios.get(se3ApiSettings.GetVersionsInfo())).data;
         store.set("versions", res);
@@ -46,8 +46,8 @@ const GetVersions = async () => {
  * @param {String} versionTag version tag
  * @returns link
  */
-const GetVersionZipFile = async (versionTag) => {
-    const version = (await GetVersions()).Versions.find((version) => version.tag === versionTag);
+export async function GetVersionZipFile(versionTag) {
+    const version = (await GetAvailableVersions()).Versions.find((version) => version.tag === versionTag);
 
     let url;
     const versionFile = process.platform === "win32" ? version.file : version.linuxFile;
@@ -59,93 +59,4 @@ const GetVersionZipFile = async (versionTag) => {
         url,
         version,
     };
-};
-
-/**
- * @typedef ServerVersion
- * @type {object}
- * @property {string} name - Name of this server version.
- * @property {string} version - Version tag of this server.
- * @property {string} downloadUrl - Download link to the server.
- * @property {string} linuxRuntime - Download link to Linux x64 Node.js runtime (tar.gz)
- * @property {string} windowsRuntime - Download link to Windows x64 Node.js runtime (.zip)
- * @property {string} runtimeVersion - Version of the Node.js runtime
- */
-
-/**
- * Returns avaiable server versions.
- *
- * @returns {ServerVersion[]}
- */
-const GetServerVersions = async () => {
-    try {
-        const res = (await axios.get(se3ApiSettings.GetServersList())).data;
-        store.set("servers", res);
-        return res;
-    } catch (ex) {
-        if (store.has("servers")) return store.get("servers");
-        throw new Error("Can't get servers");
-    }
-};
-
-/**
- * Gets server versions
- *
- * @param {string} serverVersion
- * @returns {ServerVersion}
- */
-const GetServerVersion = async (serverVersion) => {
-    try {
-        return (await GetServerVersions()).find((version) => version.version === serverVersion);
-    } catch (ex) {
-        throw new Error("Could not get server info");
-    }
-};
-
-/**
- * @typedef ServerRuntime
- * @type {object}
- * @property {string} windowsRuntime - URL to Windows x64 Node.js runtime (.zip)
- * @property {string} linuxRuntime - URL to Linux x64 Node.js runtime (.tar.gz)
- */
-
-/**
- * Returns server runtimes.
- *
- * @returns {ServerRuntime[]}
- */
-const GetServerRuntimes = async () => {
-    try {
-        const res = (await axios.get(se3ApiSettings.GetServerRuntimes())).data;
-        store.set("server_runtimes", res);
-        return res;
-    } catch (ex) {
-        if (store.has("server_runtimes")) return store.get("server_runtimes");
-        throw new Error("Can't get server runtimes");
-    }
-};
-
-/**
- * Returns server runtime
- *
- * @param {string} serverRuntimeVersion
- * @returns {ServerRuntime}
- */
-const GetServerRuntime = async (serverRuntimeVersion) => {
-    try {
-        const runtime = (await GetServerRuntimes())[serverRuntimeVersion];
-        if (!runtime) throw new Error("Could not find server runtime");
-        return runtime;
-    } catch (ex) {
-        throw new Error("Could not server runtime");
-    }
-};
-
-module.exports = {
-    GetVersions,
-    GetVersionZipFile,
-    GetServerVersions,
-    GetServerVersion,
-    GetServerRuntimes,
-    GetServerRuntime,
 };

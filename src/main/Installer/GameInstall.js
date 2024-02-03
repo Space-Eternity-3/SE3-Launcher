@@ -1,7 +1,7 @@
-const { GetLauncherDirectory, GetVersionsDirectory } = require("../utils");
-const path = require("path");
-const { DownloadAction, ExtractAction } = require("./Installer");
-const { GetVersionZipFile } = require("../SE3Api");
+import { GetLauncherDirectory, GetVersionsDirectory } from "../utils";
+import path from "path";
+import { DownloadAction, ExtractAction } from "./Installer";
+import { GetVersionZipFile } from "../SE3Api";
 
 /**
  * @param {string} version 
@@ -22,4 +22,4 @@ const GameInstall = async(version) => {
     };
 };
 
-module.exports = GameInstall;
+export default GameInstall;

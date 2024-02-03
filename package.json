@@ -1,121 +1,49 @@
 {
-    "name": "se3-launcher",
-    "description": "Launcher for Space Eternity 3",
-    "version": "3.0.2",
-    "private": true,
-    "homepage": "./",
-    "main": "src/main/index.js",
-    "author": {
-        "name": "Nadwey",
-        "url": "https://github.com/Nadwey/",
-        "email": "nadweyyy@gmail.com"
-    },
-    "license": "MIT",
-    "devDependencies": {
-        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-        "concurrently": "^8.2.1",
-        "cross-env": "^7.0.3",
-        "electron": "^22.3.24",
-        "electron-builder": "^24.6.5",
-        "jest": "^29.7.0",
-        "prettier": "3.0.3",
-        "react": "^18.2.0",
-        "react-app-rewired": "^2.2.1",
-        "react-dom": "^18.2.0",
-        "wait-on": "^7.0.1"
-    },
-    "repository": {
-        "url": "https://github.com/Space-Eternity-3/SE3-Launcher"
-    },
-    "scripts": {
-        "start": "concurrently --kill-others \"cross-env BROWSER=none react-app-rewired start\" \"electron .\"",
-        "react-build": "react-app-rewired build",
-        "windows-electron-build": "electron-builder --win --x64 --publish=never",
-        "linux-electron-build": "electron-builder --linux --x64 --publish=never",
-        "build": "npm run react-build && npm run electron-build",
-        "prettier": "prettier --write .",
-        "test": "jest --runInBand"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "dependencies": {
-        "@mantine/core": "^7.0.2",
-        "@mantine/modals": "^7.0.2",
-        "@mantine/notifications": "^7.0.2",
-        "@tabler/icons-react": "^2.35.0",
-        "axios": "^1.5.1",
-        "compressing": "^1.10.0",
-        "electron-is": "github:Nadwey/electron-is",
-        "electron-store": "^8.1.0",
-        "electronbb": "^1.0.0-beta.3",
-        "eventemitter3": "^5.0.1",
-        "github-markdown-css": "^5.2.0",
-        "lodash": "^4.17.21",
-        "react-markdown": "^8.0.7",
-        "remark-gfm": "^4.0.0"
-    },
-    "build": {
-        "productName": "SE3 Launcher",
-        "extends": null,
-        "files": [
-            "**/*",
-            "!.github/",
-            "!src/renderer/",
-            "!resources/",
-            "!public/",
-            "!.prettierrc",
-            "!.vscode/",
-            "!.github/",
-            "!.test/",
-            "!README.md",
-            "!config-overrides.js",
-            "node_modules/",
-            "build/"
-        ],
-        "linux": {
-            "target": [
-                "deb",
-                "rpm",
-                "tar.gz",
-                "AppImage"
-            ],
-            "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}",
-            "icon": "../resources/icons/",
-            "executableName": "SE3 Launcher",
-            "category": "Game"
-        },
-        "win": {
-            "target": [
-                "nsis",
-                "zip"
-            ],
-            "artifactName": "SE3 Launcher-${version}-${os}-${arch}.${ext}",
-            "icon": "../resources/icon.ico"
-        },
-        "nsis": {
-            "oneClick": false,
-            "perMachine": false,
-            "allowToChangeInstallationDirectory": true,
-            "installerIcon": "resources/icon.ico",
-            "deleteAppDataOnUninstall": true,
-            "installerSidebar": "../resources/Sidebar.bmp",
-            "differentialPackage": false
-        }
-    }
+  "name": "se3-launcher",
+  "version": "3.0.2",
+  "description": "An Electron application with React",
+  "main": "./out/main/index.js",
+  "author": "example.com",
+  "homepage": "https://electron-vite.org",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@mantine/core": "^7.5.1",
+    "@mantine/modals": "^7.5.1",
+    "@mantine/notifications": "^7.5.1",
+    "@tabler/icons-react": "^2.47.0",
+    "axios": "^1.6.7",
+    "compressing": "^1.10.0",
+    "electron-store": "^8.1.0",
+    "eventemitter3": "^5.0.1",
+    "github-markdown-css": "^5.5.0",
+    "lodash": "^4.17.21",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config": "^1.0.2",
+    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.12.0",
+    "electron-vite": "^2.0.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^5.0.12"
+  }
 }

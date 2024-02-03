@@ -23,7 +23,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: "Install Node"
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
 
             - name: Install deps and build
               run: |
@@ -31,28 +31,28 @@ jobs:
                       npm run react-build
                       npm run linux-electron-build
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               name: Upload deb build
               with:
                   name: "SE3-Launcher-linux-deb"
                   path: |
                       dist/*.deb
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               name: Upload rpm build
               with:
                   name: "SE3-Launcher-linux-rpm"
                   path: |
                       dist/*.rpm
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               name: Upload tar.gz build
               with:
                   name: "SE3-Launcher-linux-tar.gz"
                   path: |
                       dist/*.tar.gz
 
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               name: Upload AppImage build
               with:
                   name: "SE3-Launcher-linux-AppImage"

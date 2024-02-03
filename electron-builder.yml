@@ -1,0 +1,32 @@
+appId: pl.nadwey.se3launcher
+productName: "SE3 Launcher"
+directories:
+  buildResources: build
+files:
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!electron.vite.config.{js,ts,mjs,cjs}"
+  - "!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
+  - "!{.env,.env.*,.npmrc,pnpm-lock.yaml}"
+asarUnpack:
+  - resources/**
+win:
+  executableName: "SE3 Launcher"
+  icon: build/icon.ico
+  target: [nsis, zip]
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  installerSidebar: "build/installerSidebar.bmp"
+linux:
+  target: [AppImage, tar.gz, deb, rpm]
+  maintainer: Nadwey
+  category: Utility
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false

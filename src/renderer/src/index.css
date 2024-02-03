@@ -1,0 +1,37 @@
+body {
+    font-family: "Quicksand";
+    margin: 0 !important;
+    background-color: #222222;
+    height: 100vh;
+}
+
+#root {
+    height: 100%;
+}
+
+.mantine-Tabs-list {
+    width: 100%;
+    background-color: #00000050;
+    backdrop-filter: blur(2px);
+    user-select: none;
+}
+
+.markdown-body {
+    background-color: transparent !important;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #161616;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: #161616;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #666666;
+    border-radius: 5px;
+}
