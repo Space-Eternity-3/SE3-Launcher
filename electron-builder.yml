@@ -30,5 +30,5 @@ linux:
   category: Game
   executableName: "SE3 Launcher"
 appImage:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}-${version}-${os}-${arch}.${ext}
 npmRebuild: false
