@@ -12,10 +12,11 @@ asarUnpack:
   - resources/**
 win:
   executableName: "SE3 Launcher"
+  artifactName: ${name}-${version}-${os}-${arch}-portable.${ext}
   icon: build/icon.ico
-  target: [nsis, zip]
+  target: [nsis, zip, portable]
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-${version}-${os}-${arch}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   oneClick: false

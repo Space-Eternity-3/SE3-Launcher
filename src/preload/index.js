@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, shell } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 import "./versionManager";
 import IpcMessages from "../common/IpcMessages";
 
