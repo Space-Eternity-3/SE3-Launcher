@@ -34,7 +34,6 @@ ipcRenderer.on(IpcMessages.VERSION_MANAGER.ON_VERSION_INSTALL_PROGRESS, (event, 
     switch (type) {
         case "data":
             installers[id]?.updateData(data);
-
             break;
         case "finish":
             installers[id]?.finish();
@@ -42,6 +41,10 @@ ipcRenderer.on(IpcMessages.VERSION_MANAGER.ON_VERSION_INSTALL_PROGRESS, (event, 
             break;
         case "error":
             installers[id]?.error(data);
+            deleteInstaller(id);
+            break;
+        case "cancelled":
+            installers[id]?.cancelled();
             deleteInstaller(id);
             break;
         default:

@@ -116,6 +116,7 @@ export class DownloadAction extends Action {
     cancel() {
         this.abortController.abort();
         this.writeStream.close();
+        this.emit("cancelled");
     }
 
     /**
@@ -261,6 +262,12 @@ export class Installer extends EventEmitter {
                 });
 
                 action.on("finished", () => {
+                    resolve();
+                });
+
+                action.on("cancelled", () => {
+                    this.emit("cancelled");
+                    this.failed = true;
                     resolve();
                 });
 

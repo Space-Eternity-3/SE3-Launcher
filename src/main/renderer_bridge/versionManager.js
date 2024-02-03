@@ -43,6 +43,11 @@ ipcMain.handle(IpcMessages.VERSION_MANAGER.INSTALL_VERSION, async (e, id, data) 
             installerProgress("data", data);
         });
 
+        versionInstaller.on("cancelled", () => {
+            installerProgress("cancelled", id);
+            deleteInstaller(id);
+        });
+
         versionInstaller.Start();
     } catch (err) {
         installerProgress("error", err);

@@ -40,6 +40,10 @@ class Installer {
                     Installer.emitter.emit("update");
                     resolve();
                 },
+                cancelled: () => {
+                    this_.removeInstallationInternal(id);
+                    Installer.emitter.emit("update");
+                },
                 error: (err) => {
                     this_.removeInstallationInternal(id);
                     Installer.emitter.emit("error", err);
@@ -60,7 +64,6 @@ class Installer {
     cancel(id) {
         cancelInstall(id);
         this.removeInstallationInternal(id);
-        Installer.emitter.emit("update");
     }
 
     /**
