@@ -10,7 +10,7 @@
     right: 0;
     bottom: 0;
     z-index: -2;
-    background-image: url(../assets/img/background.png);
+    background-image: url(../assets/img/background.webp);
     background-size: cover;
     background-position: center;
 }

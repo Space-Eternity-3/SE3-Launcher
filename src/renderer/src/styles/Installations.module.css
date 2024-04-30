@@ -2,6 +2,7 @@
     margin: 10px 0;
     padding: 15px;
     width: 100%;
-    background-color: #232329;
+    background-color: #202020;
+    border: solid 1px #343434;
     border-radius: 5px;
 }
