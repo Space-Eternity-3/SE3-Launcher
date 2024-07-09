@@ -316,9 +316,9 @@ export default function App() {
                                                 fontSize: "1.2rem",
                                             }}
                                         >
-                                            Empty here,{" "}
-                                            <span style={{ cursor: "pointer", textDecoration: "underline", color: "#2080ff" }} onClick={showVersionSelector}>
-                                                Install a version.
+                                            <span style={{ fontSize: "1rem", fontWeight: "bold" }}>No versions installed...</span><br />
+                                            <span style={{ cursor: "pointer", textDecoration: "none", color: "#359aff" }} onClick={showVersionSelector}>
+                                                Install a version
                                             </span>
                                         </div>
                                     </div>
