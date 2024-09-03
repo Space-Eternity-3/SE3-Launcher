@@ -68,7 +68,7 @@
 
 /* Efekt kliknięcia */
 .playContainer > .playButton:active {
-    background-color: rgba(255, 255, 255, 0.2); /* Podświetlenie tła */
+    background-color: rgba(255, 255, 255, 0.1); /* Podświetlenie tła */
     transform: translateY(2px); /* Przesunięcie przycisku w dół, żeby wyglądał na kliknięty */
 }
 
