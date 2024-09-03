@@ -1,12 +1,17 @@
 import { isVersionInstalled, runVersion } from "./preload/versionManager";
 import styles from "./styles/HomePage.module.css";
+import se3Logo from "./assets/img/logo.png";
 
 export default function HomePage({ playButtonText, versions, openVersionSelector }) {
     return (
         <div className={styles.homePage}>
             <div className={styles.background}></div>
             <div className={styles.contentContainer}>
-                <div className={styles.content}>Space Eternity 3</div>
+                <img 
+                    src={se3Logo} 
+                    alt="Space Eternity 3 - official logo" 
+                    style={{ width: '65%', height: 'auto', display: 'block', margin: '0 auto', userSelect: `none` }} 
+                />
             </div>
             <div className={styles.playContainer}>
                 <button

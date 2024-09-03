@@ -36,7 +36,15 @@ export async function UninstallVersion(versionTag) {
     await fsPromises.rm(versionPath, { recursive: true, force: true });
 };
 
+const runningInstances = [];
+
 export function RunVersion (versionTag) {
+    if (runningInstances.length > 0) {
+        dialog.showErrorBox("Game already running", "Please close the existing instance before starting a new one.");
+        return;
+    }
+    
+
     const versionPath = path.join(GetVersionsDirectory(), versionTag);
     const execNames = ["Sondy Eksploracji 3.exe", "Space Eternity 3.exe", "Space Eternity 3.x86_64"];
 
@@ -48,6 +56,13 @@ export function RunVersion (versionTag) {
                 detached: true,
                 cwd: versionPath,
             });
+            runningInstances.push(game);
+            game.on('exit', () => {
+                const index = runningInstances.indexOf(game);
+                if (index > -1) {
+                    runningInstances.splice(index, 1);
+                }
+            });            
             game.unref();
             return;
         }

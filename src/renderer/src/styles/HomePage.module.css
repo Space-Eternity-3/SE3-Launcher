@@ -49,7 +49,6 @@
 .playContainer > .playButton {
     font-family: "Quicksand";
     font-size: 26px;
-    /* font-weight: lighter; */
     border: solid 2px white;
     border-radius: 15px;
     background-color: #00000000;
@@ -57,4 +56,19 @@
     padding: 3px 50px;
     cursor: pointer;
     user-select: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
+
+/* ChatGPT-ed */
+
+/* Efekt najechania */
+.playContainer > .playButton:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Podświetlenie tła */
+}
+
+/* Efekt kliknięcia */
+.playContainer > .playButton:active {
+    background-color: rgba(255, 255, 255, 0.2); /* Podświetlenie tła */
+    transform: translateY(2px); /* Przesunięcie przycisku w dół, żeby wyglądał na kliknięty */
+}
+
