@@ -24,11 +24,11 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
-    "@mantine/core": "^7.11.1",
-    "@mantine/modals": "^7.11.1",
-    "@mantine/notifications": "^7.11.1",
-    "@tabler/icons-react": "3.10.0",
-    "axios": "^1.7.2",
+    "@mantine/core": "^7.12.2",
+    "@mantine/modals": "^7.12.2",
+    "@mantine/notifications": "^7.12.2",
+    "@tabler/icons-react": "3.14.0",
+    "axios": "^1.7.7",
     "compressing": "^1.10.1",
     "electron-store": "^8.2.0",
     "eventemitter3": "^5.0.1",
@@ -41,14 +41,14 @@
     "@electron-toolkit/eslint-config": "^1.0.2",
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@vitejs/plugin-react": "^4.3.1",
-    "electron": "^31.1.0",
-    "electron-builder": "25.0.0-alpha.11",
+    "electron": "^32.0.2",
+    "electron-builder": "25.0.5",
     "electron-vite": "^2.3.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.3",
-    "prettier": "^3.3.2",
+    "eslint": "^9.9.1",
+    "eslint-plugin-react": "^7.35.2",
+    "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "vite": "^5.3.3"
+    "vite": "^5.4.3"
   }
 }
